@@ -1,0 +1,23 @@
+[
+  {
+    "slug": "building-in-public-why-im-writing",
+    "title": "Building in Public — Why I'm Opening the Scribe's Archive",
+    "date": "2026-07-04",
+    "description": "Six years of shipping games taught me that the best production knowledge lives in war stories nobody writes down. So I'm writing mine down — AI workflows, pipeline fixes, and the messy middle of making games.",
+    "tags": [
+      "building in public",
+      "game production"
+    ]
+  },
+  {
+    "slug": "ai-copilot-for-game-producers",
+    "title": "An AI Copilot for Game Producers — What Actually Sticks",
+    "date": "2026-06-20",
+    "description": "I spent a quarter running LLMs against real production work — standups, risk registers, vendor threads. Here's the honest scorecard: three workflows that stuck, two that failed, and the rule I use to tell them apart.",
+    "tags": [
+      "ai",
+      "product management",
+      "workflows"
+    ]
+  }
+]
