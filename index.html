@@ -1571,6 +1571,34 @@ body.light-mode .rv-modal-box{background:linear-gradient(160deg,var(--surface2),
 body.light-mode .pw-panel{background:linear-gradient(160deg,#fff,#f4f0fc)}
 body.light-mode .pw-input{background:#f0ecf8;color:#1a1432;border-color:var(--a30)}
 body.light-mode .pw-input:focus{border-color:var(--gold);box-shadow:0 0 10px var(--a20)}
+
+/* ══ ONE OCEAN — depth dive (dark mode only), depth gauge, beacon ══
+   Sections darken from the surface (--bg) through sunlight, twilight, midnight and abyss,
+   then return to --bg at the seabed so the footer joins cleanly. Light mode is untouched. */
+:root{--lamp:255,235,160}
+body:not(.light-mode) #about{background:linear-gradient(var(--bg),#18203a);border-top-color:transparent}
+body:not(.light-mode) #experience{background:linear-gradient(#18203a,#142744);border-top-color:transparent}
+body:not(.light-mode) #quests{background:linear-gradient(#142744,#13213f);border-top-color:transparent}
+body:not(.light-mode) #skills{background:linear-gradient(#13213f,#151a3a);border-top-color:transparent}
+body:not(.light-mode) #methodology{background:linear-gradient(#151a3a,#141431);border-top-color:transparent}
+body:not(.light-mode) #achievements{background:linear-gradient(#141431,#100f26);border-top-color:transparent}
+body:not(.light-mode) #recommendations{background:linear-gradient(#100f26,#0c0b1c)}
+body:not(.light-mode) #studio{background:linear-gradient(#0c0b1c,#080812)}
+body:not(.light-mode) #contact{background:linear-gradient(#080812,#0a0910 55%,var(--bg));border-top-color:transparent}
+#depthGauge{position:fixed;left:14px;bottom:14px;z-index:400;font-family:var(--ff-head);line-height:1.3;color:var(--text2);background:rgba(22,20,32,.7);border:1px solid var(--a30);padding:6px 12px;border-radius:2px;backdrop-filter:blur(8px);pointer-events:none}
+#depthGauge b{display:block;font-size:.8rem;font-weight:600;letter-spacing:.08em;color:var(--gold2);font-variant-numeric:tabular-nums}
+#depthGauge span{display:block;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase}
+body.light-mode #depthGauge{background:rgba(240,235,255,.88);border-color:var(--a35)}
+/* footer leaves room so the gauge never covers its text */
+footer{padding-bottom:68px}
+@media(max-width:640px){#depthGauge{left:8px;bottom:8px;padding:4px 9px}#depthGauge b{font-size:.68rem}footer{padding-bottom:56px}}
+.beacon-wrap{margin-top:28px}
+.beacon-btn{font-family:var(--ff-head);font-size:.7rem;letter-spacing:.18em;color:rgb(var(--lamp));background:rgba(var(--lamp),.08);border:1px solid rgba(var(--lamp),.55);padding:12px 26px;border-radius:3px;transition:background .2s,box-shadow .2s}
+.beacon-btn:hover{background:rgba(var(--lamp),.16);box-shadow:0 0 22px rgba(var(--lamp),.25)}
+.beacon-note{font-family:var(--ff-label);font-style:italic;font-size:.72rem;color:var(--text2);letter-spacing:.06em;margin-top:10px;min-height:1.3em}
+body.light-mode .beacon-wrap{display:none}
+.beacon-pulse{position:fixed;left:50%;bottom:0;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:rgb(var(--lamp));box-shadow:0 0 24px 10px rgba(var(--lamp),.55);z-index:9001;pointer-events:none;animation:beaconRise 1.3s ease-in forwards}
+@keyframes beaconRise{to{transform:translateY(-105vh);opacity:.4}}
 </style>
 </head>
 <body>
@@ -1967,50 +1995,50 @@ window._isLight=function(){return document.body.classList.contains('light-mode')
 
 <div class="map-header">
   <p class="map-eyebrow">Choose your destination</p>
-  <p class="map-title">✦ The World Map ✦</p>
+  <p class="map-title">✦ The Sea Chart ✦</p>
 </div>
 <div class="reef-frame">
   <canvas id="reefCanvas" width="960" height="520" aria-hidden="true"></canvas>
   <div class="reef-nodes-layer">
     <div class="reef-node" style="left:20%;top:58%;" role="button" tabindex="0" onclick="document.getElementById('about')?.scrollIntoView({behavior:'smooth'})">
-      <div class="reef-orb"><span class="reef-icon">🐠</span></div>
-      <div class="reef-pill">ART VILLAGE<span class="reef-sub">Creative Direction</span></div>
+      <div class="reef-orb"><span class="reef-icon">🪔</span></div>
+      <div class="reef-pill">KEEPER'S QUARTERS<span class="reef-sub">Origin Story</span></div>
     </div>
     <div class="reef-node" style="left:40%;top:42%;" role="button" tabindex="0" onclick="document.getElementById('quests')?.scrollIntoView({behavior:'smooth'})">
       <div class="reef-orb"><span class="reef-icon">🪸</span></div>
-      <div class="reef-pill">STRATEGY TOWER<span class="reef-sub">Production Planning</span></div>
+      <div class="reef-pill">CORAL GARDENS<span class="reef-sub">Completed Quests</span></div>
     </div>
     <div class="reef-node" style="left:62%;top:38%;" role="button" tabindex="0" onclick="document.getElementById('skills')?.scrollIntoView({behavior:'smooth'})">
-      <div class="reef-orb"><span class="reef-icon">🔱</span></div>
-      <div class="reef-pill">DEV FORGE<span class="reef-sub">Technical Systems</span></div>
+      <div class="reef-orb"><span class="reef-icon">🦪</span></div>
+      <div class="reef-pill">PEARL BEDS<span class="reef-sub">Skill Tree</span></div>
     </div>
     <div class="reef-node" style="left:80%;top:54%;" role="button" tabindex="0" onclick="document.getElementById('experience')?.scrollIntoView({behavior:'smooth'})">
       <div class="reef-orb"><span class="reef-icon">🧭</span></div>
-      <div class="reef-pill">TIMELINE PORTAL<span class="reef-sub">Career Journey</span></div>
+      <div class="reef-pill">THE LONG CURRENT<span class="reef-sub">Career Journey</span></div>
     </div>
     <div class="reef-node" style="left:50%;top:68%;" role="button" tabindex="0" onclick="document.getElementById('achievements')?.scrollIntoView({behavior:'smooth'})">
       <div class="reef-orb"><span class="reef-icon">🏆</span></div>
-      <div class="reef-pill">ACHIEVEMENT HALL<span class="reef-sub">Stats &amp; Certs</span></div>
+      <div class="reef-pill">THE TROVE<span class="reef-sub">Stats &amp; Certs</span></div>
     </div>
     <div class="reef-node" style="left:13%;top:30%;" role="button" tabindex="0" onclick="document.getElementById('recommendations')?.scrollIntoView({behavior:'smooth'})">
-      <div class="reef-orb"><span class="reef-icon">🪼</span></div>
-      <div class="reef-pill">CREW HALL<span class="reef-sub">Testimonials</span></div>
+      <div class="reef-orb"><span class="reef-icon">📜</span></div>
+      <div class="reef-pill">MESSAGE BOTTLES<span class="reef-sub">From the Crew</span></div>
     </div>
     <div class="reef-node" style="left:33%;top:80%;" role="button" tabindex="0" onclick="openRuneVault()">
       <div class="reef-orb"><span class="reef-icon">🔮</span></div>
-      <div class="reef-pill">RUNE VAULT<span class="reef-sub">Memory Game</span></div>
+      <div class="reef-pill">SUNKEN VAULT<span class="reef-sub">Memory Game</span></div>
     </div>
     <div class="reef-node" style="left:73%;top:20%;" role="button" tabindex="0" onclick="document.getElementById('studio')?.scrollIntoView({behavior:'smooth'})">
       <div class="reef-orb"><span class="reef-icon">⚓</span></div>
-      <div class="reef-pill">WAR ROOM<span class="reef-sub">Studio Diagnosis</span></div>
+      <div class="reef-pill">THE SOUNDING<span class="reef-sub">Studio Diagnosis</span></div>
     </div>
     <div class="reef-node" style="left:87%;top:72%;" role="button" tabindex="0" onclick="document.getElementById('contact')?.scrollIntoView({behavior:'smooth'})">
-      <div class="reef-orb"><span class="reef-icon">🐚</span></div>
-      <div class="reef-pill">SIGNAL SHORE<span class="reef-sub">Get in Touch</span></div>
+      <div class="reef-orb"><span class="reef-icon">🏮</span></div>
+      <div class="reef-pill">DEEP BEACON<span class="reef-sub">Get in Touch</span></div>
     </div>
     <div class="reef-node" style="left:90%;top:36%;" role="button" tabindex="0" onclick="document.getElementById('methodology')?.scrollIntoView({behavior:'smooth'})">
-      <div class="reef-orb"><span class="reef-icon">📐</span></div>
-      <div class="reef-pill">PRODUCTION HQ<span class="reef-sub">How I Work</span></div>
+      <div class="reef-orb"><span class="reef-icon">🌊</span></div>
+      <div class="reef-pill">TIDE TABLES<span class="reef-sub">How I Work</span></div>
     </div>
   </div>
 </div>
@@ -2021,16 +2049,16 @@ var ctx=cv.getContext('2d'),W=960,H=520,t=0;
 var PI2=Math.PI*2;
 var isLight=window._isLight;
 var NODES=[
-  {x:.20,y:.58}, // 0 Art Village → #quests
-  {x:.40,y:.42}, // 1 Strategy Tower → #about
-  {x:.62,y:.38}, // 2 Dev Forge → #skills
-  {x:.80,y:.54}, // 3 Timeline Portal → #experience
-  {x:.50,y:.68}, // 4 Achievement Hall → #achievements
-  {x:.13,y:.30}, // 5 Crew Hall → #recommendations
-  {x:.33,y:.80}, // 6 Rune Vault → #rune-vault
-  {x:.73,y:.20}, // 7 War Room → #studio
-  {x:.87,y:.72}, // 8 Signal Shore → #contact
-  {x:.90,y:.36}  // 9 Production HQ → #methodology
+  {x:.20,y:.58}, // 0 Keeper's Quarters → #about
+  {x:.40,y:.42}, // 1 Coral Gardens → #quests
+  {x:.62,y:.38}, // 2 Pearl Beds → #skills
+  {x:.80,y:.54}, // 3 The Long Current → #experience
+  {x:.50,y:.68}, // 4 The Trove → #achievements
+  {x:.13,y:.30}, // 5 Message Bottles → #recommendations
+  {x:.33,y:.80}, // 6 Sunken Vault → rune vault modal
+  {x:.73,y:.20}, // 7 The Sounding → #studio
+  {x:.87,y:.72}, // 8 Deep Beacon → #contact
+  {x:.90,y:.36}  // 9 Tide Tables → #methodology
 ];
 var LINKS=[[0,1],[1,2],[2,3],[3,4],[4,0],[1,4],[2,4],[0,3],[5,0],[5,1],[6,4],[6,0],[7,2],[7,1],[8,3],[8,4],[9,3],[9,7],[9,8]];
 
@@ -2504,7 +2532,7 @@ draw();
     <div class="char-sheet reveal">
       <div class="char-sheet-left">
         <div class="chapter-header" style="text-align:left;margin-bottom:32px">
-          <p class="chapter-loc">🏘 Art Village · Origin Story</p>
+          <p class="chapter-loc">🪔 The Keeper's Quarters · Origin Story</p>
           <h2 class="chapter-title">CHARACTER PROFILE</h2>
           <p class="chapter-sub">The person behind the producer. Levelled up through code, collaboration, and creative chaos.</p>
         </div>
@@ -2541,7 +2569,7 @@ draw();
 <section id="experience" class="section sec-bg1">
   <div class="section-inner">
     <div class="chapter-header reveal">
-      <p class="chapter-loc">🌀 Timeline Portal · Career Chronicles</p>
+      <p class="chapter-loc">🧭 The Long Current · Career Chronicles</p>
       <h2 class="chapter-title">OPS LOG</h2>
       <p class="chapter-sub">Each chapter, a different world — same relentless commitment to shipping great experiences.</p>
     </div>
@@ -2607,7 +2635,7 @@ draw();
 <section id="quests" class="section sec-bg2">
   <div class="section-inner">
     <div class="chapter-header reveal">
-      <p class="chapter-loc">🏰 Strategy Tower · Completed Quests</p>
+      <p class="chapter-loc">🪸 The Coral Gardens · Completed Quests</p>
       <h2 class="chapter-title">QUEST BOARD</h2>
       <p class="chapter-sub">Five missions. Each one a different challenge, a different world, a different team to lead to victory.</p>
     </div>
@@ -2735,7 +2763,7 @@ draw();
 <section id="skills" class="section sec-bg1">
   <div class="section-inner">
     <div class="chapter-header reveal">
-      <p class="chapter-loc">⚙️ Dev Forge · Skill Tree</p>
+      <p class="chapter-loc">🦪 The Pearl Beds · Skill Tree</p>
       <h2 class="chapter-title">ABILITIES & XP</h2>
       <p class="chapter-sub">Four-plus years of forging skills under real pressure. Each bar earned, not assigned.</p>
     </div>
@@ -2880,7 +2908,7 @@ draw();
 <section id="methodology" class="section sec-bg2">
   <div class="section-inner">
     <div class="chapter-header reveal">
-      <p class="chapter-loc">📐 War Room · Production Methodology</p>
+      <p class="chapter-loc">🌊 The Tide Tables · Production Methodology</p>
       <h2 class="chapter-title">HOW I WORK</h2>
       <p class="chapter-sub">Systems, not heroics. Every process I build is designed to make great work repeatable.</p>
     </div>
@@ -2899,7 +2927,7 @@ draw();
 <section id="achievements" class="section sec-bg2">
   <div class="section-inner">
     <div class="chapter-header reveal">
-      <p class="chapter-loc">🏆 Achievement Hall · Earned, Not Given</p>
+      <p class="chapter-loc">🏆 The Trove · Earned, Not Given</p>
       <h2 class="chapter-title">HALL OF FAME</h2>
       <p class="chapter-sub">Every badge has a story. Every number has a team behind it.</p>
     </div>
@@ -3245,7 +3273,7 @@ draw();
   <div class="rv-modal-box">
     <div class="modal-close" role="button" tabindex="0" aria-label="Close rune vault" onclick="closeRuneVault()">✕</div>
     <div class="rv-modal-header">
-      <div class="chapter-loc">✦ &nbsp;Secret Chamber&nbsp; ✦</div>
+      <div class="chapter-loc">✦ &nbsp;The Sunken Vault&nbsp; ✦</div>
       <h2 class="chapter-title">The Rune Vault</h2>
       <p class="chapter-sub">Ancient runes guard hidden knowledge. Match every pair to unlock the vault and prove your mastery of arcane memory.</p>
     </div>
@@ -3566,7 +3594,7 @@ window.closeRuneVault = function(){
 ══════════════════════ -->
 <section id="recommendations">
   <div class="rec-inner reveal">
-    <p class="map-eyebrow">✦ Crew Testimonials ✦</p>
+    <p class="map-eyebrow">✦ Message Bottles · Words from the Crew ✦</p>
     <h2 class="chapter-title">Recommendations</h2>
     <div class="rec-marquee-wrap">
       <div class="rec-marquee">
@@ -3749,7 +3777,7 @@ window.closeRuneVault = function(){
 ══════════════════════ -->
 <section id="studio">
   <div class="stud-wrap reveal">
-    <p class="sec-eyebrow">✦ Thinking Producer · Not Just Executor ✦</p>
+    <p class="sec-eyebrow">✦ The Sounding · Thinking Producer, Not Just Executor ✦</p>
     <h2 class="sec-title">How I'd Improve Your Game Studio</h2>
     <p class="stud-sub">Select your studio size for a tailored production diagnosis.</p>
 
@@ -3936,7 +3964,7 @@ function showPanel(id,btn){
 ══════════════════════ -->
 <section id="contact">
   <div class="contact-inner reveal">
-    <p class="contact-eyebrow">✦ Send a raven ✦</p>
+    <p class="contact-eyebrow">✦ The Deep Beacon · Send a Signal ✦</p>
     <h2 class="contact-title">LET'S<br><span>MAKE</span><br>SOMETHING.</h2>
     <p class="contact-sub" style="margin-bottom:16px">Have a game that needs a great producer? Building something ambitious? I'd love to hear from you. Every great title started with one conversation.</p>
     <div style="margin-bottom:28px"><a class="begin-btn" href="#" style="font-size:.72rem;padding:12px 28px;letter-spacing:.16em;text-decoration:none;display:inline-block" title="Traditional resume download (coming soon)"><span>📄 DOWNLOAD RESUME (PDF)</span></a></div>
@@ -3946,6 +3974,7 @@ function showPanel(id,btn){
       <a href="https://github.com/hamnajalil" class="clink" target="_blank" rel="noopener noreferrer"><div class="clink-icon">🐙</div><div class="clink-body"><div class="clink-lbl">GitHub</div><div class="clink-val">github.com/hamnajalil</div></div><span class="clink-arr">→</span></a>
       <a href="HAMNA_JALIL.pdf" class="clink" target="_blank" rel="noopener noreferrer"><div class="clink-icon">📜</div><div class="clink-body"><div class="clink-lbl">Resume</div><div class="clink-val">Hamna_Jalil_Resume.pdf</div></div><span class="clink-arr">→</span></a>
     </div>
+    <div class="beacon-wrap"><button type="button" class="beacon-btn" id="beaconBtn">✦ LIGHT THE BEACON ✦</button><p class="beacon-note" id="beaconNote" role="status">Send a signal back up to the lighthouse.</p></div>
   </div>
 </section>
 
@@ -3954,6 +3983,7 @@ function showPanel(id,btn){
   <div class="foot-l">✦ <span>HAMNA JALIL</span> · Game Producer · Lahore, Pakistan</div>
   <div class="foot-r"><span class="foot-gem">💎</span> Portfolio crafted with love and late sprints</div>
 </footer>
+<div id="depthGauge" aria-hidden="true"><b id="dgDepth">0 m</b><span id="dgZone">Surface</span></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ── Magical Wand Cursor + Sparkle Trail ── */
@@ -4797,9 +4827,9 @@ function drawStormy(W,H){
   var lx=W*.8,ly=H*.52;
   ctx.fillStyle='#1a1c2e';ctx.fillRect(lx-7,ly,14,H*.2);ctx.fillStyle='#24263c';ctx.fillRect(lx-11,ly+H*.18,22,H*.05);
   ctx.fillStyle='rgba(255,235,160,.9)';ctx.beginPath();ctx.arc(lx,ly,4.5,0,PI2);ctx.fill();
-  var ba=.055+.035*Math.sin(t*2);ctx.save();ctx.translate(lx,ly);ctx.rotate(t*.016);ctx.globalAlpha=ba;ctx.fillStyle='rgba(255,235,160,1)';ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-W*.42,-H*.38);ctx.lineTo(-W*.52,-H*.27);ctx.closePath();ctx.fill();ctx.globalAlpha=1;ctx.restore();
+  var _bk=(window._beaconUntil&&Date.now()<window._beaconUntil)?(.5+.5*Math.sin(Date.now()/170)):0;var ba=.055+.035*Math.sin(t*2)+_bk*.28;ctx.save();ctx.translate(lx,ly);ctx.rotate(t*.016);ctx.globalAlpha=ba;ctx.fillStyle='rgba(255,235,160,1)';ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-W*.42,-H*.38);ctx.lineTo(-W*.52,-H*.27);ctx.closePath();ctx.fill();ctx.globalAlpha=1;ctx.restore();
   if(!_lhHalo){_lhHalo=ctx.createRadialGradient(lx,ly,0,lx,ly,W*.055);_lhHalo.addColorStop(0,'rgba(255,235,160,.28)');_lhHalo.addColorStop(1,'rgba(255,235,160,0)');}
-  ctx.fillStyle=_lhHalo;ctx.beginPath();ctx.arc(lx,ly,W*.055,0,PI2);ctx.fill();
+  ctx.fillStyle=_lhHalo;ctx.beginPath();ctx.arc(lx,ly,W*.055,0,PI2);ctx.fill();if(_bk>0){var _bg=ctx.createRadialGradient(lx,ly,0,lx,ly,W*.16);_bg.addColorStop(0,'rgba(255,235,160,'+(.6*_bk)+')');_bg.addColorStop(1,'rgba(255,235,160,0)');ctx.fillStyle=_bg;ctx.beginPath();ctx.arc(lx,ly,W*.16,0,PI2);ctx.fill();}
 
   // waves — stormy dark
   for(var layer=4;layer>=0;layer--){
@@ -5450,6 +5480,46 @@ function showUnlockToast(){
       e.stopPropagation();
       el.classList.toggle('tc-flipped');
     });
+  });
+})();
+</script>
+<script>
+/* ── One Ocean: depth gauge + beacon ── */
+(function(){
+  var STOPS=[['landing',0],['map',2],['about',5],['experience',40],['quests',120],['skills',300],['methodology',700],['achievements',1500],['recommendations',3500],['studio',5000],['contact',6000]]
+    .map(function(p){return{el:document.getElementById(p[0]),d:p[1]};}).filter(function(p){return p.el;});
+  var dEl=document.getElementById('dgDepth'),zEl=document.getElementById('dgZone'),ticking=false;
+  function zone(d){return d<3?'Surface':d<200?'Sunlight zone':d<1000?'Twilight zone':d<4000?'Midnight zone':d<5990?'Abyss':'Seabed';}
+  /* depth is interpolated between the sections on either side of a line 40% down the screen */
+  function read(){
+    ticking=false;
+    if(!dEl||!STOPS.length)return;
+    var ref=window.innerHeight*.4,i=0,k;
+    for(k=0;k<STOPS.length;k++){if(STOPS[k].el.getBoundingClientRect().top<=ref)i=k;}
+    var a=STOPS[i],b=STOPS[i+1],d=a.d;
+    if(b){var ta=a.el.getBoundingClientRect().top,tb=b.el.getBoundingClientRect().top;d+=Math.min(1,Math.max(0,(ref-ta)/((tb-ta)||1)))*(b.d-a.d);}
+    if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4)d=6000;
+    dEl.textContent=Math.round(d).toLocaleString('en-US')+' m';
+    zEl.textContent=zone(d);
+  }
+  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(read);}}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  read();
+
+  /* beacon: a pulse rises, the page returns to the surface, the hero lighthouse flashes (see _beaconUntil in drawStorm) */
+  var btn=document.getElementById('beaconBtn'),note=document.getElementById('beaconNote');
+  if(btn)btn.addEventListener('click',function(){
+    var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    note.textContent='Beacon lit. Rising 6,000 m\u2026';
+    if(!rm){var p=document.createElement('div');p.className='beacon-pulse';document.body.appendChild(p);setTimeout(function(){p.remove();},1400);}
+    setTimeout(function(){
+      document.getElementById('landing').scrollIntoView({behavior:rm?'auto':'smooth'});
+      var tries=0,iv=setInterval(function(){
+        tries++;
+        if(window.scrollY<window.innerHeight*.35||tries>60){clearInterval(iv);window._beaconUntil=Date.now()+5200;note.textContent='The lighthouse answered.';}
+      },120);
+    },rm?0:650);
   });
 })();
 </script>
