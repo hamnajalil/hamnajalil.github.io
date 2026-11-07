@@ -1752,7 +1752,7 @@ window._isLight=function(){return document.body.classList.contains('light-mode')
       <span class="line1"><span class="word">HAMNA</span></span>
       <span class="line2"><span class="word">JALIL</span></span>
     </h1>
-    <p class="hero-subtitle">GAME PRODUCER · PLAYABLE PORTFOLIO · EST. 2020</p>
+    <p class="hero-subtitle">GAME PRODUCER · PLAYABLE PORTFOLIO · EST. 2022</p>
     <p class="hero-pitch">Game Producer &amp; Associate PM with 4+ years shipping AAA, Web3, and live-service titles across 4 continents. Co-owned the roadmap for a $40M+ Web3 gaming ecosystem with 700K+ installs, leading 50+ people.</p>
     <p class="hero-now"><span class="now-dot" aria-hidden="true"></span><b>Now</b><span>Associate Product Manager · Revolving Games</span><span class="now-sep" aria-hidden="true">·</span><span>Open to Senior Producer &amp; Product roles</span></p>
     <div class="hero-tags">
@@ -3381,6 +3381,7 @@ draw();
   /* ── AUDIO ── */
   function ac(){return window._getSharedAC();}
   function tone(freq,type,vol,dur,delay){
+    return; /* game sound effects removed 2026-11-07 — Ham found them annoying */
     try{
       var c=ac(),o=c.createOscillator(),g=c.createGain();
       o.connect(g);g.connect(c.destination);
@@ -4250,90 +4251,60 @@ function _panDrift(pan,range,rate){
 }
 
 /* ════════════════════════════════════════
-   STORMY NIGHT
-   L1  distant rooftop rain    180-700 Hz
-   L2  rain in the air         900-2200 Hz
-   L3  mist shimmer            2800-6000 Hz
-   L4  night sub warmth        ~52 Hz sine
-   drip  every 8-20 s  (spatialised random pan)
-   crackle  faint fireplace warmth at scenes 4-5
+   SURFACE SWELL (dark mode) — replaced the rain storm 2026-11-07
+   L1  wave body        lowpass 420 Hz, slow swell every ~13 s
+   L2  wash             300-1400 Hz, drifting against L1
+   L3  spray            above 3.8 kHz, very faint
+   sub deep water       ~48 Hz sine
+   pearl  one soft glass note every 12-25 s, very quiet
+   crackle  silent placeholder so the scene tables still apply
 ════════════════════════════════════════ */
 function _buildStorm(dest){
   const c=_ac();
 
-  /* L1 — warm distant body */
-  const r1=_noiseLayer(dest,
-    [{type:'highpass',freq:180,q:0.6},{type:'lowpass',freq:700,q:0.5}],
-    0.082,8,0);
-  _lfo(r1.gain.gain,0.033,0.014);
-  _panDrift(r1.panner,0.10,0.018);
+  const r1=_noiseLayer(dest,[{type:'lowpass',freq:420,q:0.7}],0.09,8,0);
+  _lfo(r1.gain.gain,0.075,0.055);
+  _panDrift(r1.panner,0.12,0.02);
   _snd.layers.L1=r1.gain;
 
-  /* L2 — mid patter */
   const r2=_noiseLayer(dest,
-    [{type:'highpass',freq:900,q:0.5},{type:'lowpass',freq:2200,q:0.5}],
-    0.040,7,-0.06);
-  _lfo(r2.gain.gain,0.049,0.009);
-  _panDrift(r2.panner,0.14,0.022);
+    [{type:'highpass',freq:300,q:0.5},{type:'lowpass',freq:1400,q:0.5}],
+    0.03,7,-0.08);
+  _lfo(r2.gain.gain,0.062,0.018);
+  _panDrift(r2.panner,0.16,0.025);
   _snd.layers.L2=r2.gain;
 
-  /* L3 — subliminal mist */
-  const r3=_noiseLayer(dest,
-    [{type:'highpass',freq:2800,q:0.4},{type:'lowpass',freq:6000,q:0.4}],
-    0.013,6,0.06);
-  _lfo(r3.gain.gain,0.072,0.004);
-  _panDrift(r3.panner,0.18,0.028);
+  const r3=_noiseLayer(dest,[{type:'highpass',freq:3800,q:0.4}],0.008,6,0.08);
+  _lfo(r3.gain.gain,0.075,0.004);
   _snd.layers.L3=r3.gain;
 
-  /* L4 — sub warmth */
   const sub=c.createOscillator(),subG=c.createGain();
-  sub.type='sine';sub.frequency.value=52;subG.gain.value=0.006;
+  sub.type='sine';sub.frequency.value=48;subG.gain.value=0.005;
   const drift=c.createOscillator(),driftG=c.createGain();
-  drift.frequency.value=0.013;driftG.gain.value=1.5;
+  drift.frequency.value=0.011;driftG.gain.value=1.2;
   drift.connect(driftG);driftG.connect(sub.frequency);
   sub.connect(subG);subG.connect(dest);
   sub.start();drift.start();
   _snd.lfos.push(drift);_snd.nodes.push(sub,subG);
   _snd.layers.sub=subG;
 
-  /* Crackle layer — silent until scenes 4-5 */
-  const crk=_noiseLayer(dest,
-    [{type:'bandpass',freq:310,q:2.2},{type:'lowpass',freq:860,q:0.6}],
-    0.0,5,0.12);
-  _lfo(crk.gain.gain,0.055,0.001);
-  _snd.layers.crackle=crk.gain;
+  const silent=c.createGain();silent.gain.value=0;silent.connect(dest);
+  _snd.nodes.push(silent);
+  _snd.layers.crackle=silent;
 
-  /* Random crackle ticks */
-  function crackTick(){
-    if(!_snd.on||_snd.mode!=='storm')return;
-    if(_snd.scene>=4){
-      try{
-        window._playNoise(_ac(), dest, {
-          filterType:'bandpass', filterFreq:260+Math.random()*180, filterQ:3,
-          attack:0.003, peak:0.005+Math.random()*0.004, decay:0.047, dur:0.07
-        });
-      }catch(e){}
-    }
-    _snd.timers.push(setTimeout(crackTick,350+Math.random()*1600));
-  }
-  _snd.timers.push(setTimeout(crackTick,2500));
-
-  /* Occasional drip — spatialised random position */
-  function drip(){
+  /* Sparse pearl — D-major pentatonic, three sine partials, far quieter than the bed */
+  const PEARL=[587.33,880,1174.66,739.99,987.77];
+  function pearl(){
     if(!_snd.on||_snd.mode!=='storm')return;
     try{
-      window._playNoise(_ac(), dest, {
-        filters:[
-          {type:'bandpass', freq:1300+Math.random()*900, q:26},
-          {type:'lowpass', freq:3000}
-        ],
-        attack:0.002, peak:0.009+Math.random()*0.006, decay:0.078, dur:0.11,
-        pan:Math.random()*1.4-0.7
+      const f=PEARL[Math.floor(Math.random()*PEARL.length)],pan=Math.random()*1.2-0.6;
+      [[1,1],[3.01,0.25],[5.98,0.07]].forEach(function(p,i){
+        window._playTone(c, dest, {freq:f*p[0], attack:0.005, peak:0.012*p[1], decay:1.4*(i?0.55:1), pan:pan});
       });
     }catch(e){}
-    _snd.timers.push(setTimeout(drip,8000+Math.random()*12000));
+    _snd.timers.push(setTimeout(pearl,12000+Math.random()*13000));
   }
-  _snd.timers.push(setTimeout(drip,5000+Math.random()*5000));
+  _snd.timers.push(setTimeout(pearl,6000+Math.random()*6000));
 }
 
 /* ════════════════════════════════════════
@@ -4421,7 +4392,7 @@ function _buildBeach(dest){
    Base layer gains × scene multipliers × aliveness
 ════════════════════════════════════════ */
 const _BASE={
-  storm:{L1:0.082,L2:0.040,L3:0.013,sub:0.006,crackle:0.0},
+  storm:{L1:0.09,L2:0.03,L3:0.008,sub:0.005,crackle:0.0},
   beach:{wave1:0.052,wave2:0.052,breeze:0.016,evening:0.0},
 };
 const _SMUL={
@@ -4483,50 +4454,8 @@ function _alivenessLoop(){
    MICRO-CUE SOUNDS
 ════════════════════════════════════════ */
 
-/* Section-entry ambient cue */
-function _playSectionCue(){
-  if(!_snd.on||!_snd.master)return;
-  try{
-    var c=_ac(), dest=_snd.master;
-    if(_snd.mode==='beach'){
-      /* Single distant gull note */
-      window._playTone(c, dest, {
-        freq:1200, attack:0.06, peak:0.012, decay:0.27,
-        pan:Math.random()<0.5?-0.52:0.52,
-        freqRamp:[{val:1620,at:0.13},{val:940,at:0.30,exp:true}]
-      });
-    } else {
-      /* Soft distant low roll */
-      window._playNoise(c, dest, {
-        filterType:'lowpass', filterFreq:46, filterQ:2.1,
-        attack:0.14, peak:0.24, decay:1.26, dur:1.5
-      });
-    }
-  }catch(e){}
-}
-
-/* Modal open cue — click micro-feedback.
-   Dark: soft descending wood creak. Light: three-note wind chime. */
-function _playModalCue(){
-  _whenRunning(function(c){
-    try{
-      var dest=(_snd.on&&_snd.master)?_snd.master:c.destination;
-      var light=_isLight();
-      if(!light){
-        /* Soft descending wood creak */
-        window._playTone(c, dest, {
-          freq:290, attack:0.022, peak:0.018, decay:0.478,
-          freqRamp:[{val:175,at:0.20,exp:true},{val:90,at:0.44,exp:true}]
-        });
-      } else {
-        /* Three-note wind chime */
-        [[880,0,-0.28],[1109,0.09,0.12],[1397,0.19,-0.06]].forEach(function(v){
-          window._playTone(c, dest, {freq:v[0], attack:0.010, peak:0.016, decay:0.67, delay:v[1], pan:v[2]});
-        });
-      }
-    }catch(e){}
-  });
-}
+/* Micro-cue sound effects (section roll, modal creak) removed 2026-11-07:
+   Ham found the effects annoying. The opt-in Ambience bed is the only sound. */
 
 /* ════════════════════════════════════════
    ENGINE — start / stop / switch
@@ -4576,7 +4505,7 @@ function _sndUpdateBtn(){
   const btn=document.getElementById('musicBtn');
   if(!btn)return;
   if(_snd.on){
-    btn.textContent=(_snd.mode==='storm'?'🌧':'🌊')+' AMBIENCE: ON';
+    btn.textContent='🌊 AMBIENCE: ON';
     btn.classList.add('music-on');
   } else {
     btn.textContent='\u266a AMBIENCE';
@@ -4604,8 +4533,6 @@ function toggleMusic(){
     recommendations:4,
     studio:5,contact:5,
   };
-  const CUE_SECS=new Set(['studio','contact']);
-  let lastCued='';
 
   const obs=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
@@ -4613,10 +4540,6 @@ function toggleMusic(){
       const id=e.target.id,si=SEC[id];
       if(si===undefined)return;
       _applyScene(si,false);
-      if(CUE_SECS.has(id)&&id!==lastCued&&_snd.on){
-        lastCued=id;
-        setTimeout(_playSectionCue,900);
-      }
     });
   },{threshold:0.28});
 
