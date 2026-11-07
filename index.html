@@ -4,8 +4,17 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="description" content="Hamna Jalil — Game Producer & Product Manager. An RPG-themed interactive portfolio showcasing AAA, Web3, and live service production experience."/>
 <meta property="og:title" content="Hamna Jalil · Game Producer"/>
-<meta property="og:description" content="An RPG-themed playable portfolio — quest boards, skill trees, and the production experience to back it up."/>
+<meta property="og:description" content="Game Producer &amp; Associate PM · 4+ years across AAA, Web3 and live-service · 700K+ installs · $40M+ ecosystem · 50+ people on 4 continents. A playable, RPG-themed portfolio."/>
 <meta property="og:type" content="website"/>
+<meta property="og:url" content="https://hamnajalil.com/"/>
+<meta property="og:image" content="https://hamnajalil.com/og-card.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="Hamna Jalil — Game Producer. 700K+ installs, $40M+ ecosystem, 50+ people led, 4 continents."/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Hamna Jalil · Game Producer"/>
+<meta name="twitter:description" content="4+ years across AAA, Web3 and live-service · 700K+ installs · $40M+ ecosystem · 50+ people on 4 continents."/>
+<meta name="twitter:image" content="https://hamnajalil.com/og-card.png"/>
 <title>Hi, it's Hamna</title>
 <script>
 (function(){
@@ -235,7 +244,30 @@ background-size:100% 100%}
 @keyframes riseIn{to{opacity:1;transform:none}}
 
 .hero-subtitle{font-family:var(--ff-head);font-size:clamp(.75rem,1.5vw,.95rem);letter-spacing:.18em;color:var(--text2);margin-bottom:10px;opacity:0;animation:riseIn .6s .55s ease forwards}
-.hero-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-bottom:36px;opacity:0;animation:riseIn .6s .7s ease forwards}
+.hero-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-bottom:22px;opacity:0;animation:riseIn .6s .7s ease forwards}
+.hero-now{font-family:var(--ff-head);font-size:clamp(.58rem,1.05vw,.7rem);letter-spacing:.14em;text-transform:uppercase;color:var(--text2);margin:-4px auto 14px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 9px;opacity:0;animation:riseIn .6s .66s ease forwards}
+.hero-now b{color:var(--gold2);font-weight:600}
+.now-dot{width:7px;height:7px;border-radius:50%;background:var(--emerald);animation:nowPulse 2.4s ease-out infinite}
+@keyframes nowPulse{0%{box-shadow:0 0 0 0 rgba(128,200,152,.55)}70%{box-shadow:0 0 0 7px rgba(128,200,152,0)}100%{box-shadow:0 0 0 0 rgba(128,200,152,0)}}
+.hero-quote{position:relative;max-width:640px;margin:0 auto 26px;padding:14px 26px 12px;border:1px solid var(--a30);border-radius:4px;background:linear-gradient(180deg,rgba(240,235,255,.07),rgba(240,235,255,.025));box-shadow:0 14px 34px -20px rgba(184,158,224,.55),inset 0 0 36px rgba(184,158,224,.05);opacity:0;animation:riseIn .6s .8s ease forwards,bottleBob 5.5s 1.5s ease-in-out infinite}
+.hero-quote::before,.hero-quote::after{content:"";position:absolute;width:11px;height:11px;border:1px solid var(--gold);pointer-events:none}
+.hero-quote::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.hero-quote::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+@keyframes bottleBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(-.35deg)}}
+.bottle-tag{display:block;font-family:var(--ff-head);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.hero-quote blockquote{position:relative;font-family:var(--ff-label);font-style:italic;font-size:clamp(.82rem,1.35vw,.96rem);line-height:1.6;color:rgba(236,228,255,.86);margin:0 0 9px}
+.hero-quote blockquote::before{content:"\201C";position:absolute;left:-20px;top:-14px;font-family:var(--ff-display);font-style:normal;font-size:2.6rem;line-height:1;color:var(--gold);opacity:.35}
+.hero-quote figcaption{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 8px;font-family:var(--ff-head);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text2)}
+.seal{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--gold2),var(--forest) 70%);color:var(--bg);font-weight:700;font-size:.5rem;letter-spacing:.02em;box-shadow:0 1px 5px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.18)}
+.hero-quote figcaption a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--a30)}
+.hero-quote figcaption a:hover{color:var(--gold2)}
+body.light-mode .hero-quote{background:linear-gradient(180deg,rgba(30,24,56,.05),rgba(30,24,56,.02));box-shadow:0 14px 34px -20px rgba(30,24,56,.3)}
+body.light-mode .hero-quote blockquote{color:rgba(30,24,56,.78)}
+body.light-mode .bottle-tag,body.light-mode .hero-quote figcaption a{color:var(--forest)}
+@media(prefers-reduced-motion:reduce){.hero-quote{animation:riseIn .6s .8s ease forwards}}
+@media(max-width:768px){.hero-quote .q-more{display:none}.hero-quote{margin-bottom:20px;padding:12px 16px 10px}.hero-quote blockquote::before{left:-10px;top:-12px;font-size:2rem}.bottle-tag{font-size:.5rem}.hero-now .now-sep{display:none}.hero-now{flex-direction:column;gap:3px}.hero-now b{display:none}}
+@media(max-height:700px){.hero-quote{display:none}}
+@media(max-height:640px){.hero-now{display:none}}
 .htag{font-family:var(--ff-head);font-size:.6rem;letter-spacing:.12em;color:var(--text3);border:1px solid var(--a30);padding:4px 12px;border-radius:20px}
 
 .hero-cta{opacity:0;animation:riseIn .6s .9s ease forwards}
@@ -1722,10 +1754,16 @@ window._isLight=function(){return document.body.classList.contains('light-mode')
     </h1>
     <p class="hero-subtitle">GAME PRODUCER · PLAYABLE PORTFOLIO · EST. 2020</p>
     <p class="hero-pitch">Game Producer &amp; Associate PM with 4+ years shipping AAA, Web3, and live-service titles across 4 continents. Co-owned the roadmap for a $40M+ Web3 gaming ecosystem with 700K+ installs, leading 50+ people.</p>
+    <p class="hero-now"><span class="now-dot" aria-hidden="true"></span><b>Now</b><span>Associate Product Manager · Revolving Games</span><span class="now-sep" aria-hidden="true">·</span><span>Open to Senior Producer &amp; Product roles</span></p>
     <div class="hero-tags">
       <span class="htag">AAA</span><span class="htag">Web3</span><span class="htag">Live Ops</span>
       <span class="htag">50+ People</span><span class="htag">4 Continents</span><span class="htag">Women in Games</span>
     </div>
+    <figure class="hero-quote">
+      <span class="bottle-tag">📜 Message bottle · from the crew</span>
+      <blockquote>“A powerhouse producer — incredibly hardworking, razor-sharp, and always on top of every detail.<span class="q-more"> Her ability to juggle complex priorities and anticipate challenges before they become issues is unmatched.</span>”</blockquote>
+      <figcaption><span class="seal" aria-hidden="true">VR</span><span>Vikki Ruttle · Design Director<span class="q-more"> · Revolving Games</span></span><a href="#recommendations">+6 more ↓</a></figcaption>
+    </figure>
     <div class="hero-cta">
       <button class="begin-btn" onclick="document.getElementById('map').scrollIntoView({behavior:'smooth'})">
         <span>✦ BEGIN THE JOURNEY ✦</span>
