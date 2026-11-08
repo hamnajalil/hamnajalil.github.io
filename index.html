@@ -1643,9 +1643,35 @@ footer{padding-bottom:68px}
 body.light-mode .beacon-wrap{display:none}
 .beacon-pulse{position:fixed;left:50%;bottom:0;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:rgb(var(--lamp));box-shadow:0 0 24px 10px rgba(var(--lamp),.55);z-index:9001;pointer-events:none;animation:beaconRise 1.3s ease-in forwards}
 @keyframes beaconRise{to{transform:translateY(-105vh);opacity:.4}}
+/* Readability floor (2026-11-08): no readable text under 11px (.7rem), at any screen size.
+   Lettering inside drawings (SVG chart labels, sea-chart coordinates) and the VR seal are left as art. */
+#musicBtn,#themeBtn,.bottle-tag,.hero-quote figcaption,.htag,.stat-key,.chip,
+.ops-era,.ops-active,.opill,.xp-level,.inv-rarity,.inv-equipped,.inv-tool,
+.ach-tier,.ach-impact,.tc-numeral,.tc-issuer,.tc-type,.tc-flip-hint,.tc-back-issuer,.tc-cred-date,.tc-cred-verify,
+.clink-lbl,.foot-l,.jn-tip,.reef-pill,.reef-sub,.stud-btn,.stud-sz,.stud-hd,.stud-ul li b,
+.rv-stat-label,.rv-btn-sm,.rv-win-sl,.rec-title,.rec-rel,
+.hero-now,
+.lock-sub,.lock-access-btn,.lock-hint,.pw-subtitle,.pw-format-hint,.pw-submit,.pw-error-msg{font-size:.7rem}
+#depthGauge span{font-size:.7rem}
+@media(max-width:768px){#depthGauge b{font-size:.7rem}.hero-now{letter-spacing:.04em;gap:4px 6px}}
+/* Phones: the sea chart is too small for ten 11px labels, so its labels keep their original drawn size */
+@media(max-width:640px){.reef-pill,.reef-sub{font-size:.42rem}}
+@media(max-width:480px){.reef-pill{font-size:.38rem}}
+/* Contact heading: SOMETHING. was cut off on phones; scale it with the screen */
+.contact-title{font-size:clamp(1.6rem,8vw,3rem)}
+/* Certificate cards are narrow on tablets: keep VERIFY on one line */
+.tc-cred-verify{white-space:nowrap}
+@media(max-width:1024px){.tc-cred-verify{padding-left:10px;padding-right:10px}}
+/* Skill cards: the bigger EQUIPPED tag moves to the card corner so the name and category keep the full width */
+@media(min-width:641px){.inv-equipped{position:absolute;top:0;right:0;border-width:0 0 1px 1px;border-radius:0 0 0 4px;padding:2px 8px}.inv-slot-head{padding-top:22px}}
+/* Skip link: first thing a keyboard user reaches; hidden until focused */
+.skip-link{position:fixed;left:12px;top:-64px;z-index:10000;padding:10px 16px;background:var(--bg);color:var(--text);border:2px solid var(--gold2);border-radius:4px;font-family:var(--ff-head);font-size:.8rem;letter-spacing:.08em;text-decoration:none;transition:top .15s}
+.skip-link:focus{top:12px}
+#main:focus{outline:none}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <noscript><div style="padding:60px 40px;text-align:center;font-family:Georgia,serif;color:#ede8ff;background:#1c1828;min-height:100vh"><h1 style="margin-bottom:16px">Hamna Jalil — Game Producer</h1><p>This interactive portfolio requires JavaScript to run. Please enable JavaScript or visit <a href="https://linkedin.com/in/hamnabukhari" style="color:#b89ee0">my LinkedIn</a> instead.</p></div></noscript>
 <script>
 /* Skyborne animation data now loads at the end of <body> (see "deferred media") so the page can paint first */
@@ -1776,7 +1802,7 @@ window._isLight=function(){return document.body.classList.contains('light-mode')
   <p class="scroll-hint">scroll to explore ↓</p>
 </section>
 
-<main>
+<main id="main" tabindex="-1">
 <!-- Surface band: what Ham is doing now + one recommendation, first thing on the first scroll -->
 <div class="surface-band">
   <p class="hero-now"><span class="now-dot" aria-hidden="true"></span><b>Now</b><span>Associate Product Manager · Revolving Games</span><span class="now-sep" aria-hidden="true">·</span><span>Open to Senior Producer &amp; Product roles</span></p>
