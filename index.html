@@ -244,7 +244,7 @@ background-size:100% 100%}
 @keyframes riseIn{to{opacity:1;transform:none}}
 
 .hero-subtitle{font-family:var(--ff-head);font-size:clamp(.75rem,1.5vw,.95rem);letter-spacing:.18em;color:var(--text2);margin-bottom:10px;opacity:0;animation:riseIn .6s .55s ease forwards}
-.hero-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-bottom:22px;opacity:0;animation:riseIn .6s .7s ease forwards}
+.hero-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-bottom:36px;opacity:0;animation:riseIn .6s .7s ease forwards}
 .hero-now{font-family:var(--ff-head);font-size:clamp(.58rem,1.05vw,.7rem);letter-spacing:.14em;text-transform:uppercase;color:var(--text2);margin:-4px auto 14px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 9px;opacity:0;animation:riseIn .6s .66s ease forwards}
 .hero-now b{color:var(--gold2);font-weight:600}
 .now-dot{width:7px;height:7px;border-radius:50%;background:var(--emerald);animation:nowPulse 2.4s ease-out infinite}
@@ -265,9 +265,10 @@ body.light-mode .hero-quote{background:linear-gradient(180deg,rgba(30,24,56,.05)
 body.light-mode .hero-quote blockquote{color:rgba(30,24,56,.78)}
 body.light-mode .bottle-tag,body.light-mode .hero-quote figcaption a{color:var(--forest)}
 @media(prefers-reduced-motion:reduce){.hero-quote{animation:riseIn .6s .8s ease forwards}}
-@media(max-width:768px){.hero-quote .q-more{display:none}.hero-quote{margin-bottom:20px;padding:12px 16px 10px}.hero-quote blockquote::before{left:-10px;top:-12px;font-size:2rem}.bottle-tag{font-size:.5rem}.hero-now .now-sep{display:none}.hero-now{flex-direction:column;gap:3px}.hero-now b{display:none}}
-@media(max-height:700px){.hero-quote{display:none}}
-@media(max-height:640px){.hero-now{display:none}}
+@media(max-width:768px){.surface-band{padding:32px 16px 28px}.hero-quote figcaption .q-more{display:none}.hero-quote{padding:12px 16px 10px}.hero-quote blockquote::before{left:-10px;top:-12px;font-size:2rem}.bottle-tag{font-size:.5rem}.hero-now .now-sep{display:none}.hero-now{flex-direction:column;gap:3px}.hero-now b{display:none}}
+.surface-band{background:var(--bg);padding:44px 20px 40px;display:flex;flex-direction:column;align-items:center}
+.surface-band .hero-now{margin:0 auto 18px}
+.surface-band .hero-quote{margin:0 auto}
 .htag{font-family:var(--ff-head);font-size:.6rem;letter-spacing:.12em;color:var(--text3);border:1px solid var(--a30);padding:4px 12px;border-radius:20px}
 
 .hero-cta{opacity:0;animation:riseIn .6s .9s ease forwards}
@@ -1762,16 +1763,10 @@ window._isLight=function(){return document.body.classList.contains('light-mode')
     </h1>
     <p class="hero-subtitle">GAME PRODUCER · PLAYABLE PORTFOLIO · EST. 2022</p>
     <p class="hero-pitch">Game Producer &amp; Associate PM with 4+ years shipping AAA, Web3, and live-service titles across 4 continents. Co-owned the roadmap for a $40M+ Web3 gaming ecosystem with 700K+ installs, leading 50+ people.</p>
-    <p class="hero-now"><span class="now-dot" aria-hidden="true"></span><b>Now</b><span>Associate Product Manager · Revolving Games</span><span class="now-sep" aria-hidden="true">·</span><span>Open to Senior Producer &amp; Product roles</span></p>
     <div class="hero-tags">
       <span class="htag">AAA</span><span class="htag">Web3</span><span class="htag">Live Ops</span>
       <span class="htag">50+ People</span><span class="htag">4 Continents</span><span class="htag">Women in Games</span>
     </div>
-    <figure class="hero-quote">
-      <span class="bottle-tag">📜 Message bottle · from the crew</span>
-      <blockquote>“A powerhouse producer — incredibly hardworking, razor-sharp, and always on top of every detail.<span class="q-more"> Her ability to juggle complex priorities and anticipate challenges before they become issues is unmatched.</span>”</blockquote>
-      <figcaption><span class="seal" aria-hidden="true">VR</span><span>Vikki Ruttle · Design Director<span class="q-more"> · Revolving Games</span></span><a href="#recommendations">+6 more ↓</a></figcaption>
-    </figure>
     <div class="hero-cta">
       <button class="begin-btn" onclick="document.getElementById('map').scrollIntoView({behavior:'smooth'})">
         <span>✦ BEGIN THE JOURNEY ✦</span>
@@ -1782,6 +1777,15 @@ window._isLight=function(){return document.body.classList.contains('light-mode')
 </section>
 
 <main>
+<!-- Surface band: what Ham is doing now + one recommendation, first thing on the first scroll -->
+<div class="surface-band">
+  <p class="hero-now"><span class="now-dot" aria-hidden="true"></span><b>Now</b><span>Associate Product Manager · Revolving Games</span><span class="now-sep" aria-hidden="true">·</span><span>Open to Senior Producer &amp; Product roles</span></p>
+  <figure class="hero-quote">
+    <span class="bottle-tag">📜 Message bottle · from the crew</span>
+    <blockquote>“A powerhouse producer — incredibly hardworking, razor-sharp, and always on top of every detail.<span class="q-more"> Her ability to juggle complex priorities and anticipate challenges before they become issues is unmatched.</span>”</blockquote>
+    <figcaption><span class="seal" aria-hidden="true">VR</span><span>Vikki Ruttle · Design Director<span class="q-more"> · Revolving Games</span></span><a href="#recommendations">+6 more ↓</a></figcaption>
+  </figure>
+</div>
 <!-- ══════════════════════
      WORLD MAP — NAVIGATION
 ══════════════════════ -->
