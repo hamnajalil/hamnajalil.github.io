@@ -450,7 +450,7 @@ body.light-mode .opill:hover{
 .quest-board-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px}
 .quest-notice{background:var(--surface);border:1.5px solid var(--a25);border-radius:3px;padding:14px 20px;max-width:520px}
 .quest-notice p{font-family:var(--ff-label);font-style:italic;font-size:.82rem;color:var(--text2);line-height:1.7}
-.quest-tip{font-family:var(--ff-head);font-size:.6rem;letter-spacing:.15em;color:var(--gold);display:flex;align-items:center;gap:6px}
+.quest-tip{font-family:var(--ff-head);font-size:.7rem;letter-spacing:.15em;color:var(--gold);display:flex;align-items:center;gap:6px}
 .quest-tip::before{content:'↺';font-size:.8rem}
 
 .quests-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -460,7 +460,8 @@ body.light-mode .opill:hover{
 .qcard-noflip{overflow:visible}
 .qcard-noflip .qcard-inner{transform:none!important}
 .qcard-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.16,1,.3,1)}
-.qcard:hover .qcard-inner,.qcard.flipped .qcard-inner{transform:rotateY(180deg)}
+.qcard.flipped .qcard-inner{transform:rotateY(180deg)}
+@media(hover:hover){.qcard:hover .qcard-inner{transform:rotateY(180deg)}}
 .qface{position:absolute;inset:0;backface-visibility:hidden;border-radius:4px;overflow:hidden}
 
 /* front face */
@@ -473,7 +474,7 @@ body.light-mode .opill:hover{
 }
 .qcard:hover .qfront{border-color:var(--a50)}
 .qfront-top{display:flex;align-items:center;justify-content:space-between}
-.q-type{font-family:var(--ff-head);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;border-radius:2px}
+.q-type{font-family:var(--ff-head);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;border-radius:2px}
 .qt-aaa{color:var(--amethyst);background:rgba(136,72,200,.1);border:1px solid rgba(136,72,200,.3)}
 .qt-web3{color:var(--sapphire);background:rgba(56,96,200,.1);border:1px solid rgba(56,96,200,.3)}
 .qt-indie{color:var(--gold);background:var(--a10);border:1px solid var(--a30)}
@@ -483,8 +484,8 @@ body.light-mode .opill:hover{
 .q-name{font-family:var(--ff-head);font-size:1.05rem;letter-spacing:.08em;color:var(--parch);line-height:1.3;text-align:center}
 .q-teaser{font-family:var(--ff-label);font-style:italic;font-size:.76rem;color:var(--text2);line-height:1.65;text-align:center;flex:1}
 .q-metrics{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin-top:auto}
-.qm{font-family:var(--ff-head);font-size:.56rem;letter-spacing:.08em;color:var(--text3);border:1px solid var(--a15);padding:2px 8px;border-radius:2px}
-.q-hint{font-family:var(--ff-label);font-style:italic;font-size:.62rem;color:var(--text3);text-align:center;padding-top:10px;border-top:1px solid var(--a10);margin-top:auto;display:flex;align-items:center;justify-content:center;gap:5px}
+.qm{font-family:var(--ff-head);font-size:.7rem;letter-spacing:.08em;color:var(--text3);border:1px solid var(--a15);padding:2px 8px;border-radius:2px}
+.q-hint{font-family:var(--ff-label);font-style:italic;font-size:.72rem;color:var(--text3);text-align:center;padding-top:10px;border-top:1px solid var(--a10);margin-top:auto;display:flex;align-items:center;justify-content:center;gap:5px}
 .q-hint-arr{animation:nudge .8s ease-in-out infinite}
 @keyframes nudge{0%,100%{transform:rotate(0)}50%{transform:rotate(15deg)}}
 
@@ -501,10 +502,10 @@ body.light-mode .opill:hover{
 .qback-title{font-family:var(--ff-head);font-size:.85rem;letter-spacing:.1em;color:var(--gold);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--a20);position:relative;z-index:1;line-height:1.3}
 .qi{position:relative;z-index:1;padding:8px 0;border-bottom:1px solid var(--a07)}
 .qi:last-child{border:none}
-.qi-label{font-family:var(--ff-head);font-size:.55rem;letter-spacing:.15em;color:var(--gold);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.qi-label{font-family:var(--ff-head);font-size:.7rem;letter-spacing:.15em;color:var(--gold);margin-bottom:4px;display:flex;align-items:center;gap:6px}
 .qi-text{font-size:.77rem;line-height:1.6;color:var(--text2)}
 .qi-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
-.qi-chip{font-family:var(--ff-head);font-size:.55rem;color:var(--gold2);border:1px solid var(--a30);padding:1px 7px;border-radius:20px}
+.qi-chip{font-family:var(--ff-head);font-size:.7rem;color:var(--gold2);border:1px solid var(--a30);padding:1px 7px;border-radius:20px}
 
 /* ══════════════════════════════════
    SKILL TREE — DEV FORGE
@@ -1181,11 +1182,18 @@ body.light-mode .mi-chip{color:var(--gold2);border-color:var(--a35);background:v
   border-top:1px solid var(--a30);
   transition:background .2s;
 }
+.qcard:focus-within .dossier-scroll{height:54px;pointer-events:all}
+@media(hover:none){.dossier-scroll{height:54px;pointer-events:all}}
+.qcard:not(.qcard-noflip) .qfront{padding-bottom:20px}
+.qcard[tabindex]:focus-visible{outline:2px solid var(--gold2);outline-offset:4px;border-radius:4px}
+.dossier-btn:focus-visible{outline:2px solid var(--gold2);outline-offset:-4px}
+.hint-tap{display:none}
+@media(hover:none){.hint-hover{display:none}.hint-tap{display:inline}}
 .dossier-btn:hover{
   background:linear-gradient(0deg,var(--a22) 0%,rgba(24,20,34,.85) 100%);
 }
 .dossier-btn-text{
-  font-family:var(--ff-head);font-size:.6rem;letter-spacing:.2em;
+  font-family:var(--ff-head);font-size:.7rem;letter-spacing:.2em;
   color:var(--gold2);
   display:flex;align-items:center;gap:8px;
 }
@@ -2673,7 +2681,7 @@ draw();
     </div>
     <div class="quest-board-top reveal">
       <div class="quest-notice"><p>Each quest card holds the full story behind the title — challenge faced, role played, process used, and results achieved. The best producers don't just ship games; they solve the problems no one else can see.</p></div>
-      <div class="quest-tip">Hover any card to reveal full intel</div>
+      <div class="quest-tip"><span><span class="hint-hover">Hover</span><span class="hint-tap">Tap</span> any card to reveal full intel</span></div>
     </div>
     <div class="quests-grid reveal">
 
@@ -2744,7 +2752,7 @@ draw();
       </div>
 
       <!-- Quest 4 -->
-      <div class="qcard">
+      <div class="qcard" tabindex="0">
         <div class="qcard-inner">
           <div class="qface qfront">
             <div class="qfront-top"><span class="q-type qt-indie">TACTICAL RPG</span><span class="q-rank">★★★★★</span></div>
@@ -2752,7 +2760,7 @@ draw();
             <div class="q-name">Dastaan</div>
             <div class="q-teaser">Led a 30+ member team from concept to full launch of a turn-based tactical RPG. Zero to ship.</div>
             <div class="q-metrics"><span class="qm">30+ team</span><span class="qm">0 → Launch</span></div>
-            <div class="q-hint">Hover to reveal intel <span class="q-hint-arr">↻</span></div>
+            <div class="q-hint"><span class="hint-hover">Hover</span><span class="hint-tap">Tap</span> to reveal intel <span class="q-hint-arr">↻</span></div>
           </div>
           <div class="qface qback">
             <div class="qback-title">Dastaan — Tactical RPG</div>
@@ -2765,7 +2773,7 @@ draw();
       </div>
 
       <!-- Quest 5 -->
-      <div class="qcard">
+      <div class="qcard" tabindex="0">
         <div class="qcard-inner">
           <div class="qface qfront">
             <div class="qfront-top"><span class="q-type qt-indie">SIMULATION</span><span class="q-rank">★★★☆☆</span></div>
@@ -2773,7 +2781,7 @@ draw();
             <div class="q-name">Music Festival Tycoon</div>
             <div class="q-teaser">Simulation title production. Feature scoping, resource allocation, and strategic milestone delivery.</div>
             <div class="q-metrics"><span class="qm">Simulation</span><span class="qm">Scope Mgmt</span></div>
-            <div class="q-hint">Hover to reveal intel <span class="q-hint-arr">↻</span></div>
+            <div class="q-hint"><span class="hint-hover">Hover</span><span class="hint-tap">Tap</span> to reveal intel <span class="q-hint-arr">↻</span></div>
           </div>
           <div class="qface qback">
             <div class="qback-title">Music Festival Tycoon</div>
@@ -4563,6 +4571,30 @@ function toggleMusic(){
     });
   }
 
+})();
+</script>
+<script>
+/* Quest cards without a mouse (2026-11-08): tap, Enter or Space flips the two flip cards;
+   Enter or Space activates any element with role="button" (OPEN DOSSIER, modal close). */
+(function(){
+  var hoverable=window.matchMedia&&matchMedia('(hover:hover)').matches;
+  document.querySelectorAll('.qcard:not(.qcard-noflip)').forEach(function(card){
+    function toggle(){card.classList.toggle('flipped');}
+    card.addEventListener('click',function(){if(!hoverable)toggle();});
+    card.addEventListener('keydown',function(e){
+      if(e.target!==card)return;
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}
+    });
+    card.addEventListener('mouseleave',function(){card.classList.remove('flipped');});
+    card.addEventListener('blur',function(){card.classList.remove('flipped');});
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'&&e.key!==' ')return;
+    var t=e.target;
+    if(!t||!t.matches||!t.matches('[role="button"][tabindex]'))return;
+    if(t.tagName==='BUTTON'||t.tagName==='A')return;
+    e.preventDefault();t.click();
+  });
 })();
 </script>
 <!-- ══ PROJECT MODALS ══ -->
