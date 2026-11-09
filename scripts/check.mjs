@@ -9,7 +9,8 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(process.argv[2] || path.join(path.dirname(fileURLToPath(import.meta.url)), '..'));
 const DOMAIN = 'hamnajalil.com';
 const RESUME = 'HAMNA_JALIL.pdf';
-const MAX_BYTES = 3_000_000; // index.html is ~2.7 MB while images are still embedded; lower this once they move out
+const MAX_BYTES = 600_000; // index.html is ~350 KB since images moved to assets/ (2026-11-09)
+const MAX_EMBEDDED = 60_000; // images go in assets/; only tiny ones (favicon, the locked portrait) stay embedded
 
 const results = [];
 const check = (name, fn) => {
@@ -80,9 +81,42 @@ check('No external scripts, frames or trackers', () => {
   return p;
 });
 
-check('index.html under ' + (MAX_BYTES / 1e6).toFixed(1) + ' MB', () => {
+check('index.html under ' + MAX_BYTES / 1000 + ' KB', () => {
   const n = fs.statSync(path.join(ROOT, 'index.html')).size;
-  return n <= MAX_BYTES ? [] : [`index.html is ${(n / 1e6).toFixed(2)} MB`];
+  return n <= MAX_BYTES ? [] : [`index.html is ${Math.round(n / 1000)} KB`];
+});
+
+check('No big images embedded in the page (they belong in assets/)', () => {
+  const p = [];
+  for (let i = html.indexOf('data:image/'); i >= 0; i = html.indexOf('data:image/', i + 1)) {
+    let e = html.indexOf(',', i) + 1;
+    while (/[A-Za-z0-9+/=%]/.test(html[e])) e++;
+    if (e - i > MAX_EMBEDDED) p.push(`${Math.round((e - i) / 1000)} KB image embedded at line ${html.slice(0, i).split('\n').length}`);
+    i = e;
+  }
+  return p;
+});
+
+check('Every local file the page uses exists (exact case)', () => {
+  // exact-case lookup, folder by folder (GitHub Pages is case-sensitive, Windows is not)
+  const exists = rel => {
+    let dir = ROOT;
+    for (const part of rel.split('/')) {
+      if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory() || !fs.readdirSync(dir).includes(part)) return false;
+      dir = path.join(dir, part);
+    }
+    return true;
+  };
+  const refs = new Set();
+  for (const t of [...tags('img'), ...tags('link'), ...tags('a'), ...tags('source')]) {
+    for (const a of ['src', 'href']) {
+      const v = attr(t, a);
+      if (v && !/^(https?:|mailto:|tel:|data:|#|javascript:)/i.test(v)) refs.add(v.replace(/^\.?\//, '').split(/[?#]/)[0]);
+    }
+  }
+  for (const m of html.matchAll(/["'](assets\/[^"'\s]+)["']/g)) refs.add(m[1]); // paths set from scripts
+  refs.delete('');
+  return [...refs].filter(r => !exists(r)).map(r => 'missing file: ' + r);
 });
 
 check('No UI sound effects (only the opt-in ambience may make sound)', () => {
