@@ -1,0 +1,3 @@
+# Recommenders' photos are shown on the page but should not appear in image search.
+User-agent: *
+Disallow: /assets/people/
