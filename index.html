@@ -16,6 +16,7 @@
 <meta name="twitter:description" content="4+ years across AAA, Web3 and live-service · 700K+ installs · $40M+ ecosystem · 50+ people on 4 continents."/>
 <meta name="twitter:image" content="https://hamnajalil.com/og-card.png"/>
 <title>Hamna Jalil — Game Producer &amp; Product Manager</title>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Hamna Jalil","jobTitle":"Game Producer & Product Manager","url":"https://hamnajalil.com/","image":"https://hamnajalil.com/og-card.png","sameAs":["https://www.linkedin.com/in/hamnabukhari","https://github.com/hamnajalil"],"knowsAbout":["Game production","Product management","Live-service games","Web3 games","Agile delivery"]}</script>
 <script>
 (function(){
 var _origTitle = document.title;
@@ -5305,100 +5306,6 @@ draw();
     var isLight = document.body.classList.toggle('light-mode');
     btn.textContent = isLight ? '☀ LIGHT' : '◑ DARK';
     localStorage.setItem('portfolioTheme', isLight ? 'light' : 'dark');
-  });
-})();
-</script>
-<script>
-/* ── SFX: Fantasy RPG Sounds — single AudioContext ── */
-(function(){
-  var X = null;
-  var _unlocked = false;
-  var playTone = window._playTone;
-  var playNoise = window._playNoise;
-
-  function getCtx(){ X = window._getSharedAC(); return X; }
-  function ready(){
-    var c = getCtx();
-    if(c.state === 'running'){ _unlocked = true; return Promise.resolve(c); }
-    return c.resume().then(function(){ _unlocked = true; return c; });
-  }
-  function _unlock(){
-    if(_unlocked) return;
-    getCtx(); ready().catch(function(){});
-  }
-  ['pointerdown','keydown','touchstart'].forEach(function(evt){
-    document.addEventListener(evt, _unlock, { capture: true });
-  });
-
-  var SEL = 'a,button,[onclick],.qcard,.scroll-wrap,.rec-card,.reef-node,'+
-    '.dng-node,.map-node,.xp-row,.opill,.inv-slot,.ach-card,.stud-btn,'+
-    '.ops-head,.rv-card,.cert-row,.cert-card,.cert-scroll';
-
-  /* ══ CLICK SFX ══ */
-  document.addEventListener('click', function(e){
-    if(!e.target.closest(SEL)) return;
-    ready().then(function(c){
-      try{
-        var dest = c.destination;
-        var isLight = _isLight();
-
-        if(!isLight){
-          /* DARK: Arcane Rune Strike — thud + singing-bowl + detuned shimmer */
-          playNoise(c, dest, {filterType:'lowpass', filterFreq:175, peak:0.065, decay:0.06, dur:0.035});
-          playTone(c, dest, {freq:182,  attack:0.012, peak:0.030, decay:1.088});
-          playTone(c, dest, {freq:364,  attack:0.010, peak:0.015, decay:0.59});
-          playTone(c, dest, {freq:1080, attack:0.005, peak:0.009, decay:0.215});
-          playTone(c, dest, {freq:1091, attack:0.005, peak:0.007, decay:0.215});
-        } else {
-          /* LIGHT: Crystal Bell Strike — highpass tap + bell partials */
-          playNoise(c, dest, {filterType:'highpass', filterFreq:3800, peak:0.038, decay:0.038, dur:0.022});
-          [[880,0.026,1.40,-0.30],[2217,0.013,0.85,0.18],[3136,0.007,0.52,0.00],[4186,0.004,0.32,-0.12]].forEach(function(v){
-            playTone(c, dest, {freq:v[0], attack:0.008, peak:v[1], decay:v[2], pan:v[3]});
-          });
-        }
-      }catch(err){if(err)console.warn('SFX click:',err.message);}
-    });
-  });
-
-  /* ══ HOVER SFX ══ */
-  var _lastHover = 0;
-  document.addEventListener('mouseover', function(e){
-    var el = e.target.closest(SEL);
-    if(!el || el.contains(e.relatedTarget)) return;
-    var now = Date.now();
-    if(now - _lastHover < 120) return;
-    _lastHover = now;
-    if(!_unlocked || !X || X.state !== 'running') return;
-    try{
-      var c = X, dest = c.destination;
-      var isLight = _isLight();
-      var isNode = el.classList.contains('dng-node') || el.classList.contains('map-node') || el.classList.contains('reef-node');
-
-      /* Shared stereo panner for dark-mode hover sounds */
-      var pan = c.createStereoPanner();
-      pan.pan.value = Math.random()*0.6 - 0.3;
-      pan.connect(dest);
-
-      if(isNode && !isLight){
-        /* DARK NODE: Ancient Stone Mechanism */
-        playTone(c, pan, {freq:55+Math.random()*10, attack:0.04, peak:0.022, decay:0.24});
-        playNoise(c, pan, {filterType:'bandpass', filterFreq:320, filterQ:1.4, peak:0.015, decay:0.175, dur:0.18, delay:0});
-        playTone(c, pan, {freq:440+Math.random()*55, attack:0.04, peak:0.007, decay:0.15, delay:0.03});
-      } else if(isNode && isLight){
-        /* LIGHT NODE: Enchanted Waypoint Chime — C5→G5 */
-        playTone(c, dest, {freq:523, attack:0.012, peak:0.022, decay:0.368, pan:-0.28});
-        playTone(c, dest, {freq:784, attack:0.012, peak:0.022, decay:0.368, pan:0.28, delay:0.075});
-      } else if(!isLight){
-        /* DARK GENERIC: Arcane Whisper — twin detuned rising triangles */
-        playTone(c, pan, {freq:260, freqEnd:260*1.46, type:'triangle', attack:0.04, peak:0.014, decay:0.16});
-        playTone(c, pan, {freq:264, freqEnd:264*1.46, type:'triangle', attack:0.04, peak:0.010, decay:0.16});
-      } else {
-        /* LIGHT GENERIC: Fairy Sparkle — A6, C7, E7 staggered */
-        [1760, 2093, 2637].forEach(function(freq, idx){
-          playTone(c, dest, {freq:freq, attack:0.008, peak:0.013, decay:0.192, pan:(Math.random()-0.5)*0.65, delay:idx*0.048});
-        });
-      }
-    }catch(err){if(err)console.warn('SFX hover:',err.message);}
   });
 })();
 </script>
