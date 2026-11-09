@@ -1,0 +1,21 @@
+# Runs the pre-deploy check on every pull request and on every change to main.
+# main is production (GitHub Pages), so a red check means: do not merge.
+name: Site check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-deploy check
+        run: node scripts/check.mjs
