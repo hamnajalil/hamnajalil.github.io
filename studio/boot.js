@@ -8,14 +8,27 @@ veil.querySelector('.role').textContent = PROFILE.role;
 const bar = veil.querySelector('.bar i'), pct = veil.querySelector('.pct');
 window.__progress = (k) => { const v = Math.round(Math.max(0, Math.min(1, k)) * 100); bar.style.width = v + '%'; pct.textContent = INTRO.loading + ' ' + v + '%'; };
 window.__progress(0);
+// The wait is the longest look anyone gives this page on a slow line, so it already shows the results and two ways out.
+{
+  const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+  const box = veil.querySelector('.in');
+  if (INTRO.proof) { const row = mk('div', 'proof'); for (const [n, what] of INTRO.proof) { const it = mk('span'); it.append(mk('b', '', n), ' ' + what); row.append(it); } box.append(row); }
+  const out = mk('div', 'out');
+  const cv = mk('a', '', INTRO.resume); cv.href = LINKS.resume; cv.target = '_blank'; cv.rel = 'noopener';
+  const short = mk('a', '', INTRO.short); short.href = '?plain';
+  out.append(cv, short); box.append(out);
+}
 
+const chosen = new URLSearchParams(location.search).has('plain');
 function fallback() {
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
   const link = (label, href, pri) => { const a = el('a', pri ? 'pri' : '', label); a.href = href; a.target = '_blank'; a.rel = 'noopener'; return a; };
   const root = el('main'); root.id = 'plain';
   if (PROFILE.portrait) { const im = el('img', 'me'); im.src = PROFILE.portrait; im.alt = 'Portrait of ' + PROFILE.name; root.append(im); }
-  root.append(el('div', 'status', INTRO.status), el('h1', '', PROFILE.name), el('div', 'role', PROFILE.role), el('p', 'line', PROFILE.line), el('p', 'note', INTRO.plain));
+  root.append(el('div', 'status', INTRO.status), el('h1', '', PROFILE.name), el('div', 'role', PROFILE.role), el('p', 'line', PROFILE.line));
+  if (!chosen) root.querySelector('.line').after(el('p', 'note', INTRO.plain)); // the apology is only for a real failure, not for a visitor who asked for the short version
   const links = el('div', 'links');
+  if (chosen) { const back = el('a', '', INTRO.room); back.href = location.pathname; links.append(back); }
   links.append(link('Contact me', LINKS.contact, true), link('Full portfolio', LINKS.site), link('LinkedIn', LINKS.linkedin), link('Résumé (PDF)', LINKS.resume));
   root.append(links);
   const list = el('div', 'works');
@@ -43,7 +56,7 @@ function fallback() {
 let ok = false;
 try {
   const c = document.createElement('canvas');
-  ok = !new URLSearchParams(location.search).has('plain') && !!c.getContext('webgl2');
+  ok = !chosen && !!c.getContext('webgl2');
 } catch (e) { ok = false; }
 if (ok) import('./main.js').catch((e) => { console.error(e); fallback(); });
 else fallback();

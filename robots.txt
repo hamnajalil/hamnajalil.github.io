@@ -3,3 +3,4 @@ User-agent: *
 Disallow: /portfolio/assets/people/
 Disallow: /studio/img/people/
 Disallow: /assets/people/
+Sitemap: https://hamnajalil.com/sitemap.xml
