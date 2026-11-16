@@ -334,8 +334,10 @@ function buildExterior() {
         vec3 col = pano(d);
         { // straight up, the 360 picture is one flat blue; fade it into a deep night sky with a few stars
           float zen = smoothstep(0.3, 0.68, d.y);
-          vec2 sq = d.xz * 90.0; float star = step(0.992, hash21(floor(sq))) * smoothstep(0.35, 0.0, length(fract(sq) - 0.5));
-          col = mix(col, vec3(0.018, 0.026, 0.085) + vec3(1.6, 1.4, 1.1) * star, zen);
+          vec2 sq = d.xz * 90.0; float star = step(0.975, hash21(floor(sq))) * smoothstep(0.35, 0.0, length(fract(sq) - 0.5));
+          vec2 sq2 = d.xz * 37.0 + 11.3; star += 1.7 * step(0.985, hash21(floor(sq2))) * smoothstep(0.22, 0.0, length(fract(sq2) - 0.5));
+          vec3 night = mix(vec3(0.03, 0.035, 0.11), vec3(0.008, 0.012, 0.045), smoothstep(0.7, 1.0, d.y)); // a touch lighter at the rim, darkest overhead
+          col = mix(col, night + vec3(1.6, 1.4, 1.1) * star, zen);
         }
         col += vec3(1.0, 0.78, 0.6) * glint * (0.25 + 1.6 * dot(col, vec3(0.33)));
         gl_FragColor = vec4(col, 1.0);
@@ -944,12 +946,18 @@ const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls)
 const introEl = $('#intro'), whoEl = $('#who'), helloEl = $('#hello'), tagsEl = $('#tags'), howEl = $('#how');
 introEl.querySelector('h1').textContent = PROFILE.name; introEl.querySelector('.role').textContent = PROFILE.role; introEl.querySelector('p').textContent = INTRO.hint;
 whoEl.querySelector('b').textContent = PROFILE.name; whoEl.querySelector('small').textContent = PROFILE.role;
+// H14: the results leave with the welcome, so the name plate keeps one in view, changing every few seconds (text only, nothing moves)
+if (INTRO.proof && INTRO.proof.length) {
+  const res = mk('i', 'res'); whoEl.append(res); let ri = 0;
+  const put = () => { const [n, what] = INTRO.proof[ri % INTRO.proof.length]; res.replaceChildren(mk('b', '', n), ' ' + what); };
+  put(); setInterval(() => { if (document.hidden) return; res.classList.add('swap'); setTimeout(() => { ri++; put(); res.classList.remove('swap'); }, CALM ? 0 : 450); }, 5200);
+}
 introEl.querySelector('.motto').textContent = INTRO.motto;
 if (INTRO.proof) { const row = mk('div', 'proof'); for (const [n, what] of INTRO.proof) { const it = mk('span'); it.append(mk('b', '', n), ' ' + what); row.append(it); } introEl.querySelector('.role').after(row); }
 howEl.textContent = matchMedia('(pointer: coarse)').matches ? INTRO.howTouch : INTRO.how;
 $('#cta .status').textContent = INTRO.status;
 helloEl.querySelector('h2').textContent = HELLO.title; if (HELLO.open) helloEl.querySelector('h2').after(mk('div', 'open', HELLO.open)); if (PROFILE.portrait) { const im = mk('img', 'me'); im.src = PROFILE.portrait; im.alt = 'Portrait of ' + PROFILE.name; helloEl.querySelector('h2').before(im); } helloEl.querySelector('p').textContent = HELLO.text; helloEl.querySelector('h4').replaceWith(crewHead());
-for (const [label, href, pri] of [['Contact me', LINKS.contact, true], ['LinkedIn', LINKS.linkedin], ['Résumé (PDF)', LINKS.resume], ['Full portfolio', LINKS.site]]) {
+for (const [label, href, pri] of [['Contact me', LINKS.contact, true], ['LinkedIn', LINKS.linkedin], ['Résumé (PDF)', LINKS.resume], [INTRO.caseStudies, LINKS.site]]) {
   const a = mk('a', pri ? 'pri' : '', label); a.href = href; a.target = '_blank'; a.rel = 'noopener'; helloEl.querySelector('.links').append(a);
 }
 for (const x of QUOTES.filter((x) => x.q)) helloEl.querySelector('.quotes').append(quoteCard(x));
@@ -969,6 +977,16 @@ let touring = false;
 const seq = () => touring ? TOUR.map((t) => works.find((w) => w.id === t.id)).filter(Boolean) : works;
 const navEl = $('#nav'), tourBtn = navEl.querySelector('.tour'), homeBtn = navEl.querySelector('.home');
 tourBtn.textContent = INTRO.tour; homeBtn.textContent = INTRO.home;
+// G8: which pieces this visitor has opened (this browser tab only). Their plaques are marked and the count sits by the tour button.
+// H13: until the first piece is opened the tour is the filled, main button; after that it steps back.
+const seenEl = mk('span', 'seen'); navEl.append(seenEl);
+let seen = new Set(); try { seen = new Set(JSON.parse(sessionStorage.getItem('seen') || '[]')); } catch (e) { /* private mode: no memory, no harm */ }
+function markSeen(w) {
+  if (w) { seen.add(w.id); try { sessionStorage.setItem('seen', JSON.stringify([...seen])); } catch (e) { /* as above */ } }
+  for (const x of works) if (x.tag) x.tag.classList.toggle('seen', seen.has(x.id));
+  document.body.classList.toggle('opened', seen.size > 0);
+  seenEl.textContent = seen.size ? INTRO.seen.replace('{n}', seen.size).replace('{t}', works.length) : '';
+}
 tourBtn.addEventListener('click', () => { endIntro(); touring = true; openCard(seq()[0]); });
 function goHome() { rig.yaw = 0; rig.pitch = 0; rig.dolly = tall() ? 0.55 : 0; }
 homeBtn.addEventListener('click', goHome);
@@ -1035,6 +1053,10 @@ function placeTags() {
   }
 }
 
+// G9: an open card has its own address (?view=card:<id>), so one piece can be sent to one person. Left alone when the
+// address already carries test switches.
+const SHAREABLE = [...Q.keys()].every((k) => k === 'view');
+function shareAddress(w) { if (!SHAREABLE) return; try { history.replaceState(null, '', w ? '?view=card:' + w.id : location.pathname); } catch (e) { /* file:// and the like */ } }
 function openCard(w) {
   closeHello();
   rig.mode = 'focus'; rig.focus = w;
@@ -1059,6 +1081,7 @@ function openCard(w) {
   const lead = card.querySelector('.lead'), tl = touring && TOUR.find((t) => t.id === w.id);
   lead.textContent = tl ? tl.line : ''; lead.style.display = tl ? '' : 'none';
   card.classList.add('open'); panelIn(card);
+  markSeen(w); shareAddress(w);
   label.style.opacity = 0;
   sfx.tick(660);
 }
@@ -1066,7 +1089,7 @@ function closeCard() {
   touring = false;
   if (rig.mode !== 'focus') return;
   rig.mode = 'room'; rig.focus = null;
-  card.classList.remove('open'); panelOut(card);
+  card.classList.remove('open'); panelOut(card); shareAddress(null);
   tweenTo(roomPose(clock()), 0.7, null, true);
 }
 card.querySelector('.close').addEventListener('click', closeCard);
@@ -1263,7 +1286,7 @@ load().then(() => {
   if (wake.on) setTimeout(() => document.body.classList.remove('wake'), wake.T_NAME * 1000);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => paintScreen(true));
   document.body.classList.add('ready');
-  buildTags(); startIntro();
+  buildTags(); markSeen(null); startIntro();
   const p = roomPose(clock()); rig.pos.copy(p.pos); rig.tgt.copy(p.tgt);
   if (VIEW === 'desk') { rig.dolly = 1; }
   if (tall() && VIEW === 'room') { rig.dolly = 0.55; zoomK = 0.55; const q = roomPose(clock()); rig.pos.copy(q.pos); rig.tgt.copy(q.tgt); } // phone: start a few steps in, looking at the desk, instead of at half a screen of dome

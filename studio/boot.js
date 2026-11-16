@@ -29,7 +29,7 @@ function fallback() {
   if (!chosen) root.querySelector('.line').after(el('p', 'note', INTRO.plain)); // the apology is only for a real failure, not for a visitor who asked for the short version
   const links = el('div', 'links');
   if (chosen) { const back = el('a', '', INTRO.room); back.href = location.pathname; links.append(back); }
-  links.append(link('Contact me', LINKS.contact, true), link('Full portfolio', LINKS.site), link('LinkedIn', LINKS.linkedin), link('Résumé (PDF)', LINKS.resume));
+  links.append(link('Contact me', LINKS.contact, true), link(INTRO.caseStudies, LINKS.site), link('LinkedIn', LINKS.linkedin), link('Résumé (PDF)', LINKS.resume));
   root.append(links);
   const list = el('div', 'works');
   for (const w of WORKS) {

@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="description" content="Hamna Jalil — Game Producer & Product Manager. An RPG-themed interactive portfolio showcasing AAA, Web3, and live service production experience."/>
 <meta property="og:title" content="Hamna Jalil · Game Producer"/>
-<meta property="og:description" content="Game Producer &amp; Associate PM · 4+ years across AAA, Web3 and live-service · 700K+ installs · $40M+ ecosystem · 50+ people on 4 continents. A playable, RPG-themed portfolio."/>
+<meta property="og:description" content="Game Producer &amp; Product Manager · 4+ years across AAA, Web3 and live-service · 700K+ installs · $40M+ ecosystem · 50+ people on 4 continents. A playable, RPG-themed portfolio."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://hamnajalil.com/portfolio/"/>
 <meta property="og:image" content="https://hamnajalil.com/og-card.png"/>
@@ -114,6 +114,15 @@ body.light-mode .hero-pitch{color:rgba(30,24,56,.62)}
 #musicBtn.music-on{color:var(--gold);border-color:var(--a50)}
 #themeBtn{position:fixed;top:14px;right:152px;z-index:500;font-family:var(--ff-head);font-size:.62rem;letter-spacing:.12em;color:var(--text2);background:rgba(22,20,32,.7);border:1px solid var(--a30);padding:7px 14px;border-radius:2px;transition:color .2s,border-color .2s;backdrop-filter:blur(8px)}
 #themeBtn:hover{color:var(--gold);border-color:var(--gold)}
+/* link back to the 3D studio room, which is the home page since 2026-11-16 */
+#studioBtn{position:fixed;top:14px;left:16px;z-index:500;font-family:var(--ff-head);font-size:.62rem;letter-spacing:.12em;color:var(--text2);background:rgba(22,20,32,.7);border:1px solid var(--a30);padding:7px 14px;border-radius:2px;text-decoration:none;transition:color .2s,border-color .2s;backdrop-filter:blur(8px)}
+#studioBtn:hover,#studioBtn:focus-visible{color:var(--gold);border-color:var(--gold)}
+.foot-studio{font-family:var(--ff-head);font-size:.6rem;letter-spacing:.14em;color:var(--gold);text-decoration:none}
+.foot-studio:hover{text-decoration:underline}
+@media(max-width:768px){#studioBtn{top:44px;left:10px;font-size:.52rem;padding:6px 10px;letter-spacing:.06em}}
+/* a game opened by its own address (#quest-...) is framed and clears the top bar */
+.qcard[id]{scroll-margin-top:90px}
+.qcard:target{outline:1px solid var(--gold);outline-offset:6px}
 
 /* ══ LIGHT / DARK MODE VARS ══ */
 body.light-mode {
@@ -1773,6 +1782,7 @@ window._isLight=function(){return document.body.classList.contains('light-mode')
 </nav>
 <div id="cur"></div>
 
+<a id="studioBtn" href="https://hamnajalil.com/">&#8592; THE STUDIO</a>
 <button id="musicBtn" aria-label="Toggle ambient music" onclick="toggleMusic()">♩ AMBIENCE</button>
 <button id="themeBtn" aria-label="Toggle light/dark theme">◑ DARK</button>
 
@@ -1801,7 +1811,7 @@ window._isLight=function(){return document.body.classList.contains('light-mode')
     })();
     </script>
     <p class="hero-subtitle">GAME PRODUCER · PLAYABLE PORTFOLIO · EST. 2022</p>
-    <p class="hero-pitch">Game Producer &amp; Associate PM with 4+ years shipping AAA, Web3, and live-service titles across 4 continents. Co-owned the roadmap for a $40M+ Web3 gaming ecosystem with 700K+ installs, leading 50+ people.</p>
+    <p class="hero-pitch">Game Producer &amp; Product Manager with 4+ years shipping AAA, Web3, and live-service titles across 4 continents. Co-owned the roadmap for a $40M+ Web3 gaming ecosystem with 700K+ installs, leading 50+ people.</p>
     <div class="hero-tags">
       <span class="htag">AAA</span><span class="htag">Web3</span><span class="htag">Live Ops</span>
       <span class="htag">50+ People</span><span class="htag">4 Continents</span><span class="htag">Women in Games</span>
@@ -2729,7 +2739,7 @@ draw();
     <div class="quests-grid reveal">
 
       <!-- Quest 1 — Featured, dossier scroll -->
-      <div class="qcard qcard-noflip">
+      <div class="qcard qcard-noflip" id="quest-phoenix">
         <div class="qcard-inner">
           <div class="qface qfront" id="skyborne-card-front">
             <div class="qfront-top"><span class="q-type qt-aaa">AAA LIVE</span><span class="q-rank">★★★★★</span></div>
@@ -2751,7 +2761,7 @@ draw();
       </div>
 
       <!-- Quest 2 — RCADE, dossier scroll -->
-      <div class="qcard qcard-noflip">
+      <div class="qcard qcard-noflip" id="quest-rcade">
         <div class="qcard-inner">
           <div class="qface qfront">
             <div class="qfront-top"><span class="q-type qt-web3">WEB3</span><span class="q-rank">★★★★☆</span></div>
@@ -2773,7 +2783,7 @@ draw();
       </div>
 
       <!-- Quest 3 — Genesis, dossier scroll -->
-      <div class="qcard qcard-noflip">
+      <div class="qcard qcard-noflip" id="quest-genesis">
         <div class="qcard-inner">
           <div class="qface qfront">
             <div class="qfront-top"><span class="q-type qt-web3">WEB3</span><span class="q-rank">★★★★☆</span></div>
@@ -2795,7 +2805,7 @@ draw();
       </div>
 
       <!-- Quest 4 -->
-      <div class="qcard" tabindex="0">
+      <div class="qcard" tabindex="0" id="quest-dastaan">
         <div class="qcard-inner">
           <div class="qface qfront">
             <div class="qfront-top"><span class="q-type qt-indie">TACTICAL RPG</span><span class="q-rank">★★★★★</span></div>
@@ -2816,7 +2826,7 @@ draw();
       </div>
 
       <!-- Quest 5 -->
-      <div class="qcard" tabindex="0">
+      <div class="qcard" tabindex="0" id="quest-festival">
         <div class="qcard-inner">
           <div class="qface qfront">
             <div class="qfront-top"><span class="q-type qt-indie">SIMULATION</span><span class="q-rank">★★★☆☆</span></div>
@@ -4080,6 +4090,7 @@ function showPanel(id,btn){
 </main>
 <footer>
   <div class="foot-l">✦ <span>HAMNA JALIL</span> · Game Producer · Lahore, Pakistan</div>
+  <a class="foot-studio" href="https://hamnajalil.com/">&#8592; Back to the studio</a>
   <div class="foot-r"><span class="foot-gem">💎</span> Portfolio crafted with love and late sprints</div>
 </footer>
 <div id="depthGauge" aria-hidden="true"><b id="dgDepth">0 m</b><span id="dgZone">Surface</span></div>
@@ -4629,6 +4640,24 @@ function toggleMusic(){
     });
   }
 
+})();
+</script>
+<script>
+/* Links to one game (2026-11-16): /portfolio/#quest-phoenix and the like, used by the studio room's cards, land on
+   that game with its story open: the dossier for the first three, the flipped card for the other two. */
+(function(){
+  var open={'quest-phoenix':'skyborne','quest-rcade':'rcade','quest-genesis':'genesis'};
+  function go(){
+    var id=location.hash.slice(1); if(id.indexOf('quest-')!==0)return;
+    var card=document.getElementById(id); if(!card)return;
+    card.scrollIntoView({block:'center'});
+    setTimeout(function(){
+      if(open[id]&&typeof openModal==='function')openModal(open[id]);
+      else if(!open[id]){card.classList.add('flipped');card.focus({preventScroll:true});}
+    },500);
+  }
+  window.addEventListener('load',function(){setTimeout(go,300);});
+  window.addEventListener('hashchange',go);
 })();
 </script>
 <script>

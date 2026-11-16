@@ -547,3 +547,23 @@ body.wake #intro, body.wake #how { opacity: 0 !important; transition-delay: 0s !
 body.ready #veil { visibility: hidden; transition: opacity 1.2s ease, visibility 0s 1.2s; }
 body.ready #veil .out a { pointer-events: none; }
 @media (max-width: 700px) { #veil .proof { gap: 6px; margin-top: 24px; } #veil .proof span { font-size: 12px; padding: 5px 10px 6px; } }
+
+/* ---- audit 2h, second batch (2026-11-16) */
+/* H14: one result on the name plate, so the proof does not leave with the welcome */
+#who .res { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(222, 168, 92, 0.3); font-style: normal; font-size: 11.5px; letter-spacing: 0.03em; color: var(--cream); transition: opacity 0.45s ease; min-width: 205px; }
+#who .res b { display: inline; font-family: var(--disp); font-weight: 600; font-size: 12.5px; letter-spacing: 0.04em; color: #fff; }
+#who .res.swap { opacity: 0; }
+@media (max-width: 700px) { #who .res { font-size: 10.5px; margin-top: 4px; padding-top: 4px; min-width: 0; } #who .res b { font-size: 11.5px; } }
+/* H13: until a piece has been opened the tour is the main button; afterwards it is an ordinary plate again */
+body:not(.opened) #nav .tour { color: #2a1806; background: linear-gradient(180deg, #f6d79a, #d89a4a); border-color: #ffe6b8; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 22px rgba(255, 190, 110, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6); font-weight: 700; padding: 12px 20px; font-size: 12px; }
+body:not(.opened) #nav .tour:hover { background: linear-gradient(180deg, #ffe6b8, #e2a85a); }
+@media (max-width: 700px) { body:not(.opened) #nav .tour { padding: 12px 18px; font-size: 12.5px; } }
+/* G8: pieces already opened. A small tick on the plaque, a hollow dot at rest, and a count by the tour button */
+#tags .tag.seen::after { background: transparent; box-shadow: 0 0 0 1.5px #ffd9a0; }
+#tags:not(.rest) .tag.seen, #tags.rest .tag.seen.lit, #tags.rest .tag.seen:focus-visible { padding-right: 24px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.4l2.3 2.3 4.7-5' fill='none' stroke='%23dea85c' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"), linear-gradient(180deg, rgba(58, 40, 22, 0.86), rgba(24, 16, 10, 0.9)); background-repeat: no-repeat; background-position: right 8px center, 0 0; background-size: 10px 10px, auto; }
+#tags .tag.seen.lit, #tags .tag.seen:hover, #tags .tag.seen:focus-visible { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.4l2.3 2.3 4.7-5' fill='none' stroke='%232a1806' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"), linear-gradient(180deg, #f6d79a, #d89a4a) !important; }
+#tags.rest .tag.seen:not(.lit):not(:focus-visible) { background: rgba(24, 16, 10, 0.75); border-color: #ffd9a0; box-shadow: 0 0 0 1px rgba(222, 168, 92, 0.5); }
+#nav .seen { align-self: center; margin-left: 4px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9); }
+#nav .seen:empty { display: none; }
+/* G11: the desktop shortcuts sit in two even columns instead of six and a stray one */
+@media (min-width: 900px) and (min-height: 620px) { #os .desk .icons { display: grid; grid-template-rows: repeat(4, auto); grid-auto-flow: column; align-content: start; bottom: auto; } }
