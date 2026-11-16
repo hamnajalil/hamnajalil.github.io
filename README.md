@@ -2,6 +2,8 @@
 
 **Live:** https://hamnajalil.com
 
+**Layout:** the home page (`index.html` + `studio/`) is a 3D studio you can walk around. The RPG portfolio described below lives in `portfolio/` and is served at https://hamnajalil.com/portfolio/
+
 The interactive portfolio of Hamna Jalil, a Technical PM, Game Producer and AI & Technology Lead. It works like an RPG world rather than a static CV: you explore it to find the career quests, the boss fights, and the PM tools.
 
 ## ✨ What's inside

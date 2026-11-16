@@ -1,4 +1,6 @@
 // Pre-deploy check for hamnajalil.com. main is production, so every PR runs this (.github/workflows/check.yml).
+// Since 2026-11-16 the repo holds two pages: the studio room at the root (index.html + studio/, copied in from its own
+// project) and the RPG portfolio in portfolio/. Most checks below are about the portfolio page; the last one is the room.
 // Run locally: node scripts/check.mjs   (optional: path to the site folder; defaults to the repo root)
 // Exits 1 if any check fails. Plain Node, no dependencies.
 import fs from 'node:fs';
@@ -22,8 +24,20 @@ const check = (name, fn) => {
   }
 };
 
-const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const PAGE_DIR = 'portfolio'; // the RPG portfolio page lives here; the resume, CNAME and share card stay at the root
+const html = fs.readFileSync(path.join(ROOT, PAGE_DIR, 'index.html'), 'utf8');
 const files = new Set(fs.readdirSync(ROOT)); // exact names: GitHub Pages is case-sensitive
+// exact-case lookup from the repo root, folder by folder (GitHub Pages is case-sensitive, Windows is not)
+const exists = rel => {
+  let dir = ROOT;
+  for (const part of rel.split('/')) {
+    if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory() || !fs.readdirSync(dir).includes(part)) return false;
+    dir = path.join(dir, part);
+  }
+  return true;
+};
+// a link written in a page, as a path from the repo root ('' if it climbs out of the repo)
+const fromRoot = (dir, ref) => { const r = path.posix.normalize(path.posix.join(dir, ref.split(/[?#]/)[0])); return r.startsWith('..') ? '' : r.replace(/^\.\//, ''); };
 
 // All <script> blocks, found with indexOf (regexes over this 2.8 MB file can backtrack for minutes)
 const scripts = [];
@@ -51,8 +65,8 @@ check('Resume link matches the PDF file', () => {
   const pdfLinks = tags('a').map(t => attr(t, 'href')).filter(h => h && /\.pdf(\?|#|$)/i.test(h) && !/^https?:/i.test(h));
   if (!pdfLinks.length) p.push('no link to the resume PDF found');
   for (const h of pdfLinks) {
-    const f = h.replace(/^\.?\//, '').split(/[?#]/)[0];
-    if (!files.has(f)) p.push(`link "${h}" points to a file that does not exist (names must match exactly, including case)`);
+    const f = fromRoot(PAGE_DIR, h);
+    if (f !== RESUME || !files.has(f)) p.push(`link "${h}" points to a file that does not exist (names must match exactly, including case)`);
   }
   return p;
 });
@@ -82,7 +96,7 @@ check('No external scripts, frames or trackers', () => {
 });
 
 check('index.html under ' + MAX_BYTES / 1000 + ' KB', () => {
-  const n = fs.statSync(path.join(ROOT, 'index.html')).size;
+  const n = fs.statSync(path.join(ROOT, PAGE_DIR, 'index.html')).size;
   return n <= MAX_BYTES ? [] : [`index.html is ${Math.round(n / 1000)} KB`];
 });
 
@@ -98,23 +112,14 @@ check('No big images embedded in the page (they belong in assets/)', () => {
 });
 
 check('Every local file the page uses exists (exact case)', () => {
-  // exact-case lookup, folder by folder (GitHub Pages is case-sensitive, Windows is not)
-  const exists = rel => {
-    let dir = ROOT;
-    for (const part of rel.split('/')) {
-      if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory() || !fs.readdirSync(dir).includes(part)) return false;
-      dir = path.join(dir, part);
-    }
-    return true;
-  };
   const refs = new Set();
   for (const t of [...tags('img'), ...tags('link'), ...tags('a'), ...tags('source')]) {
     for (const a of ['src', 'href']) {
       const v = attr(t, a);
-      if (v && !/^(https?:|mailto:|tel:|data:|#|javascript:)/i.test(v)) refs.add(v.replace(/^\.?\//, '').split(/[?#]/)[0]);
+      if (v && !/^(https?:|mailto:|tel:|data:|#|javascript:)/i.test(v)) refs.add(fromRoot(PAGE_DIR, v) || v);
     }
   }
-  for (const m of html.matchAll(/["'](assets\/[^"'\s]+)["']/g)) refs.add(m[1]); // paths set from scripts
+  for (const m of html.matchAll(/["'](assets\/[^"'\s]+)["']/g)) refs.add(fromRoot(PAGE_DIR, m[1])); // paths set from scripts
   refs.delete('');
   return [...refs].filter(r => !exists(r)).map(r => 'missing file: ' + r);
 });
@@ -149,6 +154,38 @@ check('In-page links point to real sections', () => {
     if (h && h.length > 1 && h.startsWith('#') && !ids.has(h.slice(1))) p.push(`link to ${h} has no matching id`);
   }
   return [...new Set(p)];
+});
+
+check('Home page (the studio room): every file it loads exists (exact case), nothing external but fonts', () => {
+  const p = [];
+  if (!exists('index.html') || !exists('studio')) return ['index.html or studio/ is missing at the root'];
+  const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const need = new Set();
+  for (const m of home.matchAll(/\s(?:src|href)="([^"]+)"/g)) {
+    const v = m[1];
+    if (/^https?:/i.test(v)) { if (!/^https:\/\/(fonts\.googleapis\.com|fonts\.gstatic\.com|hamnajalil\.com)\b/.test(v)) p.push('external address in the home page: ' + v); }
+    else if (!/^(data:|#|mailto:)/i.test(v)) need.add(v.endsWith('/') ? fromRoot('', v + 'index.html') : fromRoot('', v));
+  }
+  // follow the module imports from the page's scripts, and collect every "studio/..." path written in the code
+  const seen = new Set(), queue = [...need].filter(f => f.endsWith('.js'));
+  const bare = { three: 'studio/three/three.module.js' };
+  while (queue.length) {
+    const f = queue.pop();
+    if (seen.has(f) || !exists(f)) { need.add(f); continue; }
+    seen.add(f);
+    const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
+    for (const m of code.matchAll(/^\s*(?:import\b[^'"\n;]*?|export\b[^'"\n;=]*?\bfrom\s*)['"]([^'"\n]+)['"]/gm)) { // real import lines only, not text inside comments
+      const v = m[1];
+      const t = v.startsWith('.') ? fromRoot(path.posix.dirname(f), v) : v.startsWith('three/addons/') ? 'studio/three/addons/' + v.slice(13) : bare[v];
+      if (t) { need.add(t); queue.push(t); } else p.push(`${f} imports "${v}", which is not a local file`);
+    }
+    if (!f.startsWith('studio/three/')) for (const m of code.matchAll(/\bimport\(\s*['"](\.[^'"\n]+)['"]\s*\)/g)) { const t = fromRoot(path.posix.dirname(f), m[1]); need.add(t); queue.push(t); } // import('./x.js')
+    if (!f.startsWith('studio/three/')) for (const m of code.matchAll(/['"`](studio\/[^'"`\s$?]+\.[a-z0-9]+)['"`]/g)) need.add(m[1]);
+  }
+  if (exists('studio/os.css')) for (const m of fs.readFileSync(path.join(ROOT, 'studio/os.css'), 'utf8').matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)) if (!/^(data:|https?:)/.test(m[1])) need.add(fromRoot('studio', m[1]));
+  need.delete('');
+  for (const f of need) if (!exists(f)) p.push('missing file: ' + f);
+  return p;
 });
 
 let failed = 0;
