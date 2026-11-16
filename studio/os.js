@@ -153,7 +153,7 @@ export const OS = {
       sc('Badges', { g: G.badge, bg: 'linear-gradient(160deg,#ffd166,#ff8a5c)' }, () => this.openNote(3)),
       sc('Playbook', { g: ICON.playbook, bg: '#ff7a45' }, () => this.open('playbook')),
       sc('Sprint health', { g: G.chart, bg: 'linear-gradient(160deg,#3ddc84,#1c8f8a)' }, LINKS.sprint),
-      sc('Full portfolio', { g: G.link, bg: 'linear-gradient(160deg,#b08cff,#6a4cff)' }, LINKS.site));
+      sc(INTRO.caseStudies, { g: G.link, bg: 'linear-gradient(160deg,#b08cff,#6a4cff)' }, LINKS.site));
     const f = WORKS[0];
     const feat = h('div', { class: 'wd feat', onclick: () => this.openNote(1) }, h('img', { src: f.img, alt: f.title, draggable: 'false' }),
       h('div', { class: 'cap' }, h('small', {}, 'Featured · ' + f.kind), h('b', {}, f.title)));
