@@ -161,9 +161,10 @@ check('Home page (the studio room): every file it loads exists (exact case), not
   if (!exists('index.html') || !exists('studio')) return ['index.html or studio/ is missing at the root'];
   const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   const need = new Set();
-  for (const m of home.matchAll(/\s(?:src|href)="([^"]+)"/g)) {
-    const v = m[1];
-    if (/^https?:/i.test(v)) { if (!/^https:\/\/(fonts\.googleapis\.com|fonts\.gstatic\.com|hamnajalil\.com)\b/.test(v)) p.push('external address in the home page: ' + v); }
+  for (const m of home.matchAll(/<(\w+)\b[^>]*?\s(?:src|href)="([^"]+)"/g)) {
+    const v = m[2];
+    if (/^https?:/i.test(v)) { if (m[1].toLowerCase() === 'a') continue; // a link a visitor may click loads nothing by itself
+      if (!/^https:\/\/(fonts\.googleapis\.com|fonts\.gstatic\.com|hamnajalil\.com)\b/.test(v)) p.push('external address in the home page: ' + v); }
     else if (!/^(data:|#|mailto:)/i.test(v)) need.add(v.endsWith('/') ? fromRoot('', v + 'index.html') : fromRoot('', v));
   }
   // follow the module imports from the page's scripts, and collect every "studio/..." path written in the code
