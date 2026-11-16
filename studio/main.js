@@ -99,15 +99,20 @@ function floorMaterial(tA, tB) {
       }`,
   });
 }
-function bakedMaterial(tA, tB, opts = {}) {
+// H2 (2026-11-16): where a piece has dissolved (camera right behind it), its tray, cage and wires go too. They belong to the
+// room's furniture meshes, so those materials discard pixels inside a small upright cylinder round each dissolved piece.
+const GONE = Array.from({ length: 8 }, () => new THREE.Vector4(0, 0, 0, 0)); // x, z, lowest height, amount 0..1
+const GONE_R = new Float32Array(8); // radius of each cylinder
+function bakedMaterial(tA, tB, { gone = false, ...opts } = {}) {
   return new THREE.ShaderMaterial({
     uniforms: {
       tA: { value: tA }, tB: { value: tB }, uMon: U.uMon, uTime: U.uTime, uWake: U.uWake,
       uHi: { value: 0 }, uGhost: { value: 0 }, uSway: { value: new THREE.Vector4(0, 0, 0, 0) },
+      uGone: { value: GONE }, uGoneR: { value: GONE_R }, uGoneOn: { value: gone ? 1 : 0 },
     },
     side: THREE.DoubleSide,
     vertexShader: /* glsl */`
-      varying vec2 vUv; varying vec3 vN; varying vec3 vV; varying vec3 vL; varying float vFlat;
+      varying vec2 vUv; varying vec3 vN; varying vec3 vV; varying vec3 vL; varying float vFlat; varying vec3 vWp;
       uniform float uTime; uniform vec4 uSway; // xz = pivot, y = base height, w = amplitude
       void main(){
         vUv = uv;
@@ -119,17 +124,19 @@ function bakedMaterial(tA, tB, opts = {}) {
           p.x += sin(uTime * 0.9 + ph) * k + sin(uTime * 2.3 + ph * 1.7) * k * 0.3;
           p.z += cos(uTime * 0.7 + ph * 1.3) * k * 0.6;
         }
-        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0); vWp = (modelMatrix * vec4(p, 1.0)).xyz;
         vN = normalMatrix * normal; vV = -mv.xyz;
         vFlat = abs(normalize(mat3(modelMatrix) * normal).y); // 1 on level surfaces (ledge, desk and tray tops)
         vL = (viewMatrix * vec4(0.0, 2.9, 0.0, 1.0)).xyz - mv.xyz; // towards the lamp at the heart of the orrery
         gl_Position = projectionMatrix * mv;
       }`,
     fragmentShader: /* glsl */`
-      varying vec2 vUv; varying vec3 vN; varying vec3 vV; varying vec3 vL; varying float vFlat;
-      uniform sampler2D tA, tB; uniform vec3 uMon; uniform float uHi, uWake, uGhost;
+      varying vec2 vUv; varying vec3 vN; varying vec3 vV; varying vec3 vL; varying float vFlat; varying vec3 vWp;
+      uniform sampler2D tA, tB; uniform vec3 uMon; uniform float uHi, uWake, uGhost, uGoneOn; uniform vec4 uGone[8]; uniform float uGoneR[8];
       vec3 dec(vec3 c){ return pow(c, vec3(2.2)) * 4.0; }
       void main(){
+        if (uGoneOn > 0.0) { float g = 0.0; for (int i = 0; i < 8; i++) if (uGone[i].w > 0.0 && vWp.y > uGone[i].z && distance(vWp.xz, uGone[i].xy) < uGoneR[i]) g = max(g, uGone[i].w);
+          if (g > 0.0) { vec2 q = floor(gl_FragCoord.xy); if (fract(sin(dot(q, vec2(12.9898, 78.233))) * 43758.5453) < g) discard; } }
         if (uGhost > 0.0) { vec2 q = floor(gl_FragCoord.xy); if (fract(sin(dot(q, vec2(12.9898, 78.233))) * 43758.5453) < uGhost) discard; } // dissolves a piece the camera stands right behind
         vec3 c = dec(texture2D(tA, vUv).rgb) * uWake + dec(texture2D(tB, vUv).rgb) * uMon;
         c = mix(c, vec3(1.3) + (c - 1.3) * 0.28, step(1.3, c)); // soft knee: lit screens keep their colour instead of burning to white
@@ -519,7 +526,7 @@ function roomPose(t) {
 }
 const tall = () => innerWidth < innerHeight * 0.8;
 const UP = new THREE.Vector3(0, 1, 0), FOCUS_ZOOM = 0.8;
-const FOCUS = { arcade: { turn: -0.3, dist: 0.8 }, festival: { turn: 0.6 }, wig: { turn: -0.6 } }; // clear of the chair and the telescope // per piece: { turn: radians round the piece, dist: multiplier, up: metres }
+const FOCUS = { phoenix: { turn: Q.has('pt') ? parseFloat(Q.get('pt')) : 0.4 }, arcade: { turn: -0.3, dist: 0.8 }, festival: { turn: 0.6 }, wig: { turn: -0.6 } }; // clear of the chair and the telescope // per piece: { turn: radians round the piece, dist: multiplier, up: metres }
 function focusPose(w) {
   // stand between the piece and the starting spot, with the piece a little left of centre (the card is on the right)
   const c = w.center;
@@ -598,7 +605,7 @@ async function load() {
   ]);
   texs.pop();
   const mats = {};
-  names.forEach((n, i) => { mats[n] = bakedMaterial(texs[i * 2], texs[i * 2 + 1]); });
+  names.forEach((n, i) => { mats[n] = bakedMaterial(texs[i * 2], texs[i * 2 + 1], { gone: n !== 'shell' }); });
   const groups = {};
   const swayMats = {};
   gltf.scene.updateMatrixWorld(true);
@@ -637,6 +644,7 @@ async function load() {
           vertexShader: `varying vec3 vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`,
           fragmentShader: `varying vec3 vW; uniform vec3 uC; uniform vec3 uTray[8]; uniform float uAll;
             void main(){ float k = uAll, best = 0.9; for (int i = 0; i < 8; i++) { float d = distance(vW.xz, uTray[i].xy); if (d < best) { best = d; k = uTray[i].z; } }
+              if (k < 0.0) discard; // the ring of a dissolved piece goes with it
               gl_FragColor = vec4(uC * (0.04 + 0.96 * k), 1.0); }`,
         });
         continue;
@@ -917,6 +925,7 @@ addEventListener('keydown', (ev) => {
   if (ev.key === 'Escape') {
     if (rig.mode === 'os' || rig.mode === 'screen') exitScreen();
     else if (rig.mode === 'focus') closeCard();
+    else if (helloEl.classList.contains('open')) closeHello();
   }
   if (rig.mode === 'room' || rig.mode === 'focus') {
     if (ev.key.startsWith('Arrow')) { lastInput = performance.now(); glide = 0; }
@@ -924,7 +933,8 @@ addEventListener('keydown', (ev) => {
     if (ev.key === 'ArrowRight') rig.yaw = Math.min(1.6, rig.yaw + 0.12);
     if (ev.key === 'ArrowUp') rig.dolly = Math.min(1, rig.dolly + 0.15);
     if (ev.key === 'ArrowDown') rig.dolly = Math.max(0, rig.dolly - 0.15);
-    if (ev.key === 'Enter') enterScreen();
+    // Enter on a button or link belongs to that control; only a bare Enter steps into the monitor
+    if (ev.key === 'Enter' && !(ev.target.closest && ev.target.closest('button, a, summary, input, textarea, select'))) enterScreen();
   }
 });
 
@@ -944,8 +954,14 @@ for (const [label, href, pri] of [['Contact me', LINKS.contact, true], ['LinkedI
 }
 for (const x of QUOTES.filter((x) => x.q)) helloEl.querySelector('.quotes').append(quoteCard(x));
 { const more = mk('button', 'more', 'Read the full recommendations'); more.addEventListener('click', () => { closeHello(); enterScreen(); setTimeout(() => OS.openNote(4), 2400); }); helloEl.querySelector('.quotes').append(more); }
-function openHello() { if (rig.mode === 'focus') closeCard(); helloEl.classList.add('open'); endIntro(); }
-function closeHello() { helloEl.classList.remove('open'); }
+// keyboard: a closed panel is inert (Tab skips it); one opened from the keyboard takes the focus and hands it back on closing
+let byKey = false, backTo = null, pendingFocus = null;
+addEventListener('keydown', () => { byKey = true; }, true); addEventListener('pointerdown', () => { byKey = false; }, true);
+function panelIn(el) { el.inert = false; if (!byKey) return; if (!el.contains(document.activeElement)) { if (!document.activeElement.closest('#card, #hello')) backTo = document.activeElement; el.querySelector('.close').focus({ preventScroll: true }); } }
+function panelOut(el) { const had = el.contains(document.activeElement); el.inert = true; if (had && backTo && byKey) { pendingFocus = backTo; if (!tagsEl.contains(backTo)) { backTo.focus({ preventScroll: true }); pendingFocus = null; } } }
+helloEl.inert = true; card.inert = true;
+function openHello() { if (rig.mode === 'focus') closeCard(); helloEl.classList.add('open'); panelIn(helloEl); endIntro(); }
+function closeHello() { if (!helloEl.classList.contains('open')) return; helloEl.classList.remove('open'); panelOut(helloEl); }
 whoEl.addEventListener('click', openHello); $('#cta .hello').addEventListener('click', openHello); helloEl.querySelector('.close').addEventListener('click', closeHello);
 // the tour: the eight cards in order at the visitor's own pace, ending on "say hello"
 let touring = false;
@@ -982,7 +998,10 @@ let tagRects = []; // where the plaques are this frame (empty while they rest as
 function placeTags() {
   const show = rig.mode === 'room' && !rig.tween;
   tagsEl.classList.toggle('on', show);
+  if (tagsEl.inert === show) tagsEl.inert = !show; // hidden plaques are not keyboard stops
   if (!show) return;
+  if (pendingFocus) { const f = pendingFocus; pendingFocus = null; if (!helloEl.classList.contains('open')) f.focus({ preventScroll: true }); }
+  const corners = [whoEl, $('#cta')].filter(Boolean).map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0);
   const placed = [];
   for (const w of works) {
     tagV.copy(w.anchor).project(camera);
@@ -1004,11 +1023,15 @@ function placeTags() {
   tagRects = resting ? [] : placed;
   for (const p of placed) {
     p.x = Math.min(innerWidth - p.hw - 8, Math.max(p.hw + 8, p.x)); // keep the whole plaque on screen
+    for (const r of corners) { // H4: a plaque may not slide under the name plate or the say-hello buttons; it hangs just below them instead
+      const bot = p.y - p.lift - 16;
+      if (p.x + p.hw > r.left - 8 && p.x - p.hw < r.right + 8 && bot > r.top - 4 && bot - 32 < r.bottom + 6) p.lift = p.y - 16 - (r.bottom + 44);
+    }
     // a name stays lit for a moment after the pointer leaves, so it cannot flicker at the edge of a piece
     if (p.w === hover || p.w === tagHover) p.w.litUntil = performance.now() + 350;
     p.w.tag.classList.toggle('lit', performance.now() < (p.w.litUntil || 0));
     p.w.tag.style.transform = `translate(${p.x.toFixed(1)}px, ${(p.y - p.lift).toFixed(1)}px) translate(-50%, -100%) translateY(-16px)`;
-    p.w.tag.style.setProperty('--wire', (14 + p.lift).toFixed(0) + 'px');
+    p.w.tag.style.setProperty('--wire', Math.max(0, 14 + p.lift).toFixed(0) + 'px');
   }
 }
 
@@ -1035,7 +1058,7 @@ function openCard(w) {
   card.querySelector('.next').textContent = touring ? (i === list.length - 1 ? 'Finish' : 'Next stop') : 'Next';
   const lead = card.querySelector('.lead'), tl = touring && TOUR.find((t) => t.id === w.id);
   lead.textContent = tl ? tl.line : ''; lead.style.display = tl ? '' : 'none';
-  card.classList.add('open');
+  card.classList.add('open'); panelIn(card);
   label.style.opacity = 0;
   sfx.tick(660);
 }
@@ -1043,7 +1066,7 @@ function closeCard() {
   touring = false;
   if (rig.mode !== 'focus') return;
   rig.mode = 'room'; rig.focus = null;
-  card.classList.remove('open');
+  card.classList.remove('open'); panelOut(card);
   tweenTo(roomPose(clock()), 0.7, null, true);
 }
 card.querySelector('.close').addEventListener('click', closeCard);
@@ -1057,7 +1080,7 @@ card.querySelector('.prev').addEventListener('click', () => { const list = seq()
 const osEl = document.getElementById('os');
 function enterScreen(instant) {
   if (rig.mode === 'screen' || rig.mode === 'os') return;
-  card.classList.remove('open'); label.style.opacity = 0; hover = null; hoverScreen = false;
+  card.classList.remove('open'); card.inert = true; label.style.opacity = 0; hover = null; hoverScreen = false;
   rig.mode = 'screen';
   document.body.classList.add('in-os');
   sfx.whoosh(true);
@@ -1160,7 +1183,8 @@ function frame() {
       if (Math.abs(near - w.ghost) < 0.03) w.ghost = near;
       w.mat.uniforms.uGhost.value = w.ghost < 0.01 ? 0 : w.ghost;
       if (liveOf[w.id]) liveOf[w.id].visible = w.ghost < 0.5;
-      if (!wake.on && i < 8) wake.trays[i].z = 1 - w.ghost; // its tray ring dims with it, so no bright hoop is left hanging in front of the view
+      if (i < 8) { if (!GONE_R[i]) GONE_R[i] = Math.hypot(w.box.max.x - w.box.min.x, w.box.max.z - w.box.min.z) / 2 + (Q.has('gr') ? parseFloat(Q.get('gr')) : 0.2); GONE[i].set(w.center.x, w.center.z, w.box.min.y - 0.3, w.ghost < 0.01 ? 0 : w.ghost); }
+      if (!wake.on && i < 8) wake.trays[i].z = w.ghost > 0.5 ? -1 : 1 - w.ghost; // its tray ring dims with it, so no bright hoop is left hanging in front of the view
       if (w.tag) w.tag.style.opacity = w.ghost > 0.5 ? 0 : '';
     }
     if (w.arm) { // light runs out along the arm to the piece being pointed at (or lit in the opening, or open as a card)

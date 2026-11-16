@@ -534,3 +534,16 @@ body.wake #intro, body.wake #how { opacity: 0 !important; transition-delay: 0s !
 #intro .proof b { font-family: var(--disp); font-weight: 600; color: #fff; font-size: 1.12em; margin-right: 2px; }
 @media (max-width: 700px) { #intro .proof { gap: 6px; margin-top: 12px; } #intro .proof span { padding: 5px 10px 6px; font-size: 12px; } }
 @media (min-width: 1250px) { #intro .proof { margin-left: -150px; margin-right: -150px; } } /* five plates on one line on a desktop */
+
+/* ---- the loading screen already sells her: results under the bar, and two ways out (2026-11-16, audit H6) */
+#veil .in { width: min(660px, 88vw); }
+#veil .bar, #veil .pct { max-width: 340px; margin-left: auto; margin-right: auto; }
+#veil .proof { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 30px; }
+#veil .proof span { padding: 6px 12px 7px; border-radius: 6px; font-size: 13px; letter-spacing: 0.04em; color: var(--cream); background: var(--plate); border: 1px solid rgba(222, 168, 92, 0.6); box-shadow: inset 0 1px 0 rgba(255, 224, 170, 0.22); }
+#veil .proof b { font-family: var(--disp); font-weight: 600; color: #fff; font-size: 1.12em; margin-right: 2px; }
+#veil .out { display: flex; justify-content: center; gap: 10px; margin-top: 22px; }
+#veil .out a { pointer-events: auto; padding: 9px 14px; border-radius: 6px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; color: var(--cream); background: var(--plate); border: 1px solid rgba(222, 168, 92, 0.6); box-shadow: inset 0 1px 0 rgba(255, 224, 170, 0.22); }
+#veil .out a:hover, #veil .out a:focus-visible { outline: 0; color: #2a1806; background: linear-gradient(180deg, #f6d79a, #d89a4a); border-color: #ffe6b8; }
+body.ready #veil { visibility: hidden; transition: opacity 1.2s ease, visibility 0s 1.2s; }
+body.ready #veil .out a { pointer-events: none; }
+@media (max-width: 700px) { #veil .proof { gap: 6px; margin-top: 24px; } #veil .proof span { font-size: 12px; padding: 5px 10px 6px; } }

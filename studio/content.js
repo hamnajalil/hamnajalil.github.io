@@ -16,7 +16,7 @@ export const WORKS = [
   { id: 'wig', link: 'https://hamnajalil.com/portfolio/#achievements', linkText: 'See it on my site', short: 'Women in Games', kind: 'Community', title: 'Women in Games ambassador', art: 'star', badge: 'studio/img/women-in-games.webp', tags: ['Equity', 'Inclusion', 'Opportunity'],
     text: 'I am an International Women in Games ambassador, advocating for equity, inclusion and opportunity across the games industry.' },
   { id: 'certs', link: 'https://hamnajalil.com/portfolio/#achievements', linkText: 'See the certificates', short: 'Certificates', kind: 'Certifications', title: 'The certificate shelf', art: 'logos', tags: ['Project management', 'Agile', 'Scrum', 'Machine learning'],
-    text: 'Google Project Management, Agile with Atlassian Jira, IBM Scrum Master, and the Stanford Machine Learning specialization.' },
+    text: 'Google Project Management, Agile with Atlassian Jira, IBM Scrum Master, the UC Boulder Project Management specialization and the Stanford Machine Learning specialization.' },
   { id: 'sprint', short: 'Sprint health', kind: 'Tool I built', title: 'Sprint health', art: 'chart', tags: ['Built by me', 'Live on my site'],
     text: 'A sprint health tool I built for my portfolio, because production craft should be something you can click on.',
     link: 'https://hamnajalil.com/sprint-health/', linkText: 'Open sprint health' },
@@ -106,6 +106,7 @@ export const INTRO = {
   proof: [['700K+', 'installs'], ['$50M+', 'in-game revenue'], ['$40M+', 'ecosystem'], ['+40%', 'pipeline efficiency'], ['Zero', 'missed seasonal launches']],
   crewHint: 'Read the recommendations',
   loading: 'Opening the studio',
+  resume: 'Résumé (PDF)', short: 'Short version', room: 'Open the 3D studio', // the two ways out on the loading screen, and the way back from the short version
   plain: 'The 3D studio could not start on this device, so here is the short version.',
   tour: 'Take the tour', home: 'Back to start', soundOff: 'Enable sound',
 };
