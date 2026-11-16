@@ -1,3 +1,5 @@
-# Recommenders' photos are shown on the page but should not appear in image search.
+# Recommenders' photos are shown on the pages but should not appear in image search.
 User-agent: *
+Disallow: /portfolio/assets/people/
+Disallow: /studio/img/people/
 Disallow: /assets/people/
