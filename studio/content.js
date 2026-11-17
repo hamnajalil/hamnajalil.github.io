@@ -106,6 +106,7 @@ export const INTRO = {
   // worded as on hamnajalil.com. Money figures included by Ham's choice (2026-11-16: "Add money figures").
   proof: [['700K+', 'installs'], ['$50M+', 'in-game revenue'], ['$40M+', 'ecosystem'], ['+40%', 'pipeline efficiency'], ['Zero', 'missed seasonal launches']],
   crewHint: 'Read the recommendations',
+  enter: 'Step inside', // the brass plaque above the monitor
   loading: 'Opening the studio',
   resume: 'Résumé (PDF)', short: 'Short version', room: 'Open the 3D studio', // the two ways out on the loading screen, and the way back from the short version
   plain: 'The 3D studio could not start on this device, so here is the short version.',

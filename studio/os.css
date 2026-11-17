@@ -465,8 +465,8 @@ body:not(.met) #tags { opacity: 0 !important; }
 @media (max-width: 700px) { #intro { bottom: 19vh; } #intro h1 { font-size: 38px; } #intro::before { bottom: -19vh; height: 60vh; } #how { bottom: 76px; } }
 
 /* ------------------------------------------------------------------ art-direction audit A5, A12, A13 (2026-11-15) */
-#tags.rest .tag:not(.lit):not(:focus-visible) { font-size: 0; letter-spacing: 0; padding: 0; width: 11px; height: 11px; border-radius: 50%; background: #ffd9a0; border: 1px solid rgba(60, 38, 14, 0.9); box-shadow: 0 0 0 1px rgba(222, 168, 92, 0.6), 0 0 10px 2px rgba(255, 180, 100, 0.55); }
-#tags.rest .tag:not(.lit):not(:focus-visible)::before, #tags.rest .tag:not(.lit):not(:focus-visible)::after { display: none; }
+#tags.rest .tag:not(.door):not(.lit):not(:focus-visible) { font-size: 0; letter-spacing: 0; padding: 0; width: 11px; height: 11px; border-radius: 50%; background: #ffd9a0; border: 1px solid rgba(60, 38, 14, 0.9); box-shadow: 0 0 0 1px rgba(222, 168, 92, 0.6), 0 0 10px 2px rgba(255, 180, 100, 0.55); }
+#tags.rest .tag:not(.door):not(.lit):not(:focus-visible)::before, #tags.rest .tag:not(.door):not(.lit):not(:focus-visible)::after { display: none; }
 #tags .tag { transition: background 0.18s, color 0.18s, box-shadow 0.18s, width 0.25s, height 0.25s, padding 0.25s, font-size 0.2s; }
 #os .notes .emblem { width: 78px; height: 78px; border-radius: 50%; transform: none; font-family: "Cinzel", serif; font-weight: 600; font-size: 26px; letter-spacing: 0.04em; color: #f4dfb6; background: radial-gradient(circle at 50% 35%, #4a3320, #1a110a 70%); border: 1.5px solid #dea85c; box-shadow: 0 0 0 4px rgba(24, 16, 10, 0.9), 0 0 0 5px rgba(222, 168, 92, 0.45), 0 10px 26px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 224, 170, 0.3); }
 
@@ -474,7 +474,7 @@ body:not(.met) #tags { opacity: 0 !important; }
 /* hover is driven by .lit only (set in main.js), and the wire and its dot never catch the pointer: this stops the flicker Ham saw */
 #tags .tag::before, #tags .tag::after { pointer-events: none; }
 #tags .tag, #gl { cursor: pointer; } #gl { cursor: grab; }
-#tags.rest .tag:not(.lit):not(:focus-visible) { box-sizing: content-box; border-width: 7px; border-color: transparent; background-clip: padding-box; box-shadow: none; }
+#tags.rest .tag:not(.door):not(.lit):not(:focus-visible) { box-sizing: content-box; border-width: 7px; border-color: transparent; background-clip: padding-box; box-shadow: none; }
 
 /* round 2 fixes (2026-11-15) */
 /* plain page: pieces without key art get a tile, so every card has a picture */
@@ -567,3 +567,6 @@ body:not(.opened) #nav .tour:hover { background: linear-gradient(180deg, #ffe6b8
 #nav .seen:empty { display: none; }
 /* G11: the desktop shortcuts sit in two even columns instead of six and a stray one */
 @media (min-width: 900px) and (min-height: 620px) { #os .desk .icons { display: grid; grid-template-rows: repeat(4, auto); grid-auto-flow: column; align-content: start; bottom: auto; } }
+
+/* the monitor's plaque ("Step inside"): the one door in the room, so it keeps its words and a soft glow */
+#tags .tag.door { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 190, 110, 0.38); }

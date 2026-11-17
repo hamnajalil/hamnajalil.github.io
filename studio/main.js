@@ -191,6 +191,8 @@ const screenMat = new THREE.ShaderMaterial({
       // glass: faint reflection of the dusk window
       col += vec3(0.012, 0.011, 0.014) + 0.02 * vec3(1.0, 0.5, 0.4) * smoothstep(0.9, 0.0, vUv.x) * smoothstep(1.0, 0.0, vUv.y);
       col += uHi * vec3(0.03, 0.04, 0.06);
+      // a brass line of light round the edge of the picture: the monitor's way of saying it can be entered
+      float edge = smoothstep(0.455, 0.5, max(c.x, c.y)); col += uHi * edge * vec3(1.0, 0.62, 0.28) * 1.7 * settle;
       gl_FragColor = vec4(col, 1.0);
     }`,
 });
@@ -888,10 +890,8 @@ canvas.addEventListener('pointermove', (ev) => {
     // one rule for the cursor: a hand while dragging, a pointing finger over anything clickable (a piece, its name, the monitor), an open hand otherwise
     canvas.style.cursor = dragging && dragMoved > 6 ? 'grabbing' : (hover || hoverScreen || hoverSide || tagHover) ? 'pointer' : 'grab';
     // a piece already has its brass plaque, which lights up; a second label at the pointer was a duplicate (Ham, 2026-11-15)
-    if (hoverScreen && rig.mode === 'room') {
-      label.textContent = 'Step inside'; label.style.opacity = 1;
-      label.style.transform = `translate(${ev.clientX + 16}px, ${ev.clientY - 30}px)`;
-    } else if (hoverSide) {
+    // the monitor has its own plaque now ("Step inside"), which lights up like the others; no second label at the pointer
+    if (hoverSide) {
       label.textContent = INTRO.crewHint; label.style.opacity = 1;
       label.style.transform = `translate(${ev.clientX + 16}px, ${ev.clientY - 30}px)`;
     } else label.style.opacity = 0;
@@ -1002,7 +1002,17 @@ function startIntro() { document.body.classList.add('intro'); if (FROZEN !== nul
 for (const ev of ['pointerdown', 'wheel', 'keydown']) addEventListener(ev, () => { wakeSkip(); endIntro(); }, { passive: true });
 // one small tag above each piece, so nobody has to guess what a bird or a star stands for; they are buttons, so Tab reaches them
 let tagHover = null;
+// the monitor gets a plaque too (Ham, 2026-11-17: the pieces say they can be clicked, the monitor did not). It keeps its
+// words when the others settle into dots, because it is the one door in the room.
+let door = null, beenIn = false;
 function buildTags() {
+  if (screenMesh) {
+    const b = mk('button', 'tag door', INTRO.enter);
+    b.addEventListener('click', () => enterScreen());
+    door = { tag: b, anchor: new THREE.Vector3(SCREEN_C.x, SCREEN_C.y + MH / 2 + 0.035, SCREEN_C.z) };
+    b.addEventListener('pointerenter', () => { tagHover = door; }); b.addEventListener('pointerleave', () => { if (tagHover === door) tagHover = null; });
+    tagsEl.append(b);
+  }
   for (const w of works) {
     const b = mk('button', 'tag', w.meta.short || w.meta.title);
     b.addEventListener('click', () => openCard(w));
@@ -1012,6 +1022,7 @@ function buildTags() {
   }
 }
 const tagV = new THREE.Vector3();
+let tagged = null;
 let tagRects = []; // where the plaques are this frame (empty while they rest as dots); skill names give way to them
 function placeTags() {
   const show = rig.mode === 'room' && !rig.tween;
@@ -1021,7 +1032,7 @@ function placeTags() {
   if (pendingFocus) { const f = pendingFocus; pendingFocus = null; if (!helloEl.classList.contains('open')) f.focus({ preventScroll: true }); }
   const corners = [whoEl, $('#cta')].filter(Boolean).map((e) => e.getBoundingClientRect()).filter((r) => r.width > 0);
   const placed = [];
-  for (const w of works) {
+  for (const w of door ? tagged || (tagged = [...works, door]) : works) {
     tagV.copy(w.anchor).project(camera);
     const ok = tagV.z < 1 && Math.abs(tagV.x) < 1.05 && Math.abs(tagV.y) < 1.05;
     w.tag.style.display = ok ? '' : 'none';
@@ -1046,7 +1057,7 @@ function placeTags() {
       if (p.x + p.hw > r.left - 8 && p.x - p.hw < r.right + 8 && bot > r.top - 4 && bot - 32 < r.bottom + 6) p.lift = p.y - 16 - (r.bottom + 44);
     }
     // a name stays lit for a moment after the pointer leaves, so it cannot flicker at the edge of a piece
-    if (p.w === hover || p.w === tagHover) p.w.litUntil = performance.now() + 350;
+    if (p.w === hover || p.w === tagHover || (p.w === door && hoverScreen)) p.w.litUntil = performance.now() + 350;
     p.w.tag.classList.toggle('lit', performance.now() < (p.w.litUntil || 0));
     p.w.tag.style.transform = `translate(${p.x.toFixed(1)}px, ${(p.y - p.lift).toFixed(1)}px) translate(-50%, -100%) translateY(-16px)`;
     p.w.tag.style.setProperty('--wire', Math.max(0, 14 + p.lift).toFixed(0) + 'px');
@@ -1103,7 +1114,7 @@ card.querySelector('.prev').addEventListener('click', () => { const list = seq()
 const osEl = document.getElementById('os');
 function enterScreen(instant) {
   if (rig.mode === 'screen' || rig.mode === 'os') return;
-  card.classList.remove('open'); card.inert = true; label.style.opacity = 0; hover = null; hoverScreen = false;
+  card.classList.remove('open'); card.inert = true; label.style.opacity = 0; hover = null; hoverScreen = false; tagHover = null; beenIn = true;
   rig.mode = 'screen';
   document.body.classList.add('in-os');
   sfx.whoosh(true);
@@ -1218,7 +1229,10 @@ function frame() {
     }
   });
   sideStep(t);
-  screenMat.uniforms.uHi.value += (((hoverScreen && rig.mode === 'room') ? 1 : 0) - screenMat.uniforms.uHi.value) * Math.min(1, dt * 8);
+  { // the monitor's edge glows a little all the time and breathes slowly until someone has been inside; pointing at it (or its plaque) lights it fully
+    const rest = beenIn ? 0.22 : CALM || FROZEN !== null ? 0.45 : 0.42 + 0.22 * Math.sin(t * 1.4);
+    const want = rig.mode !== 'room' ? 0 : (hoverScreen || tagHover === door) ? 1 : rest;
+    screenMat.uniforms.uHi.value += (want - screenMat.uniforms.uHi.value) * Math.min(1, dt * 8); }
 
   // glass reflections
   if (glass) {
