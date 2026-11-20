@@ -124,7 +124,7 @@ export const OS = {
     this.paintWall();
     const soundBtn = document.getElementById('sound');
     soundBtn.addEventListener('click', () => sfx.toggle());
-    sfx.onChange((on) => { for (const b of [soundBtn, this.snd]) { b.textContent = on ? 'Sound on' : (b === soundBtn ? INTRO.soundOff : 'Enable sound'); b.classList.toggle('on', on); } });
+    sfx.onChange((on) => { for (const b of [soundBtn, this.snd]) { b.textContent = on ? 'Sound on' : (b === soundBtn ? INTRO.soundOff : 'Enable sound'); b.classList.toggle('on', on); } soundBtn.title = soundBtn.textContent; });
     setInterval(() => { this.clock.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }, 1000);
     this.clock.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const loop = (t) => { requestAnimationFrame(loop); if (!this.active) return; for (const f of this.tickers) f(t / 1000); };

@@ -1153,6 +1153,7 @@ moodPaint = () => { const cur = moodState.to || moodState.loading || moodState.n
 moodPaint();
 // the room's sound switch stands beside the keys, so it needs to know how wide they are
 const soundEl = $('#sound');
+soundEl.title = soundEl.textContent; // the switch shows only a note now; the words are its tooltip and its name for screen readers
 if (window.ResizeObserver) new ResizeObserver(() => document.body.style.setProperty('--moodw', moodEl.offsetWidth + 'px')).observe(moodEl);
 let introDone = false;
 function endIntro() {
