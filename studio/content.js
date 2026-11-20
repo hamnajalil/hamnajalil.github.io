@@ -113,6 +113,8 @@ export const INTRO = {
   seen: '{n} of {t} seen', // beside the tour button once a piece has been opened
   caseStudies: 'Case studies', // the link to the RPG page at /portfolio/ (Ham's choice, 2026-11-16; it used to say "Full portfolio")
   tour: 'Take the tour', home: 'Back to start', soundOff: 'Enable sound',
+  // the time-of-day switch (Ham, 2026-11-17). Dusk is what everyone lands on; the others load only when asked for.
+  moodLabel: 'Time of day', moods: [['dusk', 'Dusk'], ['night', 'Night'], ['morning', 'Morning']],
 };
 // written in the stars of the dome (the skill names from the public site)
 export const SKILLS = ['Sprint planning', 'Risk mitigation', 'Stakeholder alignment', 'Roadmap strategy', 'Cross-timezone leadership'];

@@ -46,29 +46,37 @@ const U = {
   tPano: { value: null },
   uWake: { value: 1 }, // the opening: 0.3 = the room before its lamps come on, 1 = lit
   tRefl: { value: null }, uReflM: { value: new THREE.Matrix4() }, uReflOn: { value: 0 }, uReflPx: { value: new THREE.Vector2() },
+  // times of day (2026-11-17): while one fades into the next, uMix runs 0..1 between the two sets of pictures
+  tPano2: { value: null }, uMix: { value: 0 }, uGlow: { value: 1 }, uLife: { value: 0 },
+  uZenA: { value: new THREE.Vector3() }, uZenB: { value: new THREE.Vector3() }, uZStar: { value: 1 }, uGlintC: { value: new THREE.Vector3() }, uMist: { value: 0 },
 };
+// the baked light of each group (layer A): a = what is shown, b = what it is fading to. Shared by every material of the group.
+const LA = { shell: { a: { value: null }, b: { value: null } }, furn: { a: { value: null }, b: { value: null } }, props: { a: { value: null }, b: { value: null } } };
 // the dusk scenery is one 360 picture rendered in Blender from the middle of the room (studio/pano.jpg)
 const PANO_GLSL = /* glsl */`
-uniform sampler2D tPano;
+uniform sampler2D tPano, tPano2; uniform float uMix;
 vec3 pano(vec3 d){
   d = normalize(d);
   vec2 uv = vec2(0.5 + atan(d.x, -d.z) / 6.2831853, 0.5 + asin(clamp(d.y, -1., 1.)) / 3.14159265);
-  return pow(texture2D(tPano, uv).rgb, vec3(2.2)) * 4.0;
+  vec3 p = pow(texture2D(tPano, uv).rgb, vec3(2.2));
+  if (uMix > 0.0) p = mix(p, pow(texture2D(tPano2, uv).rgb, vec3(2.2)), uMix);
+  return p * 4.0;
 }`;
 // the dark polished floor: baked light plus a live mirror image of the windows, so it shifts as you move
-function floorMaterial(tA, tB) {
+function floorMaterial(tB) {
   return new THREE.ShaderMaterial({
-    uniforms: { tA: { value: tA }, tB: { value: tB }, uMon: U.uMon, uWake: U.uWake, tPano: U.tPano, tRefl: U.tRefl, uReflM: U.uReflM, uReflOn: U.uReflOn, uReflPx: U.uReflPx },
+    uniforms: { tA: LA.shell.a, tA2: LA.shell.b, uMix: U.uMix, tPano2: U.tPano2, uGlow: U.uGlow, tB: { value: tB }, uMon: U.uMon, uWake: U.uWake, tPano: U.tPano, tRefl: U.tRefl, uReflM: U.uReflM, uReflOn: U.uReflOn, uReflPx: U.uReflPx },
     side: THREE.DoubleSide,
     vertexShader: `varying vec2 vUv; varying vec3 vW; varying vec3 vNw;
       void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vNw = mat3(modelMatrix) * normal; gl_Position = projectionMatrix * viewMatrix * w; }`,
     fragmentShader: /* glsl */`
       varying vec2 vUv; varying vec3 vW; varying vec3 vNw;
-      uniform sampler2D tA, tB, tRefl; uniform vec3 uMon; uniform float uWake; uniform mat4 uReflM; uniform float uReflOn; uniform vec2 uReflPx;
+      uniform sampler2D tA, tA2, tB, tRefl; uniform vec3 uMon; uniform float uWake, uGlow; uniform mat4 uReflM; uniform float uReflOn; uniform vec2 uReflPx;
       ${PANO_GLSL}
       vec3 dec(vec3 c){ return pow(c, vec3(2.2)) * 4.0; }
       void main(){
-        vec3 c = dec(texture2D(tA, vUv).rgb) * uWake + dec(texture2D(tB, vUv).rgb) * uMon;
+        vec3 la = dec(texture2D(tA, vUv).rgb); if (uMix > 0.0) la = mix(la, dec(texture2D(tA2, vUv).rgb), uMix);
+        vec3 c = la * uWake + dec(texture2D(tB, vUv).rgb) * uMon;
         vec3 n = normalize(vNw);
         if (n.y > 0.9) {
           vec3 v = normalize(vW - cameraPosition);
@@ -92,7 +100,7 @@ function floorMaterial(tA, tB) {
             rf *= uReflOn; env *= 1.0 - rf.a; // the picture is black where nothing stands, so this lays it over the scenery
             c += rf.rgb * max(fr, 0.2) * 0.85; // a polished floor: the room's contents stay readable even looking steeply down
           }
-          env += vec3(5.0, 3.1, 1.5) * smoothstep(0.035, 0.0, abs(h - 2.72));
+          env += vec3(5.0, 3.1, 1.5) * uGlow * smoothstep(0.035, 0.0, abs(h - 2.72));
           c += env * fr * 0.85;
         }
         gl_FragColor = vec4(c, 1.0);
@@ -103,10 +111,10 @@ function floorMaterial(tA, tB) {
 // room's furniture meshes, so those materials discard pixels inside a small upright cylinder round each dissolved piece.
 const GONE = Array.from({ length: 8 }, () => new THREE.Vector4(0, 0, 0, 0)); // x, z, lowest height, amount 0..1
 const GONE_R = new Float32Array(8); // radius of each cylinder
-function bakedMaterial(tA, tB, { gone = false, ...opts } = {}) {
+function bakedMaterial(grp, tB, { gone = false, ...opts } = {}) {
   return new THREE.ShaderMaterial({
     uniforms: {
-      tA: { value: tA }, tB: { value: tB }, uMon: U.uMon, uTime: U.uTime, uWake: U.uWake,
+      tA: LA[grp].a, tA2: LA[grp].b, uMix: U.uMix, uGlow: U.uGlow, tB: { value: tB }, uMon: U.uMon, uTime: U.uTime, uWake: U.uWake,
       uHi: { value: 0 }, uGhost: { value: 0 }, uSway: { value: new THREE.Vector4(0, 0, 0, 0) },
       uGone: { value: GONE }, uGoneR: { value: GONE_R }, uGoneOn: { value: gone ? 1 : 0 },
     },
@@ -132,13 +140,14 @@ function bakedMaterial(tA, tB, { gone = false, ...opts } = {}) {
       }`,
     fragmentShader: /* glsl */`
       varying vec2 vUv; varying vec3 vN; varying vec3 vV; varying vec3 vL; varying float vFlat; varying vec3 vWp;
-      uniform sampler2D tA, tB; uniform vec3 uMon; uniform float uHi, uWake, uGhost, uGoneOn; uniform vec4 uGone[8]; uniform float uGoneR[8];
+      uniform sampler2D tA, tA2, tB; uniform vec3 uMon; uniform float uHi, uWake, uGhost, uGoneOn, uMix, uGlow; uniform vec4 uGone[8]; uniform float uGoneR[8];
       vec3 dec(vec3 c){ return pow(c, vec3(2.2)) * 4.0; }
       void main(){
         if (uGoneOn > 0.0) { float g = 0.0; for (int i = 0; i < 8; i++) if (uGone[i].w > 0.0 && vWp.y > uGone[i].z && distance(vWp.xz, uGone[i].xy) < uGoneR[i]) g = max(g, uGone[i].w);
           if (g > 0.0) { vec2 q = floor(gl_FragCoord.xy); if (fract(sin(dot(q, vec2(12.9898, 78.233))) * 43758.5453) < g) discard; } }
         if (uGhost > 0.0) { vec2 q = floor(gl_FragCoord.xy); if (fract(sin(dot(q, vec2(12.9898, 78.233))) * 43758.5453) < uGhost) discard; } // dissolves a piece the camera stands right behind
-        vec3 c = dec(texture2D(tA, vUv).rgb) * uWake + dec(texture2D(tB, vUv).rgb) * uMon;
+        vec3 la = dec(texture2D(tA, vUv).rgb); if (uMix > 0.0) la = mix(la, dec(texture2D(tA2, vUv).rgb), uMix);
+        vec3 c = la * uWake + dec(texture2D(tB, vUv).rgb) * uMon;
         c = mix(c, vec3(1.3) + (c - 1.3) * 0.28, step(1.3, c)); // soft knee: lit screens keep their colour instead of burning to white
         { // a painted-on highlight from the lamp: warm metal (brass, the phoenix) and lit glass catch it; matte things do not
           vec3 n = normalize(vN), v = normalize(vV); if (dot(n, v) < 0.0) n = -n;
@@ -148,7 +157,7 @@ function bakedMaterial(tA, tB, { gone = false, ...opts } = {}) {
           float metal = smoothstep(0.05, 0.22, c.r - c.b) * smoothstep(0.02, 0.1, c.r - c.g) * smoothstep(0.05, 0.3, lum);
           metal *= 1.0 - smoothstep(0.8, 0.95, vFlat); // not on level wood: the lamp's mirror spot on the ledge burned out to a white patch in some card views
           float glass = smoothstep(0.1, 0.4, c.b - c.r) * smoothstep(0.3, 0.9, lum);
-          c += vec3(1.0, 0.8, 0.5) * (sp * 1.1 + fr * 0.1) * metal + vec3(0.9, 0.95, 1.0) * (sp * 0.9 + fr * 0.25) * glass;
+          c += (vec3(1.0, 0.8, 0.5) * (sp * 1.1 + fr * 0.1) * metal + vec3(0.9, 0.95, 1.0) * (sp * 0.9 + fr * 0.25) * glass) * uGlow; // the lamp's highlight goes when the lamp is off (morning)
         }
         if (uHi > 0.0) {
           float rim = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 2.0);
@@ -315,10 +324,10 @@ const festivalMat = liveScreen(360, 270, 2.2, (c, w, h) => {
 // ---------------------------------------------------------------- exterior: the 360 dusk picture on a huge sphere
 function buildExterior() {
   const dome = new THREE.Mesh(new THREE.SphereGeometry(3000, 48, 32), new THREE.ShaderMaterial({
-    side: THREE.BackSide, depthWrite: false, uniforms: { uTime: U.uTime, tPano: U.tPano },
+    side: THREE.BackSide, depthWrite: false, uniforms: { uTime: U.uTime, tPano: U.tPano, tPano2: U.tPano2, uMix: U.uMix, uLife: U.uLife, uZenA: U.uZenA, uZenB: U.uZenB, uZStar: U.uZStar, uGlintC: U.uGlintC, uMist: U.uMist },
     vertexShader: `varying vec3 vD; void main(){ vD = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
     fragmentShader: /* glsl */`
-      varying vec3 vD; uniform float uTime;
+      varying vec3 vD; uniform float uTime, uLife, uZStar, uMist; uniform vec3 uZenA, uZenB, uGlintC;
       ${SKY_GLSL}
       ${PANO_GLSL}
       void main(){
@@ -338,10 +347,16 @@ function buildExterior() {
           float zen = smoothstep(0.3, 0.68, d.y);
           vec2 sq = d.xz * 90.0; float star = step(0.975, hash21(floor(sq))) * smoothstep(0.35, 0.0, length(fract(sq) - 0.5));
           vec2 sq2 = d.xz * 37.0 + 11.3; star += 1.7 * step(0.985, hash21(floor(sq2))) * smoothstep(0.22, 0.0, length(fract(sq2) - 0.5));
-          vec3 night = mix(vec3(0.03, 0.035, 0.11), vec3(0.008, 0.012, 0.045), smoothstep(0.7, 1.0, d.y)); // a touch lighter at the rim, darkest overhead
+          vec3 night = mix(uZenA, uZenB, smoothstep(0.7, 1.0, d.y)); // a touch lighter at the rim, darkest overhead (dusk and night); pale blue by day
+          star *= uZStar * (0.82 + 0.18 * sin(uLife * 1.1 + hash21(floor(sq2)) * 40.0)); // a slow twinkle; uLife stands still with "reduce motion"
           col = mix(col, night + vec3(1.6, 1.4, 1.1) * star, zen);
         }
-        col += vec3(1.0, 0.78, 0.6) * glint * (0.25 + 1.6 * dot(col, vec3(0.33)));
+        if (uMist > 0.0) { // morning: a low band of mist over the far water that drifts sideways very slowly
+          float az = atan(d.x, -d.z), band = exp(-pow((d.y - 0.014) / 0.03, 2.0));
+          float n = vnoise(vec2(az * 5.0 + uLife * 0.012, d.y * 26.0)) * 0.6 + vnoise(vec2(az * 13.0 - uLife * 0.02, 3.0)) * 0.4;
+          col = mix(col, vec3(1.25, 0.92, 0.66), uMist * band * (0.12 + 0.5 * n));
+        }
+        col += uGlintC * glint * (0.25 + 1.6 * dot(col, vec3(0.33)));
         gl_FragColor = vec4(col, 1.0);
       }`,
   }));
@@ -390,16 +405,16 @@ function buildDust() {
   g.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
   const m = new THREE.ShaderMaterial({
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    uniforms: { uTime: U.uTime, uScale: { value: 1 } },
+    uniforms: { uTime: U.uTime, uScale: { value: 1 }, uGlow: U.uGlow },
     vertexShader: /* glsl */`
-      attribute float aSeed; uniform float uTime, uScale; varying vec3 vC;
+      attribute float aSeed; uniform float uTime, uScale, uGlow; varying vec3 vC;
       void main(){
         vec3 p = position;
         float t = uTime * 0.05;
         p.x += sin(t * 3.0 + aSeed * 40.0) * 0.12; p.z += cos(t * 2.3 + aSeed * 31.0) * 0.12;
         p.y = 0.2 + mod(p.y - 0.2 + t * (0.15 + aSeed * 0.25), 3.6);
         vec3 v = p - vec3(0.0, 2.9, 0.0);
-        vC = vec3(1.0, 0.72, 0.45) * (0.5 / (0.5 + dot(v, v))) * (0.4 + 0.6 * sin(uTime * (0.5 + aSeed) + aSeed * 50.0));
+        vC = vec3(1.0, 0.72, 0.45) * (0.3 + 0.7 * uGlow) * (0.5 / (0.5 + dot(v, v))) * (0.4 + 0.6 * sin(uTime * (0.5 + aSeed) + aSeed * 50.0));
         vec4 mvp = modelViewMatrix * vec4(p, 1.0);
         gl_PointSize = uScale * (1.0 + aSeed * 1.6) / max(0.3, -mvp.z);
         gl_Position = projectionMatrix * mvp;
@@ -408,6 +423,69 @@ function buildDust() {
   });
   const pts = new THREE.Points(g, m);
   pts.frustumCulled = false;
+  return pts;
+}
+
+// night: fireflies over the water outside the glass. Slow, small and far; they stand still with "reduce motion".
+function buildFireflies() {
+  const n = 70, pos = new Float32Array(n * 3), seed = new Float32Array(n);
+  let s = 11;
+  const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < n; i++) {
+    const a = (rnd() * 2 - 1) * 1.95, r = 6.5 + rnd() * rnd() * 20;
+    pos[i * 3] = Math.sin(a) * r; pos[i * 3 + 1] = 0.25 + rnd() * 2.3; pos[i * 3 + 2] = -Math.cos(a) * r; seed[i] = rnd();
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
+  const pts = new THREE.Points(g, new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    uniforms: { uLife: U.uLife, uScale: { value: 1 }, uK: { value: 0 } },
+    vertexShader: /* glsl */`
+      attribute float aSeed; uniform float uLife, uScale, uK; varying vec3 vC;
+      void main(){
+        vec3 p = position;
+        p.x += sin(uLife * 0.21 + aSeed * 40.0) * 0.7; p.y += sin(uLife * 0.33 + aSeed * 17.0) * 0.3; p.z += cos(uLife * 0.17 + aSeed * 29.0) * 0.7;
+        float blink = smoothstep(0.3, 0.9, sin(uLife * (0.45 + aSeed * 0.5) + aSeed * 60.0) * 0.5 + 0.5);
+        vC = vec3(1.0, 0.82, 0.38) * blink * uK * 1.5;
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_PointSize = max(1.5, uScale * (12.0 + aSeed * 10.0) / max(4.0, -mv.z));
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `varying vec3 vC; void main(){ float d = length(gl_PointCoord - 0.5); gl_FragColor = vec4(vC * smoothstep(0.5, 0.05, d), 1.0); }`,
+  }));
+  pts.frustumCulled = false; pts.visible = false; pts.renderOrder = 6;
+  return pts;
+}
+// morning: a small flock far out over the lake, crossing the view over several minutes. With "reduce motion" it hangs still.
+function buildBirds() {
+  const n = 7, pos = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const k = Math.ceil(i / 2), side = i % 2 ? 1 : -1; pos[i * 3] = -k * 0.022 + (i * 0.37 % 0.01); pos[i * 3 + 1] = side * k * 0.012 * (i ? 1 : 0); pos[i * 3 + 2] = i * 0.618 % 1; }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); // not a place: x = how far behind the leader (radians), y = up or down (radians), z = a random number
+  const pts = new THREE.Points(g, new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false,
+    uniforms: { uLife: U.uLife, uScale: { value: 1 }, uK: { value: 0 } },
+    vertexShader: /* glsl */`
+      uniform float uLife, uScale; varying float vS;
+      void main(){
+        vS = position.z;
+        float az = mod(1.8 + uLife * 0.006, 4.2) - 2.1 + position.x; // 0.35 degrees a second, left to right
+        float el = 0.115 + position.y + sin(az * 1.7) * 0.015; // just above the far hills, under the edge of the dome
+        vec3 p = vec3(sin(az) * cos(el), sin(el), -cos(az) * cos(el)) * 900.0 + vec3(0.0, 1.6, 0.0);
+        gl_PointSize = uScale * (6.0 + vS * 2.0);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+      }`,
+    fragmentShader: /* glsl */`
+      uniform float uLife, uK; varying float vS;
+      void main(){
+        vec2 q = gl_PointCoord - 0.5; q.y = -q.y;
+        float flap = 0.55 * sin(uLife * (2.6 + vS) + vS * 20.0); // wings up and down
+        float wing = abs(q.y - abs(q.x) * flap + 0.02);
+        float a = smoothstep(0.075, 0.02, wing) * smoothstep(0.48, 0.38, abs(q.x));
+        gl_FragColor = vec4(0.07, 0.06, 0.08, a * uK * 0.85);
+      }`,
+  }));
+  pts.frustumCulled = false; pts.visible = false; pts.renderOrder = -9; // straight after the scenery, so the room is drawn over it
   return pts;
 }
 
@@ -579,14 +657,76 @@ function wakeStep(t) {
   const all = wake.order.length ? sum / wake.order.length : 1;
   wake.lamp.value = L;
   U.uWake.value = 0.3 + 0.7 * (0.55 * L + 0.45 * all);
-  for (const g of wake.glows) g.mat.color.copy(g.base).multiplyScalar(0.1 + 0.9 * L);
+  for (const g of wake.glows) g.mat.color.copy(g.base).multiplyScalar((0.1 + 0.9 * L) * (g.lamp ? 0.15 + 0.85 * U.uGlow.value : 1));
   if (t > wake.END) wake.on = false;
+}
+
+// ---------------------------------------------------------------- times of day (Ham, 2026-11-17: "Both moods")
+// Dusk is what everyone lands on. Night and morning each have their own baked light (studio/bake_<group>_A_<mood>.webp) and
+// their own 360 picture (studio/pano-<mood>.jpg), fetched only when someone asks for them. Switching fades one into the
+// other; the camera never moves. Only two sets are ever held at once: the one leaving is dropped when the fade ends.
+const MOODS = {
+  dusk: { glow: 1, star: 1, lines: 0.55, exp: 0.82, zenA: [0.03, 0.035, 0.11], zenB: [0.008, 0.012, 0.045], zstar: 1, glint: [1.0, 0.78, 0.6], mist: 0, fly: 0, birds: 0 },
+  night: { glow: 1, star: 1.25, lines: 0.75, exp: 0.86, zenA: [0.012, 0.016, 0.06], zenB: [0.004, 0.006, 0.026], zstar: 1.9, glint: [0.7, 0.8, 1.0], mist: 0, fly: 1, birds: 0 },
+  morning: { glow: 0.18, star: 0.22, lines: 0.4, exp: 0.8, zenA: [0.4, 0.52, 0.85], zenB: [0.22, 0.36, 0.78], zstar: 0, glint: [2.2, 1.7, 1.1], mist: 1, fly: 0, birds: 1 },
+};
+const moodTex = {}; // mood -> { shell, furn, props, pano }
+const moodState = { now: 'dusk', to: null, k: 0, busy: false, loading: null };
+let moodPaint = () => {}; // set once the switch exists
+function moodValues(a, b, k) {
+  const L = (x, y) => x + (y - x) * k;
+  U.uGlow.value = L(a.glow, b.glow); U.uZStar.value = L(a.zstar, b.zstar); U.uMist.value = L(a.mist, b.mist);
+  U.uZenA.value.set(L(a.zenA[0], b.zenA[0]), L(a.zenA[1], b.zenA[1]), L(a.zenA[2], b.zenA[2]));
+  U.uZenB.value.set(L(a.zenB[0], b.zenB[0]), L(a.zenB[1], b.zenB[1]), L(a.zenB[2], b.zenB[2]));
+  U.uGlintC.value.set(L(a.glint[0], b.glint[0]), L(a.glint[1], b.glint[1]), L(a.glint[2], b.glint[2]));
+  finalMat.uniforms.uExp.value = L(a.exp, b.exp);
+  if (domeStars) domeStars.mat.color.copy(domeStars.base).multiplyScalar(L(a.star, b.star));
+  if (conLines) conLines.opacity = L(a.lines, b.lines);
+  if (conDots) conDots.color.setRGB(2.4, 1.9, 1.3).multiplyScalar(L(a.star, b.star));
+  if (flies) { flies.material.uniforms.uK.value = L(a.fly, b.fly); flies.visible = flies.material.uniforms.uK.value > 0.01; }
+  if (birds) { birds.material.uniforms.uK.value = L(a.birds, b.birds); birds.visible = birds.material.uniforms.uK.value > 0.01; }
+  if (!wake.on) for (const g of wake.glows) if (g.lamp) g.mat.color.copy(g.base).multiplyScalar(0.15 + 0.85 * U.uGlow.value);
+}
+function moodLoad(m) {
+  if (moodTex[m]) return Promise.resolve(moodTex[m]);
+  const tail = m === 'dusk' ? '' : '_' + m;
+  const one = (url, pano) => new Promise((res, rej) => tl.load(url, (t) => {
+    t.colorSpace = THREE.NoColorSpace;
+    if (pano) { t.generateMipmaps = false; t.minFilter = THREE.LinearFilter; t.wrapS = THREE.RepeatWrapping; }
+    else { t.flipY = false; t.anisotropy = 8; t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; }
+    renderer.initTexture(t); res(t); // sent to the graphics card now, so the fade itself does not stutter
+  }, undefined, rej));
+  return Promise.all([...['shell', 'furn', 'props'].map((n) => one(`studio/bake_${n}_A${tail}.webp`)), one(m === 'dusk' ? 'studio/pano.jpg' : `studio/pano-${m}.jpg`, true)])
+    .then(([shell, furn, props, pano]) => (moodTex[m] = { shell, furn, props, pano }));
+}
+function setMood(m, instant) {
+  if (!MOODS[m] || moodState.busy || m === moodState.now) return;
+  moodState.busy = true; moodState.loading = m; moodPaint();
+  moodLoad(m).then((tx) => {
+    for (const n of ['shell', 'furn', 'props']) LA[n].b.value = tx[n];
+    U.tPano2.value = tx.pano;
+    moodState.to = m; moodState.k = instant || CALM || FROZEN !== null ? 1 : 0; moodState.loading = null; moodPaint();
+  }).catch((e) => { console.warn('mood', m, e); moodState.busy = false; moodState.loading = null; moodPaint(); });
+}
+function moodStep(dt) {
+  if (!moodState.to) return;
+  moodState.k = Math.min(1, moodState.k + dt / 1.8);
+  const k = THREE.MathUtils.smoothstep(moodState.k, 0, 1);
+  U.uMix.value = k; moodValues(MOODS[moodState.now], MOODS[moodState.to], k);
+  if (moodState.k >= 1) {
+    const old = moodTex[moodState.now];
+    for (const n of ['shell', 'furn', 'props']) LA[n].a.value = LA[n].b.value;
+    U.tPano.value = U.tPano2.value; U.uMix.value = 0;
+    if (old) { for (const n in old) old[n].dispose(); delete moodTex[moodState.now]; } // it comes back from the browser's own store if asked for again
+    moodState.now = moodState.to; moodState.to = null; moodState.busy = false;
+    window.__stats.mood = moodState.now; moodPaint();
+  }
 }
 
 // ---------------------------------------------------------------- load
 const works = []; // { id, meshes, center, box, proxy, mat }
 const liveOf = {}; // the live screen that belongs to a piece, if it has one
-let screenMesh = null, sideMesh = null, glass = null, dust = null;
+let screenMesh = null, sideMesh = null, glass = null, dust = null, flies = null, birds = null, domeStars = null, conLines = null, conDots = null;
 const loader = new GLTFLoader();
 const tl = new THREE.TextureLoader();
 function tex(name) {
@@ -609,7 +749,9 @@ async function load() {
   ]);
   texs.pop();
   const mats = {};
-  names.forEach((n, i) => { mats[n] = bakedMaterial(texs[i * 2], texs[i * 2 + 1], { gone: n !== 'shell' }); });
+  moodTex.dusk = { pano: U.tPano.value };
+  names.forEach((n, i) => { LA[n].a.value = LA[n].b.value = moodTex.dusk[n] = texs[i * 2]; mats[n] = bakedMaterial(n, texs[i * 2 + 1], { gone: n !== 'shell' }); });
+  U.tPano2.value = U.tPano.value;
   const groups = {};
   const swayMats = {};
   gltf.scene.updateMatrixWorld(true);
@@ -628,10 +770,12 @@ async function load() {
     if (grp === 'glow') { // lamps, light strips, stars, floor rings: plain bright colour, the bloom does the rest
       if (name.includes('sunlamp')) { // the lamp: a warm globe with a bright heart and an amber edge, not a flat white disc
         o.material = new THREE.ShaderMaterial({
-          uniforms: { uK: wake.lamp },
+          uniforms: { uK: wake.lamp, uGlow: U.uGlow },
           vertexShader: `varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }`,
-          fragmentShader: `varying vec3 vN; varying vec3 vV; uniform float uK; void main(){ float f = clamp(dot(normalize(vN), normalize(vV)), 0.0, 1.0);
-            vec3 c = mix(vec3(0.95, 0.42, 0.14), vec3(1.9, 1.25, 0.7), pow(f, 1.6)); gl_FragColor = vec4(c * (0.06 + 0.94 * uK), 1.0); }`,
+          fragmentShader: `varying vec3 vN; varying vec3 vV; uniform float uK, uGlow; void main(){ float f = clamp(dot(normalize(vN), normalize(vV)), 0.0, 1.0);
+            vec3 c = mix(vec3(0.95, 0.42, 0.14), vec3(1.9, 1.25, 0.7), pow(f, 1.6)) * (0.06 + 0.94 * uK);
+            c = mix(vec3(0.74, 0.66, 0.56) * (0.55 + 0.45 * f), c, uGlow); // switched off by day: a plain cream globe
+            gl_FragColor = vec4(c, 1.0); }`,
         });
         continue;
       }
@@ -644,12 +788,12 @@ async function load() {
       }
       if (name.includes('warm_led')) { // tray rims, floor studs and the ceiling line: each tray's ring has its own level, for the opening
         o.material = new THREE.ShaderMaterial({
-          uniforms: { uC: { value: new THREE.Vector3(e[0], e[1], e[2]) }, uTray: { value: wake.trays }, uAll: wake.lamp }, side: THREE.DoubleSide,
+          uniforms: { uC: { value: new THREE.Vector3(e[0], e[1], e[2]) }, uTray: { value: wake.trays }, uAll: wake.lamp, uGlow: U.uGlow }, side: THREE.DoubleSide,
           vertexShader: `varying vec3 vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`,
-          fragmentShader: `varying vec3 vW; uniform vec3 uC; uniform vec3 uTray[8]; uniform float uAll;
+          fragmentShader: `varying vec3 vW; uniform vec3 uC; uniform vec3 uTray[8]; uniform float uAll, uGlow;
             void main(){ float k = uAll, best = 0.9; for (int i = 0; i < 8; i++) { float d = distance(vW.xz, uTray[i].xy); if (d < best) { best = d; k = uTray[i].z; } }
               if (k < 0.0) discard; // the ring of a dissolved piece goes with it
-              gl_FragColor = vec4(uC * (0.04 + 0.96 * k), 1.0); }`,
+              gl_FragColor = vec4(uC * (0.04 + 0.96 * k) * (0.12 + 0.88 * uGlow), 1.0); }`,
         });
         continue;
       }
@@ -663,10 +807,11 @@ async function load() {
         continue;
       }
       o.material = new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB(e[0], e[1], e[2]), side: THREE.DoubleSide });
-      if (!name.includes('dstar')) wake.glows.push({ mat: o.material, base: o.material.color.clone() });
+      if (name.includes('dstar')) domeStars = { mat: o.material, base: o.material.color.clone() };
+      else wake.glows.push({ mat: o.material, base: o.material.color.clone(), lamp: /led_coral|orb|bulb/.test(name) }); // lamp: goes down with the room's lamps by day
       continue;
     }
-    if (name.startsWith('refl__')) { o.material = floorMaterial(texs[0], texs[1]); continue; }
+    if (name.startsWith('refl__')) { o.material = floorMaterial(texs[1]); continue; }
     if (name.includes('live_laptop')) { o.material = lapMat; continue; }
     if (name.includes('live_side')) { o.material = sideMat; sideMesh = o; continue; }
     if (name.includes('live_arcade')) { o.material = arcadeMat; liveOf.arcade = o; continue; }
@@ -677,13 +822,13 @@ async function load() {
     const tag = name.includes('__') ? name.split('__')[0] : '';
     if (tag.startsWith('work_')) {
       const id = tag.slice(5);
-      if (!groups[id]) groups[id] = { id, meshes: [], box: new THREE.Box3(), mat: bakedMaterial(mats.props.uniforms.tA.value, mats.props.uniforms.tB.value) };
+      if (!groups[id]) groups[id] = { id, meshes: [], box: new THREE.Box3(), mat: bakedMaterial('props', mats.props.uniforms.tB.value) };
       o.material = groups[id].mat;
       groups[id].meshes.push(o);
       o.geometry.computeBoundingBox();
       groups[id].box.union(o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld));
     } else if (tag.startsWith('sway_')) {
-      if (!swayMats[tag]) swayMats[tag] = { mat: bakedMaterial(mats.props.uniforms.tA.value, mats.props.uniforms.tB.value), box: new THREE.Box3(), top: tag === 'sway_trail' };
+      if (!swayMats[tag]) swayMats[tag] = { mat: bakedMaterial('props', mats.props.uniforms.tB.value), box: new THREE.Box3(), top: tag === 'sway_trail' };
       o.material = swayMats[tag].mat;
       o.geometry.computeBoundingBox();
       swayMats[tag].box.union(o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld));
@@ -727,6 +872,9 @@ async function load() {
   dust = buildDust();
   dust.renderOrder = 6;
   scene.add(dust);
+  flies = buildFireflies(); scene.add(flies);
+  birds = buildBirds(); scene.add(birds);
+  moodValues(MOODS.dusk, MOODS.dusk, 0);
   paintLaptop();
   paintSide();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { sideDrawn = ''; });
@@ -790,8 +938,10 @@ function buildConstellations() {
     sp.renderOrder = 5; skillNames.push(sp);
     g.add(sp);
   });
-  g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs), new THREE.LineBasicMaterial({ color: new THREE.Color(0.75, 0.52, 0.3), transparent: true, opacity: 0.55 })));
-  const dots = new THREE.Points(new THREE.BufferGeometry().setFromPoints(pts), new THREE.PointsMaterial({ color: new THREE.Color(2.4, 1.9, 1.3), size: 0.05, sizeAttenuation: true }));
+  conLines = new THREE.LineBasicMaterial({ color: new THREE.Color(0.75, 0.52, 0.3), transparent: true, opacity: 0.55 });
+  g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs), conLines));
+  conDots = new THREE.PointsMaterial({ color: new THREE.Color(2.4, 1.9, 1.3), size: 0.05, sizeAttenuation: true });
+  const dots = new THREE.Points(new THREE.BufferGeometry().setFromPoints(pts), conDots);
   g.add(dots);
   return g;
 }
@@ -991,6 +1141,16 @@ tourBtn.addEventListener('click', () => { endIntro(); touring = true; openCard(s
 function goHome() { rig.yaw = 0; rig.pitch = 0; rig.dolly = tall() ? 0.55 : 0; }
 homeBtn.addEventListener('click', goHome);
 addEventListener('keydown', (ev) => { if (ev.key === 'Home' && rig.mode === 'room') goHome(); });
+// the time-of-day switch: three brass keys bottom right. On a phone only the current one shows, and tapping it goes to the next.
+const moodEl = mk('div', ''); moodEl.id = 'mood'; moodEl.setAttribute('role', 'group'); moodEl.setAttribute('aria-label', INTRO.moodLabel);
+const moodKeys = INTRO.moods.map(([id, name]) => { const b = mk('button', '', name); b.dataset.mood = id; moodEl.append(b);
+  b.addEventListener('click', () => { const ids = INTRO.moods.map((x) => x[0]); sfx.tick(520, 0.05); setMood(id === moodState.now ? ids[(ids.indexOf(id) + 1) % ids.length] : id); });
+  return b; });
+$('#sound').after(moodEl); // after the card and the say-hello panel in the page, so the phone rules that hide it while one is open can see it
+moodPaint = () => { const cur = moodState.to || moodState.loading || moodState.now;
+  for (const b of moodKeys) { const on = b.dataset.mood === cur; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.classList.toggle('busy', b.dataset.mood === moodState.loading); }
+  moodEl.setAttribute('aria-busy', moodState.loading ? 'true' : 'false'); };
+moodPaint();
 let introDone = false;
 function endIntro() {
   if (introDone) return; introDone = true; document.body.classList.add('met');
@@ -1140,7 +1300,7 @@ OS.onWallpaper = () => paintScreen(true);
 let tStart = performance.now(); // restarted when the room is ready, so the opening and the monitor's turn-on are seen, not spent behind the loading screen
 function clock() { return FROZEN !== null ? FROZEN : (performance.now() - tStart) / 1000; }
 let lastT = 0, frames = 0, acc = 0, slow = 0;
-window.__stats = { fps: 0, quality: 1, ready: false, refl: reflOn };
+window.__stats = { fps: 0, quality: 1, ready: false, refl: reflOn, mood: 'dusk' };
 const tmpV = new THREE.Vector3();
 function frame() {
   requestAnimationFrame(frame);
@@ -1160,8 +1320,9 @@ function frame() {
   frame.prev = now;
   if (rig.mode === 'os' && !rig.tween) return; // the OS is plain DOM on top; nothing to draw behind it
 
-  U.uTime.value = t;
+  U.uTime.value = t; U.uLife.value = CALM ? 40 : t; // uLife drives what lives outside in the other times of day; it stands still with "reduce motion"
   if (wake.on) wakeStep(t);
+  moodStep(dt);
   paintScreen(false);
   const ms = monitorState(t);
   screenMat.uniforms.uOn.value = ms.on; screenMat.uniforms.uFlick.value = ms.flick;
@@ -1199,7 +1360,7 @@ function frame() {
   camera.fov = BASE_FOV * (1 - 0.3 * zoomK); camera.updateProjectionMatrix();
   camera.position.copy(rig.pos); camera.lookAt(rig.tgt);
   camera.updateMatrixWorld(); placeTags();
-  navEl.classList.toggle('on', rig.mode === 'room' && !rig.tween);
+  navEl.classList.toggle('on', rig.mode === 'room' && !rig.tween); moodEl.classList.toggle('on', rig.mode === 'room' && !rig.tween);
   homeBtn.classList.toggle('on', Math.abs(rig.yaw) > 0.04 || Math.abs(rig.dolly - (tall() ? 0.55 : 0)) > 0.04 || Math.abs(rig.pitch) > 0.02);
 
   // highlights: hovered object glows; when nobody is pointing, a slow pulse walks along the shelves
@@ -1247,6 +1408,7 @@ function frame() {
     glassMat.uniforms.uS.value.set(glassLights[0].s, glassLights[1].s, glassLights[2].s).multiplyScalar(0.55);
   }
   if (dust) dust.material.uniforms.uScale.value = H / 1080 * 2.2;
+  if (flies) flies.material.uniforms.uScale.value = birds.material.uniforms.uScale.value = H / 1080 * 2.2;
   { // skill names: shown while looking round the room, gone while a card or the monitor has the view; smaller on phones
     const want = rig.mode === 'room' && !rig.tween ? 0.9 : 0, k = innerWidth < 700 ? 0.72 : 1;
     const pxPer = innerHeight / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))), hw = 0.46 * k * pxPer + 6;
@@ -1306,6 +1468,7 @@ load().then(() => {
   if (tall() && VIEW === 'room') { rig.dolly = 0.55; zoomK = 0.55; const q = roomPose(clock()); rig.pos.copy(q.pos); rig.tgt.copy(q.tgt); } // phone: start a few steps in, looking at the desk, instead of at half a screen of dome
   if (Q.has('yaw')) rig.yaw = parseFloat(Q.get('yaw')) || 0; // for screenshots: ?yaw=0.8&zoom=0.5
   if (Q.has('zoom')) rig.dolly = THREE.MathUtils.clamp(parseFloat(Q.get('zoom')) || 0, 0, 1);
+  if (MOODS[Q.get('mood')]) setMood(Q.get('mood'), true); // ?mood=night for screenshots
   if (VIEW === 'shelf') { rig.pitch = 0.3; }
   if (VIEW === 'window') { rig.yaw = -0.7; rig.dolly = 0.5; }
   if (VIEW.startsWith('card')) { const w = works.find((x) => x.id === VIEW.split(':')[1]) || works[0]; openCard(w); }
