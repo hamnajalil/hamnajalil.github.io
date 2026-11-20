@@ -1151,6 +1151,9 @@ moodPaint = () => { const cur = moodState.to || moodState.loading || moodState.n
   for (const b of moodKeys) { const on = b.dataset.mood === cur; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.classList.toggle('busy', b.dataset.mood === moodState.loading); }
   moodEl.setAttribute('aria-busy', moodState.loading ? 'true' : 'false'); };
 moodPaint();
+// the room's sound switch stands beside the keys, so it needs to know how wide they are
+const soundEl = $('#sound');
+if (window.ResizeObserver) new ResizeObserver(() => document.body.style.setProperty('--moodw', moodEl.offsetWidth + 'px')).observe(moodEl);
 let introDone = false;
 function endIntro() {
   if (introDone) return; introDone = true; document.body.classList.add('met');
@@ -1300,6 +1303,7 @@ OS.onWallpaper = () => paintScreen(true);
 let tStart = performance.now(); // restarted when the room is ready, so the opening and the monitor's turn-on are seen, not spent behind the loading screen
 function clock() { return FROZEN !== null ? FROZEN : (performance.now() - tStart) / 1000; }
 let lastT = 0, frames = 0, acc = 0, slow = 0;
+let lastLit = null; // what was lit by the pointer last frame, for the hover tick
 window.__stats = { fps: 0, quality: 1, ready: false, refl: reflOn, mood: 'dusk' };
 const tmpV = new THREE.Vector3();
 function frame() {
@@ -1360,7 +1364,7 @@ function frame() {
   camera.fov = BASE_FOV * (1 - 0.3 * zoomK); camera.updateProjectionMatrix();
   camera.position.copy(rig.pos); camera.lookAt(rig.tgt);
   camera.updateMatrixWorld(); placeTags();
-  navEl.classList.toggle('on', rig.mode === 'room' && !rig.tween); moodEl.classList.toggle('on', rig.mode === 'room' && !rig.tween);
+  navEl.classList.toggle('on', rig.mode === 'room' && !rig.tween); moodEl.classList.toggle('on', rig.mode === 'room' && !rig.tween); soundEl.classList.toggle('show', rig.mode === 'room' && !rig.tween);
   homeBtn.classList.toggle('on', Math.abs(rig.yaw) > 0.04 || Math.abs(rig.dolly - (tall() ? 0.55 : 0)) > 0.04 || Math.abs(rig.pitch) > 0.02);
 
   // highlights: hovered object glows; when nobody is pointing, a slow pulse walks along the shelves
@@ -1389,6 +1393,10 @@ function frame() {
       a.mat.uniforms.uHead.value = a.head; a.mesh.visible = on.value > 0.01;
     }
   });
+  { // a faint tick when a piece, its plaque or the monitor lights up under the pointer (only once sound has been switched on)
+    const lit = rig.mode === 'room' && !rig.tween && !wake.on ? (hover || tagHover || (hoverScreen ? door : null)) : null;
+    if (lit && lit !== lastLit) sfx.hover();
+    lastLit = lit; }
   sideStep(t);
   { // the monitor's edge glows a little all the time and breathes slowly until someone has been inside; pointing at it (or its plaque) lights it fully
     const rest = beenIn ? 0.22 : CALM || FROZEN !== null ? 0.45 : 0.42 + 0.22 * Math.sin(t * 1.4);

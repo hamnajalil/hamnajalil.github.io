@@ -13,10 +13,11 @@ export const sfx = {
       this.noise = buf;
     }
     // No background sound: Ham found both generated ambiences synthetic, tiring and out of place (2026-11-14). Clicks only.
-    this.ctx.resume();
+    const woke = this.ctx.resume();
     this.on = true;
     this.listeners.forEach((f) => f(true));
-    this.tick(660, 0.1);
+    // wait until the browser has really started the sound before playing: notes asked for while it is still waking are lost
+    if (woke && woke.then) woke.then(() => this.chime(), () => {}); else this.chime();
   },
   disable() { this.on = false;  this.listeners.forEach((f) => f(false)); },
   toggle() { this.on ? this.disable() : this.enable(); },
@@ -38,6 +39,10 @@ export const sfx = {
   },
   tick(f = 880, v = 0.12) { if (this.on) this._osc('sine', f * 0.5, this.ctx.currentTime, 0.07, v * 0.3); },
   note(f, dur = 0.25, type = 'triangle', v = 0.2, when) { if (this.on) this._osc(type, f, when || this.ctx.currentTime, dur, v); },
+  // switching sound on answers with two soft rising notes (Ham, 2026-11-17: "a very subtle sfx"), about a third as loud as the beat pad's kick
+  chime() { if (!this.on) return; const t = this.ctx.currentTime + 0.03; this._osc('sine', 523.25, t, 0.34, 0.3); this._osc('sine', 783.99, t + 0.12, 0.5, 0.24); },
+  // a plaque or the monitor lighting up in the room: barely there, and never more than eight a second
+  hover() { if (!this.on) return; const t = this.ctx.currentTime; if (t - (this._hov || 0) < 0.12) return; this._hov = t; this._osc('sine', 392, t, 0.06, 0.08); },
   whoosh() { this.tick(520, 0.1); }, // was a long sweep; now the same soft click as everything else
   kick(when) { if (this.on) { const t = when || this.ctx.currentTime; this._osc('sine', 150, t, 0.32, 0.9, 42); } },
   snare(when) { if (this.on) { const t = when || this.ctx.currentTime; this._noise(t, 0.16, 0.5, 'highpass', 1500); this._osc('triangle', 190, t, 0.1, 0.3, 120); } },
