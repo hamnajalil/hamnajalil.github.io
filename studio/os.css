@@ -570,3 +570,15 @@ body:not(.opened) #nav .tour:hover { background: linear-gradient(180deg, #ffe6b8
 
 /* the monitor's plaque ("Step inside"): the one door in the room, so it keeps its words and a soft glow */
 #tags .tag.door { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 190, 110, 0.38); }
+/* time of day (2026-11-17): three brass keys, bottom right, in the same brass as the tour button */
+#mood { position: fixed; right: 22px; bottom: 22px; z-index: 7; display: flex; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; border-radius: 6px; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), 0 6px 18px rgba(0, 0, 0, 0.35); }
+body.met #mood.on { opacity: 1; pointer-events: auto; }
+#mood button { font: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #f4dfb6; cursor: pointer; padding: 10px 14px; background: linear-gradient(180deg, rgba(58, 40, 22, 0.86), rgba(24, 16, 10, 0.9)); border: 1px solid rgba(222, 168, 92, 0.7); border-left-width: 0; backdrop-filter: blur(8px); }
+#mood button:first-child { border-left-width: 1px; border-radius: 6px 0 0 6px; } #mood button:last-child { border-radius: 0 6px 6px 0; }
+#mood button:hover { background: linear-gradient(180deg, rgba(84, 58, 30, 0.92), rgba(36, 24, 14, 0.94)); }
+#mood button.on { color: #2a1806; background: linear-gradient(180deg, #f6d79a, #d89a4a); }
+#mood button.busy { animation: moodbusy 0.9s ease-in-out infinite alternate; }
+@keyframes moodbusy { from { filter: brightness(0.75); } to { filter: brightness(1.1); } }
+@media (prefers-reduced-motion: reduce) { #mood button.busy { animation: none; filter: brightness(0.85); } }
+body.in-os #mood, body.plain #mood, body:not(.ready) #mood { display: none; }
+@media (max-width: 700px) { #mood { right: 10px; bottom: 12px; } #mood button { display: none; font-size: 12px; padding: 8px 12px; } #mood button.on { display: block; border-left-width: 1px; border-radius: 6px; color: #f4dfb6; background: linear-gradient(180deg, rgba(58, 40, 22, 0.86), rgba(24, 16, 10, 0.9)); } #mood button.on::before { content: '\25D0\00a0'; } #card.open ~ #mood, #hello.open ~ #mood { display: none; } }
