@@ -412,7 +412,7 @@ body:not(.ready) #sound { display: none; }
 #cta .hello:hover { filter: brightness(1.08); }
 #cta .status { color: #f4dfb6; letter-spacing: 0.16em; font-size: 11px; }
 #how { border-radius: 6px; border-color: rgba(222, 168, 92, 0.45); color: #f4dfb6; }
-#sound { display: none !important; } /* no sound in the room for now (Ham, 2026-11-14); the mini-OS keeps its own switch for the beat pad */
+/* the room's sound switch was hidden here from 2026-11-14 to 2026-11-20; it is back (Ham, 2026-11-20), placed at the end of this file */
 /* "Open to work" sits on its own small plate so it stays readable over the lamp and the sky */
 #cta .status { padding: 9px 12px 9px 28px; border-radius: 6px; background: rgba(24, 16, 10, 0.72); border: 1px solid rgba(222, 168, 92, 0.35); backdrop-filter: blur(8px); margin-right: 2px; }
 #cta .status::before { left: 12px; }
@@ -582,3 +582,8 @@ body.met #mood.on { opacity: 1; pointer-events: auto; }
 @media (prefers-reduced-motion: reduce) { #mood button.busy { animation: none; filter: brightness(0.85); } }
 body.in-os #mood, body.plain #mood, body:not(.ready) #mood { display: none; }
 @media (max-width: 700px) { #mood { right: 10px; bottom: 12px; } #mood button { display: none; font-size: 12px; padding: 8px 12px; } #mood button.on { display: block; border-left-width: 1px; border-radius: 6px; color: #f4dfb6; background: linear-gradient(180deg, rgba(58, 40, 22, 0.86), rgba(24, 16, 10, 0.9)); } #mood button.on::before { content: '\25D0\00a0'; } #card.open ~ #mood, #hello.open ~ #mood { display: none; } }
+/* the room's sound switch (back 2026-11-20): sits just left of the time-of-day keys; on a phone, just above the one key. --moodw is set in main.js */
+#sound { right: calc(22px + var(--moodw, 230px) + 10px); bottom: 22px; padding: 10px 14px 10px 32px; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+#sound::before { left: 13px; }
+body.met #sound.show { opacity: 1; pointer-events: auto; }
+@media (max-width: 700px) { #sound { right: 10px; bottom: 56px; padding: 8px 12px 8px 28px; } #sound::before { left: 11px; } }
