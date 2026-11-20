@@ -607,3 +607,13 @@ body.met #mood.on, body.met #sound.show { opacity: 0.72; }
 body.met #mood.on:hover, body.met #mood.on:focus-within, body.met #sound.show:hover, body.met #sound.show:focus-visible { opacity: 1; }
 #sound::before { color: rgba(244, 223, 182, 0.7); }
 @media (max-width: 700px) { #intro::before { height: 74vh; background: linear-gradient(180deg, rgba(8, 7, 14, 0) 0%, rgba(8, 7, 14, 0.8) 30%, rgba(8, 7, 14, 0.94) 100%); } body.met #mood.on, body.met #sound.show { opacity: 0.8; } }
+/* self-audit, second pass 2026-11-20. (1) Which time of day is on was hard to tell: the active key gets a brass underline. (2) Say-hello links left one orphan on a second row: two tidy columns. (3) On a phone the name plate showed through above the say-hello panel, cut in half: hidden while the panel is open. (4) The sound switch in the Dusk OS bar was as loud as the way out: now plain text weight. */
+#mood button.on { color: #ffe2ad; background: rgba(84, 58, 28, 0.95); box-shadow: inset 0 -2px 0 #e9b869; }
+#hello .links { display: grid; grid-template-columns: 1fr 1fr; }
+#hello .links a { text-align: center; }
+#os .bar .snd { background: transparent; border-color: transparent; color: rgba(255, 255, 255, 0.62); }
+#os .bar .snd:hover, #os .bar .snd.on { color: #fff; }
+#os .bar .snd:hover { background: rgba(255, 255, 255, 0.1); }
+@media (max-width: 700px) { #mood button.on { box-shadow: none; } body:has(#hello.open) #who { opacity: 0; pointer-events: none; } }
+/* (5) The Sprint health card's picture is a white page inside a dark brass card and glared: toned down and warmed a little, kept anchored to its top. */
+#card .art img[src*="sprint-health"] { filter: brightness(0.82) sepia(0.14) saturate(0.9); object-position: top; }
