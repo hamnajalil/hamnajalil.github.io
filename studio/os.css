@@ -601,3 +601,9 @@ body.met #mood.on:hover, body.met #mood.on:focus-within { opacity: 1; }
 body.met #sound.show { opacity: 0.55; }
 body.met #sound.show:hover, body.met #sound.show:focus-visible { opacity: 1; }
 @media (max-width: 700px) { #mood { right: 10px; bottom: 12px; } #mood button { font-size: 10px; padding: 9px 11px; } #mood button.on { color: #f4dfb6; background: rgba(20, 14, 9, 0.6); } #sound { right: 10px; bottom: 52px; width: 32px; height: 32px; max-width: none; } #sound::before { line-height: 30px; } body.met #mood.on, body.met #sound.show { opacity: 0.7; } }
+/* self-audit 2026-11-20. (1) The quiet switches were too faint to read on a large screen: one size up, less faded. (2) On a phone the opening name sat on top of the monitor and desk: the dark fade behind it now starts higher and is deeper. */
+#mood button { font-size: 10px; color: rgba(244, 223, 182, 0.85); }
+body.met #mood.on, body.met #sound.show { opacity: 0.72; }
+body.met #mood.on:hover, body.met #mood.on:focus-within, body.met #sound.show:hover, body.met #sound.show:focus-visible { opacity: 1; }
+#sound::before { color: rgba(244, 223, 182, 0.7); }
+@media (max-width: 700px) { #intro::before { height: 74vh; background: linear-gradient(180deg, rgba(8, 7, 14, 0) 0%, rgba(8, 7, 14, 0.8) 30%, rgba(8, 7, 14, 0.94) 100%); } body.met #mood.on, body.met #sound.show { opacity: 0.8; } }
