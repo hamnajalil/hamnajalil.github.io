@@ -115,6 +115,8 @@ export const INTRO = {
   tour: 'Take the tour', home: 'Back to start', soundOff: 'Enable sound',
   // the time-of-day switch (Ham, 2026-11-17). Dusk is what everyone lands on; the others load only when asked for.
   moodLabel: 'Time of day', moods: [['dusk', 'Dusk'], ['night', 'Night'], ['morning', 'Morning']],
+  // phone (2026-11-20): the small button that holds Back to start, the time of day and sound; and the two states of the card's handle
+  menu: 'More options', sheetMore: 'Read more', sheetLess: 'Show less',
 };
 // written in the stars of the dome (the skill names from the public site)
 export const SKILLS = ['Sprint planning', 'Risk mitigation', 'Stakeholder alignment', 'Roadmap strategy', 'Cross-timezone leadership'];
