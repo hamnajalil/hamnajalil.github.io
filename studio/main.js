@@ -545,7 +545,7 @@ function pass(mat, target) { fsMesh.material = mat; renderer.setRenderTarget(tar
 
 let quality = 1, W = 0, H = 0, BASE_FOV = 76, zoomK = 0;
 function resize() {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2) * quality;
+  const dpr = Math.min(window.devicePixelRatio || 1, innerWidth <= 700 ? 1.75 : 2) * quality; // phones: a little under 2, the room costs a third less to draw and looks the same at arm's length
   W = Math.max(2, Math.floor(innerWidth * dpr)); H = Math.max(2, Math.floor(innerHeight * dpr));
   renderer.setPixelRatio(1);
   renderer.setSize(W, H, false);
@@ -560,6 +560,7 @@ function resize() {
   camera.aspect = W / H;
   BASE_FOV = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(38)) * Math.max(1, (16 / 9) / camera.aspect)));
   BASE_FOV = Math.min(BASE_FOV, 84);
+  if (innerWidth < innerHeight * 0.8) BASE_FOV = PHONE.fov; // a tall screen has its own lens (see PHONE)
   camera.fov = BASE_FOV * (1 - 0.3 * zoomK);
   camera.updateProjectionMatrix();
 }
@@ -567,6 +568,12 @@ addEventListener('resize', resize);
 
 // ---------------------------------------------------------------- camera rig
 // the camera of the chosen still: Blender (x, y, z) is three (x, z, -y)
+// Phone framing (H33, 2026-11-20). A tall screen starts from its own spot: `dolly` steps in, `rise` lifts or lowers the
+// camera, `aim` lifts or lowers what it looks at, `fov` is the lens (degrees, top to bottom). Before this the phone used
+// the wide-screen lens capped at 84 and looked 22 cm down, which put the rug in the bottom half of the picture.
+// ?ph=dolly,rise,aim,fov tries other numbers (for screenshots).
+const PHONE = { dolly: 0.6, rise: -0.32, aim: 0.02, fov: 84 };
+if (Q.has('ph')) { const v = Q.get('ph').split(',').map(parseFloat); ['dolly', 'rise', 'aim', 'fov'].forEach((k, i) => { if (isFinite(v[i])) PHONE[k] = v[i]; }); }
 const CALM = Q.has('calm') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
 const HOME = { pos: new THREE.Vector3(-1.0, 1.62, 3.75), tgt: new THREE.Vector3(0.35, 1.62, -1.0) };
 const SCREEN_C = new THREE.Vector3(0, 1.195, -0.38); // replaced by the real screen centre once the room has loaded
@@ -597,7 +604,7 @@ function roomPose(t) {
   pos.lerp(tmpP.set(ORBIT.x, 1.5, ORBIT.z), 0.55 * d);
   tgt.lerp(tmpP.set(ORBIT.x, 1.05, ORBIT.z), d);
   tgt.y += rig.pitch * 4.2 * (1 - 0.6 * d);
-  if (tall()) tgt.y -= 0.22; // phone: look a little lower, so the desk fills the screen and the lamp is not a white disc in the top third
+  if (tall()) { tgt.y += PHONE.aim; pos.y += PHONE.rise; } // phone: its own height and aim, so the desk and the hanging pieces fill a tall screen
   pos.x += ca * m.x * 0.05 * lean; pos.z += sa * m.x * 0.05 * lean; pos.y += m.y * 0.02 * lean;
   // never walk through a hanging piece: within KEEP metres of one (seen from above) the path bends around it
   for (const w of works) {
@@ -668,7 +675,7 @@ function wakeStep(t) {
 const MOODS = {
   dusk: { glow: 1, star: 1, lines: 0.55, exp: 0.82, zenA: [0.03, 0.035, 0.11], zenB: [0.008, 0.012, 0.045], zstar: 1, glint: [1.0, 0.78, 0.6], mist: 0, fly: 0, birds: 0 },
   night: { glow: 1, star: 1.25, lines: 0.75, exp: 0.86, zenA: [0.012, 0.016, 0.06], zenB: [0.004, 0.006, 0.026], zstar: 1.9, glint: [0.7, 0.8, 1.0], mist: 0, fly: 1, birds: 0 },
-  morning: { glow: 0.18, star: 0.22, lines: 0.4, exp: 0.8, zenA: [0.4, 0.52, 0.85], zenB: [0.22, 0.36, 0.78], zstar: 0, glint: [2.2, 1.7, 1.1], mist: 1, fly: 0, birds: 1 },
+  morning: { glow: 0.18, star: 0.22, lines: 0.4, exp: 0.8, zenA: [0.4, 0.52, 0.85], zenB: [0.22, 0.36, 0.78], zstar: 0, glint: [1.1, 0.7, 0.36], mist: 0.3, fly: 0, birds: 1 },
 };
 const moodTex = {}; // mood -> { shell, furn, props, pano }
 const moodState = { now: 'dusk', to: null, k: 0, busy: false, loading: null };
@@ -1026,15 +1033,16 @@ canvas.addEventListener('pointermove', (ev) => {
     if (pinch !== null && rig.mode === 'room') rig.dolly = THREE.MathUtils.clamp(rig.dolly + (d - pinch) * 0.0045, 0, 1);
     pinch = d; dragMoved += 10;
   } else if (dragging) {
-    const dx = (ev.clientX - lastX) * dragGain(), dy = ev.clientY - lastY;
+    let dx = (ev.clientX - lastX) * dragGain(), dy = ev.clientY - lastY;
     dragMoved += Math.abs(dx) + Math.abs(dy);
+    if (ev.pointerType === 'touch' && rig.mode === 'focus') dx = dy = 0; // a finger across an open card's view is a swipe to the next piece, not a walk round the desk
     rig.yaw = THREE.MathUtils.clamp(rig.yaw + dx * YAW_GAIN, -1.6, 1.6);
     rig.pitch = THREE.MathUtils.clamp(rig.pitch + dy * PITCH_GAIN, -0.2, 0.35);
     { const now = performance.now(), gap = Math.max(4, now - lastMoveT); lastMoveT = now; lastInput = now; // remember how fast the hand is turning the room
       glide = gap > 80 ? 0 : glide * 0.6 + (dx * YAW_GAIN / (gap / 1000)) * 0.4; }
     lastX = ev.clientX; lastY = ev.clientY;
   }
-  if (rig.mode === 'room' || rig.mode === 'focus') {
+  if (ev.pointerType !== 'touch' && (rig.mode === 'room' || rig.mode === 'focus')) { // a finger has no hover: on a phone a tap picks a piece (see pointerup)
     const p = pick(ev);
     hover = p.work; hoverScreen = p.screen; hoverSide = p.side && rig.mode === 'room';
     // one rule for the cursor: a hand while dragging, a pointing finger over anything clickable (a piece, its name, the monitor), an open hand otherwise
@@ -1051,18 +1059,22 @@ const touches = new Map(); let pinch = null;
 const dragGain = () => THREE.MathUtils.clamp(1300 / innerWidth, 1, 3);
 const endTouch = (ev) => { touches.delete(ev.pointerId); pinch = null; };
 canvas.addEventListener('pointercancel', (ev) => { endTouch(ev); dragging = false; });
-canvas.addEventListener('pointerdown', (ev) => { if (ev.pointerType === 'touch') touches.set(ev.pointerId, [ev.clientX, ev.clientY]); dragging = true; dragMoved = 0; glide = 0; lastX = ev.clientX; lastY = ev.clientY; canvas.setPointerCapture(ev.pointerId); });
+canvas.addEventListener('pointerdown', (ev) => { if (ev.pointerType === 'touch') touches.set(ev.pointerId, [ev.clientX, ev.clientY]); dragging = true; dragMoved = 0; glide = 0; lastX = downX = ev.clientX; lastY = downY = ev.clientY; canvas.setPointerCapture(ev.pointerId); });
+let downX = 0, downY = 0;
 canvas.addEventListener('pointerup', (ev) => {
   endTouch(ev); lastX = ev.clientX; lastY = ev.clientY;
   dragging = false;
   if (performance.now() - lastMoveT > 60 || dragMoved <= 6 || CALM || rig.mode !== 'room') glide = 0; // only a hand that was still moving lets the room glide
   glide = THREE.MathUtils.clamp(glide, -1.4, 1.4);
-  if (dragMoved > 6) return;
+  if (dragMoved > 6) { if (ev.pointerType === 'touch' && rig.mode === 'focus') swiped(ev.clientX - downX, ev.clientY - downY); return; }
   const p = pick(ev);
   if (p.screen) enterScreen();
   else if (p.side && rig.mode === 'room') { label.style.opacity = 0; openHello(); }
+  // phone: the names rest as dots, so the first tap on a piece shows its name and the second opens it
+  else if (p.work && ev.pointerType === 'touch' && phone() && rig.mode === 'room' && hover !== p.work) hover = p.work;
   else if (p.work) openCard(p.work);
   else if (rig.mode === 'focus') closeCard();
+  else if (ev.pointerType === 'touch') hover = null;
 });
 canvas.addEventListener('pointerleave', () => { pointerIn = false; label.style.opacity = 0; });
 canvas.addEventListener('wheel', (ev) => {
@@ -1114,7 +1126,8 @@ for (const x of QUOTES.filter((x) => x.q)) helloEl.querySelector('.quotes').appe
 { const more = mk('button', 'more', 'Read the full recommendations'); more.addEventListener('click', () => { closeHello(); enterScreen(); setTimeout(() => OS.openNote(4), 2400); }); helloEl.querySelector('.quotes').append(more); }
 // keyboard: a closed panel is inert (Tab skips it); one opened from the keyboard takes the focus and hands it back on closing
 let byKey = false, backTo = null, pendingFocus = null;
-addEventListener('keydown', () => { byKey = true; }, true); addEventListener('pointerdown', () => { byKey = false; }, true);
+let byTouch = false;
+addEventListener('keydown', () => { byKey = true; }, true); addEventListener('pointerdown', (ev) => { byKey = false; byTouch = ev.pointerType === 'touch'; }, true);
 function panelIn(el) { el.inert = false; if (!byKey) return; if (!el.contains(document.activeElement)) { if (!document.activeElement.closest('#card, #hello')) backTo = document.activeElement; el.querySelector('.close').focus({ preventScroll: true }); } }
 function panelOut(el) { const had = el.contains(document.activeElement); el.inert = true; if (had && backTo && byKey) { pendingFocus = backTo; if (!tagsEl.contains(backTo)) { backTo.focus({ preventScroll: true }); pendingFocus = null; } } }
 helloEl.inert = true; card.inert = true;
@@ -1138,7 +1151,7 @@ function markSeen(w) {
   seenEl.textContent = seen.size ? INTRO.seen.replace('{n}', seen.size).replace('{t}', works.length) : '';
 }
 tourBtn.addEventListener('click', () => { endIntro(); touring = true; openCard(seq()[0]); });
-function goHome() { rig.yaw = 0; rig.pitch = 0; rig.dolly = tall() ? 0.55 : 0; }
+function goHome() { rig.yaw = 0; rig.pitch = 0; rig.dolly = tall() ? PHONE.dolly : 0; }
 homeBtn.addEventListener('click', goHome);
 addEventListener('keydown', (ev) => { if (ev.key === 'Home' && rig.mode === 'room') goHome(); });
 // the time-of-day switch: three brass keys bottom right. On a phone only the current one shows, and tapping it goes to the next.
@@ -1155,12 +1168,28 @@ moodPaint();
 const soundEl = $('#sound');
 soundEl.title = soundEl.textContent; // the switch shows only a note now; the words are its tooltip and its name for screen readers
 if (window.ResizeObserver) new ResizeObserver(() => document.body.style.setProperty('--moodw', moodEl.offsetWidth + 'px')).observe(moodEl);
+// Phone (H33, 2026-11-20): Back to start, the time of day and sound sit behind one small button, bottom right, so the
+// bottom bar is the tour button and nothing else. On large screens #menu takes no part in the layout (display: contents)
+// and the keys stand where they always did.
+const phone = () => innerWidth <= 700;
+const menuEl = mk('div', ''); menuEl.id = 'menu'; menuEl.setAttribute('role', 'group'); menuEl.setAttribute('aria-label', INTRO.menu);
+const moreBtn = mk('button', ''); moreBtn.id = 'more'; moreBtn.setAttribute('aria-label', INTRO.menu); moreBtn.setAttribute('aria-controls', 'menu');
+const home2 = mk('button', 'mhome', INTRO.home);
+moodEl.after(menuEl); menuEl.append(home2, moodEl, soundEl); menuEl.after(moreBtn);
+function setMenu(open) { open = open && phone(); document.body.classList.toggle('menu-open', open); moreBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); menuEl.inert = phone() && !open; }
+setMenu(false); addEventListener('resize', () => setMenu(false));
+moreBtn.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+home2.addEventListener('click', () => { goHome(); setMenu(false); });
+addEventListener('pointerdown', (ev) => { if (document.body.classList.contains('menu-open') && !menuEl.contains(ev.target) && ev.target !== moreBtn) setMenu(false); }, true);
+addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && document.body.classList.contains('menu-open')) { setMenu(false); moreBtn.focus({ preventScroll: true }); } });
 let introDone = false;
 function endIntro() {
   if (introDone) return; introDone = true; document.body.classList.add('met');
   // after a few seconds the plaques settle into small brass dots; pointing at a piece (or its dot) brings its name back.
   // Touch screens have no pointing, so there the names stay.
-  if (!matchMedia('(pointer: coarse)').matches) setTimeout(() => tagsEl.classList.add('rest'), 6500);
+  // Touch screens have no pointing, so on a large touch screen the names stay. On a phone they pile up and hide the pieces,
+  // so there they are dots from the start; a tap on a dot or a piece shows that one name (H33, 2026-11-20).
+  if (phone()) tagsEl.classList.add('rest'); else if (!matchMedia('(pointer: coarse)').matches) setTimeout(() => tagsEl.classList.add('rest'), 6500);
 }
 function startIntro() { document.body.classList.add('intro'); if (FROZEN !== null || VIEW !== 'room' || Q.has('zoom') || Q.has('yaw')) endIntro(); else setTimeout(endIntro, 7000 + (wake.on ? wake.T_NAME * 1000 : 0)); }
 for (const ev of ['pointerdown', 'wheel', 'keydown']) addEventListener(ev, () => { wakeSkip(); endIntro(); }, { passive: true });
@@ -1179,7 +1208,7 @@ function buildTags() {
   }
   for (const w of works) {
     const b = mk('button', 'tag', w.meta.short || w.meta.title);
-    b.addEventListener('click', () => openCard(w));
+    b.addEventListener('click', () => { if (phone() && byTouch && !byKey && hover !== w) { hover = w; return; } openCard(w); }); // phone: a tap on a dot shows the name, a tap on the name opens the card
     // pointing at the plaque counts the same as pointing at the piece; kept separate from the room's own hover so the two cannot fight
     b.addEventListener('pointerenter', () => { tagHover = w; }); b.addEventListener('pointerleave', () => { if (tagHover === w) tagHover = null; });
     tagsEl.append(b); w.tag = b; w.anchor = new THREE.Vector3(w.center.x, w.box.max.y + 0.09, w.center.z);
@@ -1200,7 +1229,7 @@ function placeTags() {
     tagV.copy(w.anchor).project(camera);
     const ok = tagV.z < 1 && Math.abs(tagV.x) < 1.05 && Math.abs(tagV.y) < 1.05;
     w.tag.style.display = ok ? '' : 'none';
-    if (ok) placed.push({ w, x: (tagV.x + 1) / 2 * innerWidth, y: (1 - tagV.y) / 2 * innerHeight, hw: (w.tagW || (w.tagW = w.tag.offsetWidth || 90)) / 2, lift: 0 });
+    if (ok) placed.push({ w, x: (tagV.x + 1) / 2 * innerWidth, y: (1 - tagV.y) / 2 * innerHeight, hw: (phone() ? w.tag.offsetWidth || 44 : (w.tagW || (w.tagW = w.tag.offsetWidth || 90))) / 2, lift: 0 }); // phone: a name is a dot until it is tapped, so its width is read fresh
   }
   // plaques may not sit on top of each other: the lower one keeps its place, the other rides up on a longer wire
   placed.sort((p, q) => q.y - p.y);
@@ -1213,7 +1242,7 @@ function placeTags() {
       p.lift = p.y - (hit.y - hit.lift) + 28;
     }
   }
-  tagRects = resting ? [] : placed;
+  tagRects = resting && !phone() ? [] : placed; // on a phone the dots count too: a skill name may not run through one
   for (const p of placed) {
     p.x = Math.min(innerWidth - p.hw - 8, Math.max(p.hw + 8, p.x)); // keep the whole plaque on screen
     for (const r of corners) { // H4: a plaque may not slide under the name plate or the say-hello buttons; it hangs just below them instead
@@ -1232,9 +1261,33 @@ function placeTags() {
 // address already carries test switches.
 const SHAREABLE = [...Q.keys()].every((k) => k === 'view');
 function shareAddress(w) { if (!SHAREABLE) return; try { history.replaceState(null, '', w ? '?view=card:' + w.id : location.pathname); } catch (e) { /* file:// and the like */ } }
+// Phone (H33): the card is a sheet at the bottom. Closed up it shows the tour line, the title, the tags and one line of
+// text, so the piece stays in view above it; a tap or a drag up opens it in full. A swipe sideways (on the sheet or on the
+// room above it) goes to the next or the previous piece.
+const grip = mk('button', 'grip'); card.querySelector('.close').after(grip);
+function setSheet(full) { card.classList.toggle('full', full); grip.textContent = full ? INTRO.sheetLess : INTRO.sheetMore; grip.setAttribute('aria-expanded', full ? 'true' : 'false'); if (!full) card.scrollTop = 0; }
+setSheet(false);
+grip.addEventListener('click', () => setSheet(!card.classList.contains('full')));
+card.addEventListener('click', (ev) => { if (phone() && !card.classList.contains('full') && !ev.target.closest('button, a, summary')) setSheet(true); });
+function swiped(dx, dy) { // true if the finger's path was a sideways swipe
+  if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.5) return false;
+  const list = seq(), i = list.indexOf(rig.focus);
+  if (dx > 0 && touring && i === 0) return true; // nothing before the tour's first stop
+  card.querySelector(dx < 0 ? '.next' : '.prev').click(); return true;
+}
+{ let sx = 0, sy = 0, top = 0, on = false;
+  card.addEventListener('touchstart', (ev) => { on = ev.touches.length === 1; sx = ev.touches[0].clientX; sy = ev.touches[0].clientY; top = card.scrollTop; }, { passive: true });
+  card.addEventListener('touchend', (ev) => {
+    if (!on || !phone() || rig.mode !== 'focus') return; on = false;
+    const t = ev.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy, full = card.classList.contains('full');
+    if (swiped(dx, dy)) return;
+    if (!full && dy < -28 && Math.abs(dy) > Math.abs(dx)) setSheet(true);
+    else if (full && dy > 44 && top <= 0 && card.scrollTop <= 0 && Math.abs(dy) > Math.abs(dx)) setSheet(false);
+  }, { passive: true });
+}
 function openCard(w) {
-  closeHello();
-  rig.mode = 'focus'; rig.focus = w;
+  closeHello(); setSheet(false);
+  rig.mode = 'focus'; rig.focus = w; if (phone()) hover = null;
   tweenTo(focusPose(w), 0.7, null, true);
   card.querySelector('.kind').textContent = w.meta.kind;
   card.querySelector('h2').textContent = w.meta.title;
@@ -1304,6 +1357,7 @@ OS.onWallpaper = () => paintScreen(true);
 let tStart = performance.now(); // restarted when the room is ready, so the opening and the monitor's turn-on are seen, not spent behind the loading screen
 function clock() { return FROZEN !== null ? FROZEN : (performance.now() - tStart) / 1000; }
 let lastT = 0, frames = 0, acc = 0, slow = 0;
+let fullSince = 0;
 let lastLit = null; // what was lit by the pointer last frame, for the hover tick
 window.__stats = { fps: 0, quality: 1, ready: false, refl: reflOn, mood: 'dusk' };
 const tmpV = new THREE.Vector3();
@@ -1324,6 +1378,10 @@ function frame() {
   }
   frame.prev = now;
   if (rig.mode === 'os' && !rig.tween) return; // the OS is plain DOM on top; nothing to draw behind it
+  // phone: a card opened in full covers the room, so the room is not drawn again until it closes up (saves the battery)
+  window.__stats.paused = rig.mode === 'focus' && !rig.tween && innerWidth <= 700 && card.classList.contains('full') && now - fullSince > 500;
+  if (!card.classList.contains('full')) fullSince = now;
+  if (window.__stats.paused) return;
 
   U.uTime.value = t; U.uLife.value = CALM ? 40 : t; // uLife drives what lives outside in the other times of day; it stands still with "reduce motion"
   if (wake.on) wakeStep(t);
@@ -1366,7 +1424,9 @@ function frame() {
   camera.position.copy(rig.pos); camera.lookAt(rig.tgt);
   camera.updateMatrixWorld(); placeTags();
   navEl.classList.toggle('on', rig.mode === 'room' && !rig.tween); moodEl.classList.toggle('on', rig.mode === 'room' && !rig.tween); soundEl.classList.toggle('show', rig.mode === 'room' && !rig.tween);
-  homeBtn.classList.toggle('on', Math.abs(rig.yaw) > 0.04 || Math.abs(rig.dolly - (tall() ? 0.55 : 0)) > 0.04 || Math.abs(rig.pitch) > 0.02);
+  homeBtn.classList.toggle('on', Math.abs(rig.yaw) > 0.04 || Math.abs(rig.dolly - (tall() ? PHONE.dolly : 0)) > 0.04 || Math.abs(rig.pitch) > 0.02);
+  moreBtn.classList.toggle('on', rig.mode === 'room' && !rig.tween); home2.classList.toggle('on', homeBtn.classList.contains('on'));
+  if (!(rig.mode === 'room' && !rig.tween) && document.body.classList.contains('menu-open')) setMenu(false);
 
   // highlights: hovered object glows; when nobody is pointing, a slow pulse walks along the shelves
   works.forEach((w, i) => {
@@ -1474,7 +1534,7 @@ load().then(() => {
   buildTags(); markSeen(null); startIntro();
   const p = roomPose(clock()); rig.pos.copy(p.pos); rig.tgt.copy(p.tgt);
   if (VIEW === 'desk') { rig.dolly = 1; }
-  if (tall() && VIEW === 'room') { rig.dolly = 0.55; zoomK = 0.55; const q = roomPose(clock()); rig.pos.copy(q.pos); rig.tgt.copy(q.tgt); } // phone: start a few steps in, looking at the desk, instead of at half a screen of dome
+  if (tall() && VIEW === 'room') { rig.dolly = PHONE.dolly; zoomK = PHONE.dolly; const q = roomPose(clock()); rig.pos.copy(q.pos); rig.tgt.copy(q.tgt); } // phone: start a few steps in, looking at the desk, instead of at half a screen of dome
   if (Q.has('yaw')) rig.yaw = parseFloat(Q.get('yaw')) || 0; // for screenshots: ?yaw=0.8&zoom=0.5
   if (Q.has('zoom')) rig.dolly = THREE.MathUtils.clamp(parseFloat(Q.get('zoom')) || 0, 0, 1);
   if (MOODS[Q.get('mood')]) setMood(Q.get('mood'), true); // ?mood=night for screenshots

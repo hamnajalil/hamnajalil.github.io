@@ -617,3 +617,91 @@ body.met #mood.on:hover, body.met #mood.on:focus-within, body.met #sound.show:ho
 @media (max-width: 700px) { #mood button.on { box-shadow: none; } body:has(#hello.open) #who { opacity: 0; pointer-events: none; } }
 /* (5) The Sprint health card's picture is a white page inside a dark brass card and glared: toned down and warmed a little, kept anchored to its top. */
 #card .art img[src*="sprint-health"] { filter: brightness(0.82) sepia(0.14) saturate(0.9); object-position: top; }
+
+/* ================================================================== phone-friendly (H33, 2026-11-20)
+   Ham tried the live room on her iPhone inside an in-app browser, whose own bars leave about 390 x 660: "Not so user friendly on phone".
+   Large screens: #menu takes no part in the layout and its button does not exist, so nothing changes there. */
+#menu { display: contents; }
+#menu .mhome, #more, #card .grip { display: none; }
+/* a phone held sideways is wider than 700 px and gets the large-screen layout; keep the corners clear of the notch */
+#who { left: max(22px, env(safe-area-inset-left)); } #cta { right: max(22px, env(safe-area-inset-right)); } #nav { left: max(22px, env(safe-area-inset-left)); }
+@media (max-width: 700px) {
+  /* step 1a. The name plate is a slim bar, and steps aside while a card, the tour or the say-hello panel has the screen */
+  #who { left: max(10px, env(safe-area-inset-left)); top: max(10px, env(safe-area-inset-top)); min-height: 44px; max-width: calc(100vw - 146px); padding: 6px 11px 7px; }
+  #who b { font-size: 13px; line-height: 16px; } #who small { margin-top: 2px; font-size: 8px; line-height: 11px; letter-spacing: 0.14em; }
+  #who .res { margin-top: 4px; padding-top: 4px; font-size: 10px; line-height: 13px; } #who .res b { font-size: 10.5px; }
+  body:has(#card.open) #who, body:has(#hello.open) #who { opacity: 0; pointer-events: none; }
+  #cta { right: max(10px, env(safe-area-inset-right)); top: max(10px, env(safe-area-inset-top)); }
+  #cta .hello { min-height: 44px; padding: 0 16px; }
+  /* step 1b. The bottom bar: the tour (always the gold, main button on a phone) on the left, one small button on the right */
+  #nav { left: max(10px, env(safe-area-inset-left)); bottom: calc(10px + env(safe-area-inset-bottom)); align-items: center; }
+  #nav .tour, body:not(.opened) #nav .tour { min-height: 44px; padding: 0 18px; font-size: 12.5px; font-weight: 700; color: #2a1806; background: linear-gradient(180deg, #f6d79a, #d89a4a); border-color: #ffe6b8; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 22px rgba(255, 190, 110, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6); }
+  #nav .home, #nav .home.on { display: none; }
+  #more { display: block; position: fixed; right: max(10px, env(safe-area-inset-right)); bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 7; width: 44px; height: 44px; padding: 0; cursor: pointer; border-radius: 6px; background: var(--plate); border: 1px solid rgba(222, 168, 92, 0.7); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 224, 170, 0.28); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+  #more::before { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: var(--cream); box-shadow: -8px 0 0 var(--cream), 8px 0 0 var(--cream); }
+  body.met #more.on { opacity: 1; pointer-events: auto; }
+  body.menu-open #more { background: linear-gradient(180deg, #f6d79a, #d89a4a); border-color: #ffe6b8; } body.menu-open #more::before { background: #2a1806; box-shadow: -8px 0 0 #2a1806, 8px 0 0 #2a1806; }
+  body.in-os #more, body.plain #more, body:not(.ready) #more, body:has(#card.open) #more, body:has(#hello.open) #more, body.in-os #menu, body.plain #menu, body:not(.ready) #menu { display: none; }
+  #menu { display: flex; flex-direction: column; gap: 6px; position: fixed; right: max(10px, env(safe-area-inset-right)); bottom: calc(62px + env(safe-area-inset-bottom)); z-index: 7; width: 214px; max-width: calc(100vw - 20px); padding: 8px; border-radius: 8px; background: var(--panel); border: 1px solid rgba(222, 168, 92, 0.6); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 18px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 224, 170, 0.18); opacity: 0; pointer-events: none; transform: translateY(6px); transition: opacity 0.2s ease, transform 0.2s ease; }
+  body.menu-open #menu { opacity: 1; pointer-events: auto; transform: none; }
+  #menu .mhome.on { display: block; }
+  #menu .mhome, #menu #sound { position: relative; right: auto; bottom: auto; width: auto; height: auto; max-width: none; min-height: 44px; padding: 0 12px; font: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; text-align: left; white-space: nowrap; cursor: pointer; color: var(--cream); border-radius: 6px; background: rgba(20, 14, 9, 0.6); border: 1px solid rgba(222, 168, 92, 0.45); box-shadow: none; backdrop-filter: none; opacity: 1; pointer-events: inherit; }
+  #menu #sound { padding-left: 34px; } #menu #sound.on { color: #b9f3d3; }
+  #menu #sound::before { left: 13px; right: auto; top: 50%; bottom: auto; line-height: 1; transform: translateY(-50%); font-size: 14px; color: rgba(244, 223, 182, 0.85); }
+  #menu #sound.on::before { color: #6fe3a4; }
+  #menu #mood { position: static; display: flex; opacity: 1; pointer-events: inherit; }
+  #menu #mood button, #menu #mood button.on { display: block; flex: 1; min-height: 44px; padding: 0 4px; font-size: 10.5px; line-height: 1; border-left-width: 0; border-radius: 0; color: var(--cream); background: rgba(20, 14, 9, 0.6); border-color: rgba(222, 168, 92, 0.45); }
+  #menu #mood button:first-child { border-left-width: 1px; border-radius: 6px 0 0 6px; } #menu #mood button:last-child { border-radius: 0 6px 6px 0; }
+  #menu #mood button.on { color: #2a1806; font-weight: 700; background: linear-gradient(180deg, #f6d79a, #d89a4a); border-color: #ffe6b8; }
+  #menu #mood button.on::before { content: none; }
+  /* step 1c. "Close" is a small cross in the corner (44 px to touch); it sat on the artwork as a word */
+  #card .close, #hello .close { right: 2px; top: 2px; width: 44px; height: 44px; padding: 0; font-size: 0; letter-spacing: 0; background: none; border: 0; box-shadow: none; backdrop-filter: none; }
+  #card .close:hover, #hello .close:hover { background: none; }
+  #card .close::before, #hello .close::before { content: "\2715"; display: grid; place-items: center; width: 28px; height: 28px; margin: auto; border-radius: 50%; font-size: 12px; line-height: 1; color: var(--cream); background: rgba(24, 16, 10, 0.88); border: 1px solid rgba(222, 168, 92, 0.6); }
+  /* words that scroll under the pinned Previous / Next fade out instead of being sliced through the middle of a line */
+  #card .nav { position: sticky; }
+  #card .nav::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 26px; background: linear-gradient(180deg, rgba(27, 19, 13, 0), #1b130d); pointer-events: none; }
+  #card .nav button { min-height: 44px; padding: 0 14px; }
+}
+@media (max-width: 700px) {
+  /* step 2. The names rest as brass dots from the start (set in main.js); each dot has a 44 px area to touch. A tap shows
+     that one name, with an arrow because the next tap opens it. "Step inside" keeps its words. */
+  #tags.rest .tag:not(.door):not(.lit):not(:focus-visible) { width: 10px; height: 10px; border-width: 17px; }
+  #tags.rest .tag:not(.door):not(.lit):not(:focus-visible)::after { display: block; left: 50%; top: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; background: none; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255, 217, 160, 0.55), 0 0 10px 2px rgba(255, 180, 100, 0.45); }
+  #tags .tag { font-size: 10px; padding: 6px 9px 5px; }
+  #tags .tag.lit:not(.door) { padding-right: 24px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M4 2l4.2 4L4 10' fill='none' stroke='%232a1806' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"), linear-gradient(180deg, #f6d79a, #d89a4a) !important; background-repeat: no-repeat; background-position: right 8px center, 0 0; background-size: 10px 10px, auto; }
+  #tags .tag.door { font-size: 10.5px; padding: 8px 12px 7px; }
+  /* a shown name and "Step inside" are 44 px to touch without looking any taller: a clear band above and below, and the outline drawn inside it */
+  #tags .tag.door, #tags .tag.lit:not(.door) { border-style: solid; border-color: transparent; border-width: 8px 0; background-clip: padding-box; }
+  #tags .tag.lit:not(.door) { border-width: 10px 0; }
+  #tags .tag.door { box-shadow: inset 0 0 0 1px rgba(222, 168, 92, 0.8), inset 0 2px 0 rgba(255, 224, 170, 0.2); }
+  #tags .tag.lit:not(.door), #tags .tag.door.lit { box-shadow: inset 0 0 0 1px #ffe6b8; }
+  /* step 3. The card is a sheet at the bottom of the screen. Closed up: the tour line, the title, the tags and one line of
+     text, so the piece stays in view above it. Opened (.full): everything, scrolling between a fixed handle and the
+     fixed Previous / Next. dvh is the height actually free between an in-app browser's own bars. */
+  #card { left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: 58vh; max-height: 58dvh; overflow: hidden; padding: 0; border-radius: 14px 14px 0 0; border-width: 1px 0 0; background: linear-gradient(180deg, #2a1e14 0, #2a1e14 48px, #17110e 320px); transform: translateY(30px); transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), max-height 0.35s ease; touch-action: pan-y; }
+  #card.open { transform: none; }
+  #card.full { max-height: calc(100vh - 62px); max-height: calc(100dvh - 62px - env(safe-area-inset-top)); overflow-y: auto; overscroll-behavior: contain; }
+  #card > :not(.art):not(.close):not(.grip):not(.nav) { margin-left: max(18px, env(safe-area-inset-left)); margin-right: max(18px, env(safe-area-inset-right)); }
+  #card .close { position: sticky; top: 0; right: auto; float: right; display: block; margin: 0 2px -44px auto; z-index: 4; }
+  #card .grip { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: sticky; top: 0; z-index: 3; width: 100%; width: calc(100% - 92px); min-height: 44px; margin: 0 46px 2px !important; padding: 0; font-size: 9px; letter-spacing: 0.18em; color: var(--brass); background: #2a1e14; border: 0; border-radius: 0; box-shadow: -46px 0 0 #2a1e14, 46px 0 0 #2a1e14; cursor: pointer; }
+  #card .grip:hover { background: #2a1e14; color: var(--cream); }
+  #card .grip::before { content: ""; width: 38px; height: 4px; border-radius: 2px; background: rgba(222, 168, 92, 0.75); }
+  #card .art { aspect-ratio: 3/1; margin-bottom: 14px; }
+  body.menu-open #how { opacity: 0 !important; transition-delay: 0s !important; }
+  #card .lead { margin-top: 0; margin-bottom: 10px; font-size: 13.5px; line-height: 1.4; }
+  #card h2 { margin-top: 5px; margin-bottom: 9px; }
+  #card .tags { margin-bottom: 10px; }
+  #card p { margin-bottom: 14px; }
+  #card:not(.full) .art, #card:not(.full) .wins, #card:not(.full) .story, #card:not(.full) > a { display: none !important; }
+  #card:not(.full) p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; line-clamp: 1; overflow: hidden; margin-bottom: 12px; }
+  #card:not(.full) .nav::before { display: none; }
+  #card .nav { padding: 8px max(14px, env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-right)); gap: 8px; }
+  #card .nav button { flex: none; }
+  #card .count { white-space: nowrap; font-size: 11px; }
+  #card .story summary { min-height: 44px; padding: 14px 0 10px; } #card > a { min-height: 44px; display: inline-flex; align-items: center; padding-top: 0; padding-bottom: 0; }
+  #hello .links a { min-height: 44px; display: flex; align-items: center; justify-content: center; padding-top: 0; padding-bottom: 0; } #hello .more { min-height: 44px; }
+  #hello { top: calc(64px + env(safe-area-inset-top)); bottom: calc(10px + env(safe-area-inset-bottom)); }
+}
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) { #card, #menu { transition: opacity 0.2s ease; } }
+@media (max-width: 350px) { #who small { text-wrap: balance; } #card .nav button { padding: 0 10px; letter-spacing: 0.1em; } #card .count { font-size: 10px; letter-spacing: 0; } }
