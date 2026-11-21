@@ -663,7 +663,7 @@ body.met #mood.on:hover, body.met #mood.on:focus-within, body.met #sound.show:ho
   #card .nav::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 26px; background: linear-gradient(180deg, rgba(27, 19, 13, 0), #1b130d); pointer-events: none; }
   #card .nav button { min-height: 44px; padding: 0 14px; }
 }
-@media (max-width: 700px) {
+@media (max-width: 700px), (max-height: 520px) and (pointer: coarse) {
   /* step 2. The names rest as brass dots from the start (set in main.js); each dot has a 44 px area to touch. A tap shows
      that one name, with an arrow because the next tap opens it. "Step inside" keeps its words. */
   #tags.rest .tag:not(.door):not(.lit):not(:focus-visible) { width: 10px; height: 10px; border-width: 17px; }
@@ -676,6 +676,8 @@ body.met #mood.on:hover, body.met #mood.on:focus-within, body.met #sound.show:ho
   #tags .tag.lit:not(.door) { border-width: 10px 0; }
   #tags .tag.door { box-shadow: inset 0 0 0 1px rgba(222, 168, 92, 0.8), inset 0 2px 0 rgba(255, 224, 170, 0.2); }
   #tags .tag.lit:not(.door), #tags .tag.door.lit { box-shadow: inset 0 0 0 1px #ffe6b8; }
+}
+@media (max-width: 700px) {
   /* step 3. The card is a sheet at the bottom of the screen. Closed up: the tour line, the title, the tags and one line of
      text, so the piece stays in view above it. Opened (.full): everything, scrolling between a fixed handle and the
      fixed Previous / Next. dvh is the height actually free between an in-app browser's own bars. */
@@ -705,3 +707,26 @@ body.met #mood.on:hover, body.met #mood.on:focus-within, body.met #sound.show:ho
 }
 @media (max-width: 700px) and (prefers-reduced-motion: reduce) { #card, #menu { transition: opacity 0.2s ease; } }
 @media (max-width: 350px) { #who small { text-wrap: balance; } #card .nav button { padding: 0 10px; letter-spacing: 0.1em; } #card .count { font-size: 10px; letter-spacing: 0; } }
+
+/* ================================================================== audit 3 (2026-11-21): the whole tour and every Dusk OS app, at laptop and phone sizes
+   Found with tools/audit.mjs. */
+/* A1. On a laptop (1366 x 768 and shorter) the picture took a third of the card, so the results and the case-study button
+   were below the fold of the card with nothing to say so. The picture is a band there, and what scrolls under the
+   pinned Previous / Next fades out instead of being cut through a line. */
+@media (min-width: 701px) and (max-height: 860px) { #card .art { aspect-ratio: 16/6; margin-bottom: 14px; } #card h2 { margin-top: 6px; margin-bottom: 8px; } #card p { margin-bottom: 12px; } #card .lead { margin-bottom: 10px; } #card .wins { margin-bottom: 10px; } #card .story { margin-bottom: 10px; } #card a { margin-bottom: 12px; } }
+@media (min-width: 1500px) and (min-height: 861px) and (max-height: 1150px) { #card .art { aspect-ratio: 16/7; } } /* 1920 x 1080: the two longest cards (Phoenix Flight, Dastaan) fit without scrolling */
+@media (min-width: 701px) and (max-height: 700px) { #card .art { aspect-ratio: 16/4; margin-bottom: 12px; } #card { max-height: calc(100vh - 110px); top: calc(50% + 22px); } #card .tags { margin-bottom: 8px; } }
+@media (min-width: 701px) { #card .nav::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 22px; background: linear-gradient(180deg, rgba(27, 19, 13, 0), #1b130d); pointer-events: none; } #card .nav { margin-top: 6px !important; } }
+/* A2. Phone, upright: the name plate is one slim bar the height of "Say hello" (name and role). The changing result
+   line made it a quarter of the top of the screen; the results are in the tour, one tap away. */
+@media (max-width: 700px) { #who .res { display: none; } #who { display: flex; flex-direction: column; justify-content: center; } }
+/* A3. Phone held sideways (short and wide, touch): names are dots (above), the name plate is slim, "Open to work"
+   steps aside, and the card keeps clear of "Say hello" and uses the height there is. */
+@media (min-width: 701px) and (max-height: 520px) {
+  #who { top: max(10px, env(safe-area-inset-top)); padding: 6px 12px 7px; } #who b { font-size: 14px; } #who .res { display: none; }
+  #cta { top: max(10px, env(safe-area-inset-top)); } #cta .status { display: none; }
+  #card { top: calc(50% + 26px); right: max(12px, env(safe-area-inset-right)); width: min(380px, 48vw); max-height: calc(100vh - 68px); }
+  #card .art { aspect-ratio: 16/3.4; margin-bottom: 10px; }
+  body:has(#card.open) #who { opacity: 0; pointer-events: none; }
+  #card .nav button, #cta .hello, #nav button { min-height: 40px; }
+}

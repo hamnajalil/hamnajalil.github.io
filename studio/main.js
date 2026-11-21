@@ -916,6 +916,7 @@ function buildArms() {
 
 // ---------------------------------------------------------------- the dome: her skills drawn as constellations
 const skillNames = [];
+const nameScene = new THREE.Scene(); // H11: the names are drawn after the bloom, straight to the screen, so a rod's glow can no longer run across the letters
 function buildConstellations() {
   const g = new THREE.Group();
   const R = 4.4, Z0 = 3.0, DH = 2.4, vmax = 1 - (2 / Math.PI) * 0.22, K = 0.965;
@@ -927,23 +928,23 @@ function buildConstellations() {
   SKILLS.forEach((name, i) => {
     const [az, v] = spots[i], sh = shapes[i].map(([da, dv]) => dome(az + da, v + dv));
     sh.forEach((p, k) => { pts.push(p); if (k) segs.push(sh[k - 1], p); });
-    const cv = document.createElement('canvas'); cv.width = 1400; cv.height = 64;
+    const cv = document.createElement('canvas'); cv.width = 1400; cv.height = 96;
     const c = cv.getContext('2d');
     const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.NoColorSpace;
     const draw = () => { // the engraved display face, once it has arrived
-      c.clearRect(0, 0, 1400, 64); c.font = '600 30px "Cinzel", "Space Grotesk", serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.clearRect(0, 0, 1400, 96); c.font = '600 30px "Cinzel", "Space Grotesk", serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
       try { c.letterSpacing = '7px'; } catch (e) { /* older browsers: plain spacing */ }
-      c.shadowColor = 'rgba(0, 0, 0, 1)'; c.shadowBlur = 9; c.fillStyle = '#000'; // a soft dark halo: rods and ribs behind a name fade out instead of cutting through it
-      for (let k = 0; k < 4; k++) c.fillText(name.toUpperCase(), 700, 34);
-      c.shadowBlur = 0; c.fillStyle = '#fff'; c.fillText(name.toUpperCase(), 700, 34); tx.needsUpdate = true;
+      c.shadowColor = 'rgba(0, 0, 0, 1)'; c.shadowBlur = 15; c.fillStyle = '#000'; // a soft dark halo: rods and ribs behind a name fade out instead of cutting through it
+      for (let k = 0; k < 6; k++) c.fillText(name.toUpperCase(), 700, 50);
+      c.shadowBlur = 0; c.fillStyle = '#fff'; c.fillText(name.toUpperCase(), 700, 50); tx.needsUpdate = true;
     };
     draw(); if (document.fonts && document.fonts.load) document.fonts.load('600 30px Cinzel').then(draw);
     // sizeAttenuation off: every name is the same size on screen wherever it hangs in the dome (they used to be five sizes)
     const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, transparent: true, opacity: 0, depthWrite: false, depthTest: false, sizeAttenuation: false }));
-    sp.material.onBeforeCompile = (sh) => { sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', 'vec4 tm = texture2D( map, vMapUv ); diffuseColor = vec4( vec3(0.95, 0.74, 0.5) * tm.r, tm.a * opacity );'); }; // white letters become brass, the halo stays dark
+    sp.material.onBeforeCompile = (sh) => { sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', 'vec4 tm = texture2D( map, vMapUv ); diffuseColor = vec4( vec3(0.86, 0.71, 0.53) * tm.r, tm.a * opacity );'); }; // white letters become brass, the halo stays dark (screen colour: this is drawn after the tone curve)
     sp.position.copy(dome(az + [0, 0, -5, 7, 6][i], v - 0.15)).multiplyScalar(0.86); // nudged so no name touches another or the lamp from the start view
     sp.renderOrder = 5; skillNames.push(sp);
-    g.add(sp);
+    nameScene.add(sp);
   });
   conLines = new THREE.LineBasicMaterial({ color: new THREE.Color(0.75, 0.52, 0.3), transparent: true, opacity: 0.55 });
   g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs), conLines));
@@ -1071,7 +1072,7 @@ canvas.addEventListener('pointerup', (ev) => {
   if (p.screen) enterScreen();
   else if (p.side && rig.mode === 'room') { label.style.opacity = 0; openHello(); }
   // phone: the names rest as dots, so the first tap on a piece shows its name and the second opens it
-  else if (p.work && ev.pointerType === 'touch' && phone() && rig.mode === 'room' && hover !== p.work) hover = p.work;
+  else if (p.work && ev.pointerType === 'touch' && dots() && rig.mode === 'room' && hover !== p.work) hover = p.work;
   else if (p.work) openCard(p.work);
   else if (rig.mode === 'focus') closeCard();
   else if (ev.pointerType === 'touch') hover = null;
@@ -1172,6 +1173,7 @@ if (window.ResizeObserver) new ResizeObserver(() => document.body.style.setPrope
 // bottom bar is the tour button and nothing else. On large screens #menu takes no part in the layout (display: contents)
 // and the keys stand where they always did.
 const phone = () => innerWidth <= 700;
+const dots = () => phone() || (innerHeight <= 520 && matchMedia('(pointer: coarse)').matches); // the names rest as dots on a phone, upright or held sideways (audit 3, 2026-11-21)
 const menuEl = mk('div', ''); menuEl.id = 'menu'; menuEl.setAttribute('role', 'group'); menuEl.setAttribute('aria-label', INTRO.menu);
 const moreBtn = mk('button', ''); moreBtn.id = 'more'; moreBtn.setAttribute('aria-label', INTRO.menu); moreBtn.setAttribute('aria-controls', 'menu');
 const home2 = mk('button', 'mhome', INTRO.home);
@@ -1189,7 +1191,7 @@ function endIntro() {
   // Touch screens have no pointing, so there the names stay.
   // Touch screens have no pointing, so on a large touch screen the names stay. On a phone they pile up and hide the pieces,
   // so there they are dots from the start; a tap on a dot or a piece shows that one name (H33, 2026-11-20).
-  if (phone()) tagsEl.classList.add('rest'); else if (!matchMedia('(pointer: coarse)').matches) setTimeout(() => tagsEl.classList.add('rest'), 6500);
+  if (dots()) tagsEl.classList.add('rest'); else if (!matchMedia('(pointer: coarse)').matches) setTimeout(() => tagsEl.classList.add('rest'), 6500);
 }
 function startIntro() { document.body.classList.add('intro'); if (FROZEN !== null || VIEW !== 'room' || Q.has('zoom') || Q.has('yaw')) endIntro(); else setTimeout(endIntro, 7000 + (wake.on ? wake.T_NAME * 1000 : 0)); }
 for (const ev of ['pointerdown', 'wheel', 'keydown']) addEventListener(ev, () => { wakeSkip(); endIntro(); }, { passive: true });
@@ -1208,7 +1210,7 @@ function buildTags() {
   }
   for (const w of works) {
     const b = mk('button', 'tag', w.meta.short || w.meta.title);
-    b.addEventListener('click', () => { if (phone() && byTouch && !byKey && hover !== w) { hover = w; return; } openCard(w); }); // phone: a tap on a dot shows the name, a tap on the name opens the card
+    b.addEventListener('click', () => { if (dots() && byTouch && !byKey && hover !== w) { hover = w; return; } openCard(w); }); // phone: a tap on a dot shows the name, a tap on the name opens the card
     // pointing at the plaque counts the same as pointing at the piece; kept separate from the room's own hover so the two cannot fight
     b.addEventListener('pointerenter', () => { tagHover = w; }); b.addEventListener('pointerleave', () => { if (tagHover === w) tagHover = null; });
     tagsEl.append(b); w.tag = b; w.anchor = new THREE.Vector3(w.center.x, w.box.max.y + 0.09, w.center.z);
@@ -1229,7 +1231,7 @@ function placeTags() {
     tagV.copy(w.anchor).project(camera);
     const ok = tagV.z < 1 && Math.abs(tagV.x) < 1.05 && Math.abs(tagV.y) < 1.05;
     w.tag.style.display = ok ? '' : 'none';
-    if (ok) placed.push({ w, x: (tagV.x + 1) / 2 * innerWidth, y: (1 - tagV.y) / 2 * innerHeight, hw: (phone() ? w.tag.offsetWidth || 44 : (w.tagW || (w.tagW = w.tag.offsetWidth || 90))) / 2, lift: 0 }); // phone: a name is a dot until it is tapped, so its width is read fresh
+    if (ok) placed.push({ w, x: (tagV.x + 1) / 2 * innerWidth, y: (1 - tagV.y) / 2 * innerHeight, hw: (dots() ? w.tag.offsetWidth || 44 : (w.tagW || (w.tagW = w.tag.offsetWidth || 90))) / 2, lift: 0 }); // phone: a name is a dot until it is tapped, so its width is read fresh
   }
   // plaques may not sit on top of each other: the lower one keeps its place, the other rides up on a longer wire
   placed.sort((p, q) => q.y - p.y);
@@ -1242,7 +1244,7 @@ function placeTags() {
       p.lift = p.y - (hit.y - hit.lift) + 28;
     }
   }
-  tagRects = resting && !phone() ? [] : placed; // on a phone the dots count too: a skill name may not run through one
+  tagRects = resting && !dots() ? [] : placed; // on a phone the dots count too: a skill name may not run through one
   for (const p of placed) {
     p.x = Math.min(innerWidth - p.hw - 8, Math.max(p.hw + 8, p.x)); // keep the whole plaque on screen
     for (const r of corners) { // H4: a plaque may not slide under the name plate or the say-hello buttons; it hangs just below them instead
@@ -1287,7 +1289,7 @@ function swiped(dx, dy) { // true if the finger's path was a sideways swipe
 }
 function openCard(w) {
   closeHello(); setSheet(false);
-  rig.mode = 'focus'; rig.focus = w; if (phone()) hover = null;
+  rig.mode = 'focus'; rig.focus = w; if (dots()) hover = null;
   tweenTo(focusPose(w), 0.7, null, true);
   card.querySelector('.kind').textContent = w.meta.kind;
   card.querySelector('h2').textContent = w.meta.title;
@@ -1488,7 +1490,7 @@ function frame() {
         const sx = (tmpV.x + 1) / 2 * innerWidth, sy = (1 - tmpV.y) / 2 * innerHeight;
         if (tagRects.some((q) => Math.abs(q.x - sx) < q.hw + hw && Math.abs((q.y - q.lift - 30) - sy) < 34)) w2 = 0;
       }
-      sp.material.opacity += (w2 - sp.material.opacity) * Math.min(1, dt * 6); sp.visible = sp.material.opacity > 0.01; sp.scale.set(0.92 * k, 0.042 * k, 1);
+      sp.material.opacity += (w2 - sp.material.opacity) * Math.min(1, dt * 6); sp.visible = sp.material.opacity > 0.01; sp.scale.set(0.92 * k, 0.063 * k, 1);
     }
   }
 
@@ -1520,6 +1522,7 @@ function frame() {
   finalMat.uniforms.t.value = rtScene.texture; finalMat.uniforms.b1.value = rtA1.texture; finalMat.uniforms.b2.value = rtB2.texture;
   finalMat.uniforms.uFade.value = Math.min(1, FROZEN !== null ? 1 : t / 0.9) * cutFade;
   pass(finalMat, null);
+  if (skillNames.some((sp) => sp.visible)) { renderer.autoClear = false; renderer.setRenderTarget(null); renderer.render(nameScene, camera); renderer.autoClear = true; } // H11: names over the finished picture
 }
 
 resize();

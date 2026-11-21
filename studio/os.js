@@ -89,7 +89,7 @@ export const OS = {
   state: { wallpaper: 'dusk', accent: '#ff8a5c', scan: true },
   apps: [
     { id: 'notes', name: 'Notes', color: '#f2b84b', w: 780, h: 540 },
-    { id: 'playbook', name: 'Playbook', color: '#ff7a45', w: 660, h: 460 },
+    { id: 'playbook', name: 'Playbook', color: '#ff7a45', w: 660, h: 520 },
     // the toys: things to find, after the substance
     { id: 'terminal', name: 'Terminal', color: '#2b3246', w: 620, h: 400, toy: true },
     { id: 'paint', name: 'Paint', color: '#e8587a', w: 640, h: 440, toy: true },
