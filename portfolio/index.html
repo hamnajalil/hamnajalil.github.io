@@ -23,7 +23,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Hamna Jalil","jobTitle":"Game Producer & Product Manager","url":"https://hamnajalil.com/","sameAs":["https://linkedin.com/in/hamnabukhari","https://github.com/hamnajalil"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&amp;family=Cinzel:wght@500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;family=Lora:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&amp;family=Cinzel:wght@500;600;700&amp;family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0b1d;--panel:linear-gradient(170deg,rgba(44,30,22,.92),rgba(18,12,22,.92));--brass:#dea85c;--cream:#f4dfb6;--hi:#ffe6b8;--ink:#2a1806;--mute:#cbb89c;--line:rgba(222,168,92,.38);--plum:#4a2a6a;--paper:#efe1c2;--pink:#2a1e14;
 --cz:'Cinzel',Georgia,serif;--czd:'Cinzel Decorative','Cinzel',Georgia,serif;--sg:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;--lora:'Lora',Georgia,serif}
@@ -259,97 +259,131 @@ dialog::backdrop{background:rgba(8,5,14,.78)}
   blockquote{font-size:18px}.prose{font-size:16px}
 }
 
-:root{--bg:#0e0b20;--brass:#c4acf0;--cream:#ece5ff;--hi:#f6f1ff;--ink:#1c1530;--mute:#bfb3dc;--line:rgba(196,172,240,.36);--panel:linear-gradient(170deg,rgba(44,36,84,.78),rgba(20,16,42,.86));--cz:'Cinzel',Georgia,serif;--czd:'Cinzel Decorative','Cinzel',Georgia,serif;--sg:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif}
-body{background:#0b0918}
-main{background:radial-gradient(60% 40% at 20% 10%,rgba(140,100,230,.12),transparent 70%),radial-gradient(50% 40% at 85% 45%,rgba(80,170,220,.08),transparent 70%),radial-gradient(60% 40% at 30% 85%,rgba(230,120,190,.07),transparent 70%),#0e0b20}
-.top{background:rgba(12,10,28,.9);border-bottom-color:rgba(196,172,240,.35)}
-.top nav a[aria-current="true"],.btn.gold{background:linear-gradient(180deg,#e3d6ff,#b89ee0);color:var(--ink)}
-.btn.gold{box-shadow:0 6px 24px rgba(184,158,224,.35)}.btn.line{border-color:rgba(196,172,240,.6)}.btn.line:hover{background:rgba(196,172,240,.12)}
-/* sections become menu screens */
-.stop{border-top:0;background:transparent!important}
+:root{--bg:#0e0b20;--brass:#c4acf0;--cream:#ece5ff;--hi:#f6f1ff;--ink:#1c1530;--mute:#b9addb;--line:rgba(196,172,240,.32);--panel:linear-gradient(170deg,rgba(42,34,82,.72),rgba(19,15,40,.85));--gold:#ffd27a;--cyan:#9fe7ff;
+--cz:'Cinzel',Georgia,serif;--czd:'Cinzel Decorative','Cinzel',Georgia,serif;--sg:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;--lora:'Nunito',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace}
+body{background:#0b0918;color:var(--cream)}
+main{background:radial-gradient(60% 40% at 20% 10%,rgba(140,100,230,.10),transparent 70%),radial-gradient(50% 40% at 85% 45%,rgba(80,170,220,.06),transparent 70%),#0e0b20}
+#gem{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:15}
+.gl .gemfb{display:none}
+.top{background:rgba(12,10,28,.9);border-bottom-color:rgba(196,172,240,.3)}
+.top nav a[aria-current="true"],.btn.gold{background:linear-gradient(180deg,#ece3ff,#b89ee0);color:var(--ink)}
+.btn.gold{box-shadow:0 6px 24px rgba(184,158,224,.32)}.btn.line{border-color:rgba(196,172,240,.55);color:var(--cream)}.btn.line:hover{background:rgba(196,172,240,.12)}
+.btn{border-radius:8px}
+/* one header style: number, title, one plain line */
+.stop{border-top:0;background:transparent!important;padding:72px 0}
 .stop::before{display:none}
-.buoy{border-radius:12px;width:52px;height:52px;left:70px;top:2px;background:linear-gradient(180deg,#3a2f6e,#1d1838);border-color:#e3d6ff;box-shadow:0 0 0 4px rgba(14,11,32,.9),0 0 0 5.5px rgba(196,172,240,.7),0 0 22px rgba(196,172,240,.4);color:#fff;font-size:16px}
-.buoy::after{content:none}
-.stop .wrap{position:relative}
-.stop .wrap>*:not(.buoy){position:relative}
-.stop-head{padding-bottom:16px;border-bottom:1px solid var(--line)}
-.stop-head h2{font-family:var(--czd);font-weight:700;letter-spacing:.01em}
-.stop-sub{color:#c9bde6}
-.eyebrow{color:#9fe7ff}.eyebrow .ico,.ico{stroke:#c4acf0}
-.card{background:var(--panel);border-color:var(--line);border-radius:10px;position:relative}
-.card::before,.card::after{content:"";position:absolute;width:12px;height:12px;border:1.5px solid #c4acf0;opacity:.8;pointer-events:none}.card::before{left:6px;top:6px;border-right:0;border-bottom:0}.card::after{right:6px;bottom:6px;border-left:0;border-top:0}
-.chips li,.chip-one{background:rgba(40,32,80,.85);border-color:rgba(196,172,240,.5);color:#f4efff;border-radius:999px}
-h3{color:#f6f1ff}.lv{color:#ffd27a}
-.row i{border-radius:3px;transform:skewX(-12deg);width:13px}.row i.on{background:linear-gradient(180deg,#e3d6ff,#9d86d0);box-shadow:0 0 8px rgba(196,172,240,.6)}.row i{border-color:rgba(196,172,240,.4)}
-.arch{border-radius:12px;border-color:#e3d6ff;box-shadow:0 0 0 4px rgba(14,11,32,.9),0 0 0 5.5px rgba(196,172,240,.7),0 0 30px rgba(196,172,240,.25)}
-.isle .btn{border-radius:999px}
-.sound{border-color:var(--brass);background:linear-gradient(170deg,rgba(50,40,96,.92),rgba(20,16,42,.95));box-shadow:0 0 50px rgba(184,158,224,.14)}
-.size{border-radius:10px}.size[aria-pressed="true"]{background:linear-gradient(180deg,#e3d6ff,#b89ee0);border-color:#fff;color:var(--ink)}
-.mc{background:repeating-linear-gradient(45deg,#2b2450,#2b2450 6px,#231d44 6px,#231d44 12px);border-color:var(--brass)}.mc.up,.mc.done{background:linear-gradient(180deg,#e3d6ff,#b89ee0)}
-.light{background:radial-gradient(circle at 50% 40%,#3a2f6e,#141030)}
-.note{background:#f4efff}.note .q strong{background:linear-gradient(transparent 60%,rgba(196,172,240,.55) 60%)}.who img{border-color:#6a4fb0}
-.badge .tier{border-radius:999px}
-.scroll{background:#efe8ff}.scroll .by{color:#4a2a8a}
+.buoy{border-radius:12px;width:48px;height:48px;left:84px;top:-2px;background:linear-gradient(180deg,#3a2f6e,#1d1838);border:1.5px solid #e3d6ff;box-shadow:0 0 0 4px rgba(14,11,32,.9),0 0 0 5.5px rgba(196,172,240,.55);color:#fff;font:700 17px var(--mono)}
+.stop-head{position:relative;display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:34px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.stop-head h2{font:600 clamp(30px,3.2vw,44px)/1.05 var(--cz);letter-spacing:.04em;margin:0;color:var(--hi)}
+.stop-sub{font:600 16px var(--sg);color:var(--mute);text-align:left;max-width:none}
+.stop-head::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,#e3d6ff,var(--cyan) 35%,transparent 70%);transform-origin:0 50%}
+h3{color:var(--hi);font-family:var(--cz)}
+.eyebrow,.group,.rule,.when{color:var(--cyan)}.ico{stroke:var(--brass)}
+.card{background:var(--panel);border-color:var(--line);border-radius:12px}
+.chips li,.chip-one{background:rgba(40,32,80,.85);border-color:rgba(196,172,240,.45);color:#f4efff;border-radius:999px}
+blockquote{font-family:var(--sg);font-style:italic;font-weight:600;color:#e3d6ff;border-left-color:var(--brass)}
+.profile-top img{border-color:#e3d6ff}
+.lv{color:var(--gold)}
+.row i{border-radius:3px;transform:skewX(-12deg);width:13px;border-color:rgba(196,172,240,.4)}.row i.on{background:linear-gradient(180deg,#ece3ff,#9d86d0);box-shadow:0 0 8px rgba(196,172,240,.55)}
+/* quests: one main quest, four side quests, whole card is the button */
+.qmain{margin-bottom:22px;scroll-margin-top:100px}
+.qm{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);width:100%;padding:0;border:1px solid rgba(196,172,240,.45);border-radius:16px;overflow:hidden;background:var(--panel);color:inherit;text-align:left;font:inherit;cursor:pointer;transition:border-color .3s,box-shadow .3s,transform .3s}
+.qm:hover{border-color:#e3d6ff;box-shadow:0 20px 60px rgba(110,80,200,.35);transform:translateY(-3px)}
+.qart{display:block;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 40%,#4a3d86,#1b1636)}
+.qm .qart{min-height:340px}.qart img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+.qm:hover .qart img,.qs:hover .qart img{transform:scale(1.05)}
+.qbody{display:flex;flex-direction:column;gap:14px;padding:30px 32px}
+.qtag{font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
+.qm strong{font:600 clamp(26px,2.6vw,36px)/1.1 var(--cz);color:#fff}
+.qline{font-size:16px;line-height:1.6;color:var(--cream)}
+.qstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.qstats span{display:flex;flex-direction:column;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(10,8,24,.45)}.qstats b{font:700 22px var(--cz);color:#fff}.qstats i{font:600 12px var(--sg);font-style:normal;color:var(--mute)}
+.qgo{margin-top:auto;font:700 12px var(--cz);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.qside{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.qside li{scroll-margin-top:100px}
+.qs{display:flex;flex-direction:column;gap:8px;width:100%;height:100%;padding:0 0 16px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);color:inherit;text-align:left;font:inherit;cursor:pointer;transition:border-color .3s,box-shadow .3s,transform .3s}
+.qs:hover{border-color:#e3d6ff;box-shadow:0 16px 40px rgba(110,80,200,.3);transform:translateY(-3px)}
+.qs .qart{aspect-ratio:16/10;margin-bottom:6px}.qs .qart.logo{background:radial-gradient(circle at 50% 45%,#7a6ac8,#2a2358)}.qs .qart.logo img{object-fit:contain;padding:8%;filter:brightness(1.9) contrast(1.1) saturate(1.25)}
+.qs .qtag,.qs strong,.qs .qwin,.qs .qgo{margin:0 16px}.qs strong{font:600 18px/1.25 var(--cz);color:#fff}.qs .qwin{font-weight:700;font-size:14px;color:var(--gold)}
+/* achievements: number first */
+.badge{gap:8px}.tier{border-radius:999px}.bignum{display:flex;align-items:baseline;gap:10px;margin:6px 0 2px}.bignum b{font:700 clamp(34px,3vw,46px)/1 var(--cz);color:#fff;font-variant-numeric:tabular-nums}.bignum span{font:600 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--cyan)}
+.badge h3{font-size:16px}
+.scroll{background:#efe8ff;border-radius:10px}.scroll .by{color:#4a2a8a}
+/* allies */
+.note{background:#f4efff;border-radius:6px}.q{font-family:var(--sg);font-style:italic;font-weight:600;font-size:16px}.note .q strong{font-style:italic;background:linear-gradient(transparent 60%,rgba(196,172,240,.55) 60%)}.who img{border-color:#6a4fb0}.name{font-family:var(--cz)}
+/* side quest */
+.sound{border-color:var(--brass);background:linear-gradient(170deg,rgba(50,40,96,.92),rgba(20,16,42,.95));border-radius:16px}
+.try strong{font-family:var(--cz)}.size{border-radius:12px}.size[aria-pressed="true"]{background:linear-gradient(180deg,#ece3ff,#b89ee0);border-color:#fff;color:var(--ink)}
+/* press start */
+.coop{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:40px;align-items:stretch}
+.p1c{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.big2{font:600 clamp(34px,3.6vw,52px)/1.05 var(--cz);color:#fff;letter-spacing:.02em}
+.coop .lead{font-size:17px;line-height:1.6}
+.tostudio{font:700 12px var(--cz);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-decoration:none;margin-top:6px}.tostudio:hover{color:#fff}
+.p2{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:30px;border:2px dashed rgba(196,172,240,.55);border-radius:18px;background:radial-gradient(circle at 50% 40%,rgba(120,90,220,.22),rgba(14,11,32,.6) 70%);text-align:center}
+.p2h{display:flex;align-items:center;gap:8px;font:600 12px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+.p2plus{font:300 64px/1 var(--sg);color:rgba(227,214,255,.6)}
+.p2 .start{min-height:56px;padding:0 28px;font-size:14px}
+.anim .p2 .start{animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(196,172,240,.12),0 6px 30px rgba(184,158,224,.5)}}
+.p2mail{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--cream)}.copy{min-height:36px;padding:0 12px;border-radius:8px;border:1px solid rgba(196,172,240,.55);background:transparent;color:var(--cream);font:700 12px var(--sg);cursor:pointer}.copy:hover{background:rgba(196,172,240,.14)}
+.blip{width:9px;height:9px;border-radius:50%;background:#8ef0b4;box-shadow:0 0 10px #8ef0b4;flex-shrink:0}
 footer{background:#0b0918}
-.rise{opacity:0;transform:translateY(14px);animation:srise .9s cubic-bezier(.2,.7,.2,1) forwards}@keyframes srise{to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.rise,.ql li{opacity:1!important;transform:none!important}}
-/* scroll animations: only when motion is allowed; without script everything simply shows */
+/* quest details: same world as the page */
+dialog{background:#15112e;color:var(--cream);box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 1px rgba(196,172,240,.5),0 0 0 6px rgba(14,11,32,.9),0 0 0 7px rgba(196,172,240,.35);border-radius:18px}
+dialog::backdrop{background:rgba(6,4,16,.8);backdrop-filter:blur(3px)}
+.book::before{display:none}.pg.l,.pg.r{background:transparent}.pg.l{border-right:1px solid var(--line)}
+.book .eyebrow{color:var(--cyan)}.book h2{font:600 clamp(26px,2.8vw,36px)/1.1 var(--cz);color:#fff}.book .sub{font-family:var(--sg);font-style:normal;font-weight:600;color:var(--mute)}
+.photo{transform:none;background:transparent;padding:0;box-shadow:none;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.stamps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.stamp,.stamp:nth-child(odd),.stamp:nth-child(even){width:auto;height:auto;padding:12px 8px;border-radius:12px;transform:none;border:1px solid var(--line);box-shadow:none;background:rgba(10,8,24,.5);color:#fff}.stamp b{font:700 22px var(--cz)}.stamp span{font:600 11px var(--mono);color:var(--cyan);max-width:none}
+.book h3{color:var(--cyan);font-family:var(--mono);font-size:12px;letter-spacing:.16em}.book .pg p.t{font-family:var(--sg);color:var(--cream)}
+.wins li::before{color:var(--gold)}.wins{color:#fff}
+.book-nav{background:rgba(10,8,24,.6);border-top:1px solid var(--line)}.book-nav .btn.line{color:var(--cream);border-color:rgba(196,172,240,.55)}.book-nav .btn.gold{background:linear-gradient(180deg,#ece3ff,#b89ee0);color:var(--ink)}
+.x{background:#241d4a;color:#fff;border-color:rgba(196,172,240,.6)}
+/* scroll reveals */
 .anim .rv{opacity:0;translate:0 26px;transition:opacity .75s ease var(--d,0ms),translate .85s cubic-bezier(.2,.7,.2,1) var(--d,0ms)}
 .anim .rv.in{opacity:1;translate:0 0}
-.anim .buoy.rv{translate:0 0;scale:.3;transition:opacity .5s ease,scale .7s cubic-bezier(.3,1.6,.5,1)}.anim .buoy.rv.in{scale:1}
-.stop-head{position:relative}.stop-head::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,#e3d6ff,#9fe7ff 40%,transparent);transform-origin:0 50%}
+.anim .buoy.rv{translate:0 0;scale:.4;transition:opacity .5s ease,scale .7s cubic-bezier(.3,1.6,.5,1)}.anim .buoy.rv.in{scale:1}
 .anim .stop-head.rv::after{transform:scaleX(0);transition:transform 1.2s cubic-bezier(.2,.7,.2,1) .25s}.anim .stop-head.rv.in::after{transform:scaleX(1)}
 .anim .row.rv{opacity:1;translate:0 0}.anim .row.rv:not(.in) i.on{background:none;box-shadow:none;border:1px solid rgba(196,172,240,.4)}
 .row i{transition:background .35s ease,box-shadow .35s ease}.row i:nth-child(1){transition-delay:150ms}.row i:nth-child(2){transition-delay:220ms}.row i:nth-child(3){transition-delay:290ms}.row i:nth-child(4){transition-delay:360ms}.row i:nth-child(5){transition-delay:430ms}.row i:nth-child(6){transition-delay:500ms}.row i:nth-child(7){transition-delay:570ms}.row i:nth-child(8){transition-delay:640ms}.row i:nth-child(9){transition-delay:710ms}.row i:nth-child(10){transition-delay:780ms}
-.card,.note,.scroll,.isle .arch,.load>li,.badges>li{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
-.card:hover,.load>li:hover,.badges>li:hover{transform:translateY(-4px);border-color:#c4acf0;box-shadow:0 16px 40px rgba(110,80,200,.32)}
-.note:hover{transform:translateY(-4px) rotate(0deg)!important;box-shadow:0 20px 40px rgba(0,0,0,.6)}
-.arch img{transition:transform .6s ease}.isle:hover .arch img{transform:scale(1.06)}
-.light svg path:nth-of-type(1),.light svg path:nth-of-type(2){transform-box:view-box;transform-origin:300px 96px;animation:sbeam 5s ease-in-out infinite alternate}
-@keyframes sbeam{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
-.light svg circle{animation:slamp 3s ease-in-out infinite alternate}@keyframes slamp{from{opacity:.5}to{opacity:1}}
-.buoy{animation:bglow 3.5s ease-in-out infinite alternate}@keyframes bglow{from{box-shadow:0 0 0 4px rgba(14,11,32,.9),0 0 0 5.5px rgba(196,172,240,.6),0 0 14px rgba(196,172,240,.25)}to{box-shadow:0 0 0 4px rgba(14,11,32,.9),0 0 0 5.5px #e3d6ff,0 0 32px rgba(196,172,240,.6)}}
-@media (prefers-reduced-motion:reduce){.light svg path,.light svg circle,.buoy{animation:none}}
-/* hero */
-.sel{position:relative;overflow:hidden;min-height:min(calc(100vh - 65px),900px);display:flex;align-items:center;background:#0b0918}
-.aur{position:absolute;inset:-20%;background:radial-gradient(40% 30% at 30% 40%,rgba(140,100,230,.35),transparent 70%),radial-gradient(35% 28% at 70% 60%,rgba(80,170,220,.22),transparent 70%),radial-gradient(30% 25% at 55% 25%,rgba(230,120,190,.18),transparent 70%);animation:aur 26s ease-in-out infinite alternate;filter:blur(20px)}
-@keyframes aur{from{transform:translate(-3%,-2%) rotate(0)}to{transform:translate(3%,2%) rotate(8deg)}}
-#fx{position:absolute;inset:0;width:100%;height:100%}
-.swrap{position:relative;z-index:2;width:100%;max-width:1320px;margin:0 auto;padding:34px 28px 40px;display:grid;grid-template-columns:minmax(0,1fr) 380px minmax(0,1fr);gap:26px;align-items:center}
-.stitle{grid-column:1/-1;text-align:center;font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:.5em;color:#c4acf0;text-transform:uppercase}
-.stitle b{animation:blink 1.4s steps(2) infinite}@keyframes blink{50%{opacity:0}}
-.scard{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
-.ring{position:absolute;top:-30px;left:50%;margin-left:-180px;width:360px;height:360px;border-radius:50%;border:1px dashed rgba(196,172,240,.5);animation:spin 60s linear infinite}
-.ring::before{content:"";position:absolute;inset:22px;border-radius:50%;border:1px solid rgba(196,172,240,.3)}
-.ring i{position:absolute;left:50%;top:-6px;width:12px;height:12px;margin-left:-6px;transform:rotate(45deg);background:#e3d6ff;box-shadow:0 0 12px #c4acf0}
+.card,.note,.scroll,.load>li,.badges>li{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.card:hover,.load>li:hover,.badges>li:hover{transform:translateY(-4px);border-color:#c4acf0;box-shadow:0 16px 40px rgba(110,80,200,.3)}
+.note:hover{transform:translateY(-4px) rotate(0deg)!important}
+.rise{opacity:0;transform:translateY(14px);animation:srise .9s cubic-bezier(.2,.7,.2,1) forwards}@keyframes srise{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1!important;transform:none!important}}
+/* opening */
+.sel{position:relative;overflow:hidden;min-height:min(calc(100vh - 65px),820px);display:flex;align-items:center;background:#0b0918}
+.aur{position:absolute;inset:-20%;background:radial-gradient(38% 30% at 68% 42%,rgba(140,100,230,.40),transparent 70%),radial-gradient(30% 26% at 82% 66%,rgba(80,170,220,.20),transparent 70%),radial-gradient(34% 28% at 25% 30%,rgba(230,120,190,.12),transparent 70%);animation:aur 26s ease-in-out infinite alternate;filter:blur(18px)}
+@keyframes aur{from{transform:translate(-2%,-1%) rotate(0)}to{transform:translate(2%,1%) rotate(6deg)}}
+.swrap{position:relative;z-index:2;width:100%;max-width:1240px;margin:0 auto;padding:48px 40px 52px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px;align-items:center}
+.stx{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.p1{display:flex;align-items:center;gap:10px;font:600 12px var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--cyan)}
+.snm{font:700 clamp(54px,6.6vw,96px)/.95 var(--czd);color:#fbf8ff;text-shadow:0 0 40px rgba(196,172,240,.35);font-feature-settings:'liga' 0,'dlig' 0,'clig' 0,'calt' 0}.snm span{display:block;color:transparent;-webkit-text-stroke:1.6px #c4acf0}
+.scls{font:600 14px var(--cz);letter-spacing:.2em;text-transform:uppercase;color:#e3d6ff}
+.spitch{font-size:clamp(18px,1.5vw,21px);line-height:1.55;max-width:560px;color:#f4efff}
+.snow{font-size:14.5px;font-weight:700;color:#bff5d4}
+.ch{display:flex;gap:12px;flex-wrap:wrap}
+.sstats{display:grid;grid-template-columns:repeat(4,minmax(0,auto));gap:28px;padding-top:18px;margin-top:4px;border-top:1px solid var(--line)}.sstats b{display:block;font:700 26px var(--cz);color:#fff;font-variant-numeric:tabular-nums}.sstats span{font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.scard{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:110px}
+.ring{position:absolute;top:118px;left:50%;margin-left:-185px;width:370px;height:370px;border-radius:50%;border:1px dashed rgba(196,172,240,.45);animation:spin 70s linear infinite}
+.ring::before{content:"";position:absolute;inset:24px;border-radius:50%;border:1px solid rgba(196,172,240,.25)}
+.ring i{position:absolute;left:50%;top:-5px;width:10px;height:10px;margin-left:-5px;transform:rotate(45deg);background:#e3d6ff;box-shadow:0 0 12px #c4acf0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.port{position:relative;width:280px;height:300px;border-radius:140px 140px 12px 12px;overflow:hidden;border:2px solid #e3d6ff;animation:glow 3.5s ease-in-out infinite alternate}
-@keyframes glow{from{box-shadow:0 0 0 7px rgba(14,10,32,.9),0 0 0 8.5px #c4acf0,0 0 30px rgba(196,172,240,.3)}to{box-shadow:0 0 0 7px rgba(14,10,32,.9),0 0 0 8.5px #e3d6ff,0 0 70px rgba(196,172,240,.65)}}
+.gemslot{position:absolute;top:-34px;left:50%;width:140px;height:140px;margin-left:-70px;display:flex;align-items:center;justify-content:center}
+.gemfb{width:44px;height:44px;transform:rotate(45deg);background:linear-gradient(135deg,#f4efff,#9d86d0);box-shadow:0 0 30px #c4acf0}
+.port{position:relative;width:290px;height:320px;border-radius:145px 145px 14px 14px;overflow:hidden;border:2px solid #e3d6ff;box-shadow:0 0 0 7px rgba(14,10,32,.9),0 0 0 8.5px #c4acf0,0 0 60px rgba(196,172,240,.45)}
 .port img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
-.snm{font-family:var(--czd);font-weight:700;font-size:42px;line-height:1;margin-top:10px;color:#fbf8ff}.snm span{color:transparent;-webkit-text-stroke:1.5px #c4acf0}
-.scls{font-family:var(--cz);font-weight:600;font-size:13px;letter-spacing:.18em;color:#d8c8ff;text-transform:uppercase}
-.slv{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:#9fe7ff}
-.spanel{position:relative;border:1px solid rgba(196,172,240,.4);border-radius:10px;background:rgba(20,16,44,.72);backdrop-filter:blur(6px);padding:18px 20px}
-.spanel::before,.spanel::after,.dlg::before{content:"";position:absolute;width:12px;height:12px;border:1.5px solid #c4acf0}.spanel::before{left:6px;top:6px;border-right:0;border-bottom:0}.spanel::after{right:6px;bottom:6px;border-left:0;border-top:0}
-.sph{font-family:var(--mono);font-weight:600;font-size:11px;letter-spacing:.22em;color:#c4acf0;text-transform:uppercase;margin-bottom:12px}
-.sstats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sstats li{padding:12px 14px;border:1px solid rgba(196,172,240,.3);border-radius:8px;background:rgba(10,8,24,.5)}.sstats b{display:block;font-family:var(--cz);font-weight:700;font-size:28px;color:#fff;font-variant-numeric:tabular-nums}.sstats span{font-size:13.5px;font-weight:700;color:#cbbfee}
-.traits{display:flex;flex-wrap:wrap;gap:6px}.traits li{font-size:12.5px;font-weight:700;color:#ece5ff;padding:4px 10px;border-radius:999px;border:1px solid rgba(196,172,240,.45);background:rgba(40,32,80,.7)}
-.ql li{opacity:0;transform:translateX(18px);animation:slide .7s cubic-bezier(.2,.7,.2,1) forwards;margin-bottom:8px}@keyframes slide{to{opacity:1;transform:none}}
-.ql button{width:100%;display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px;border:1px solid rgba(196,172,240,.25);border-radius:8px;background:rgba(10,8,24,.5);color:inherit;text-align:left;cursor:pointer;font:inherit;transition:border-color .2s,background .2s}
-.ql button:hover{border-color:#e3d6ff;background:rgba(60,48,110,.6)}.ql img{width:56px;height:42px;border-radius:5px;object-fit:cover;background:#1d1838}.ql b{display:block;font-family:var(--cz);font-size:14px;color:#fff}.ql small{font-size:12.5px;font-weight:700;color:#ffd27a}.ql i{font-style:normal;color:#c4acf0}
-.dlg{grid-column:1/-1;position:relative;border:2px solid #e3d6ff;border-radius:12px;background:rgba(14,10,32,.92);padding:22px 26px;box-shadow:0 0 0 5px rgba(14,10,32,.9),0 0 0 6px #c4acf0}.dlg::before{display:none}
-.dlgwho{position:absolute;top:-16px;left:22px;font-family:var(--cz);font-weight:700;font-size:13px;letter-spacing:.14em;padding:4px 12px;background:#2a2350;border:1px solid #c4acf0;border-radius:4px}
-#say{font-size:19px;line-height:1.6;min-height:62px}#say::after{content:"▌";animation:blink 1s steps(2) infinite;color:#c4acf0}
-.snow{font-weight:700;color:#bff5d4;font-size:14.5px;margin-top:4px}
-.ch{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
-.menu{position:relative;z-index:3;background:linear-gradient(180deg,#141032,#0e0b20);border-top:1px solid rgba(196,172,240,.4);border-bottom:1px solid rgba(196,172,240,.15)}
-.min{max-width:1320px;margin:0 auto;padding:22px 28px 26px}
+.ready{font:700 12px var(--mono);letter-spacing:.4em;text-transform:uppercase;color:#bff5d4;padding:6px 14px 6px 18px;border:1px solid rgba(142,240,180,.45);border-radius:999px;background:rgba(14,30,24,.5)}
+.anim .ready{animation:blink 2.4s ease-in-out infinite}@keyframes blink{50%{opacity:.45}}
+.menu{position:relative;z-index:3;background:linear-gradient(180deg,#141032,#0e0b20);border-top:1px solid rgba(196,172,240,.35);border-bottom:1px solid rgba(196,172,240,.12)}
+.min{max-width:1240px;margin:0 auto;padding:22px 40px 26px}
+.sph{font:600 11px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}.sph span{color:var(--mute)}
 .menu ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.menu a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;min-height:52px;padding:8px 12px;text-decoration:none;border:1px solid rgba(196,172,240,.3);border-radius:8px;background:rgba(20,16,44,.6);color:#ece5ff;font-family:var(--cz);font-weight:600;font-size:13px;letter-spacing:.05em;transition:background .2s,border-color .2s,transform .2s}
-.menu a:hover{background:rgba(70,56,130,.7);border-color:#e3d6ff;transform:translateX(3px)}.menu .mn{font-family:var(--mono);font-size:11px;color:#9fe7ff}.menu i{font-style:normal;color:#c4acf0;opacity:0;transition:opacity .2s}.menu a:hover i{opacity:1}
-@media (max-width:1100px){.menu ol{grid-template-columns:repeat(2,minmax(0,1fr))}.buoy{left:30px}}
-@media (max-width:1000px){.sel{display:block}.swrap{grid-template-columns:1fr;padding:30px 16px 34px}.scard{order:-1;margin-top:24px}.spanel{order:1}.stitle{order:-2}.ring{width:300px;height:300px;top:-20px;margin-left:-150px}.port{width:230px;height:250px}.sstats b{font-size:24px}.ch .btn{flex:1 1 100%}}
-@media (max-width:820px){.min{padding:20px 16px 24px}.buoy{margin:4px 0 16px 0}}
+.menu a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;min-height:52px;padding:8px 14px;text-decoration:none;border:1px solid rgba(196,172,240,.25);border-radius:10px;background:rgba(20,16,44,.6);color:#ece5ff;transition:background .2s,border-color .2s,transform .2s}
+.menu a:hover{background:rgba(70,56,130,.6);border-color:#e3d6ff;transform:translateX(3px)}
+.menu kbd{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;border:1px solid rgba(159,231,255,.5);font:700 12px var(--mono);color:var(--cyan);background:rgba(10,8,24,.6)}
+.menu span{font:600 14px var(--cz);letter-spacing:.05em}.menu small{font:600 12.5px var(--sg);color:var(--mute);text-align:right}
+@media (max-width:1100px){.buoy{left:36px}.qside{grid-template-columns:repeat(2,minmax(0,1fr))}.qm{grid-template-columns:1fr}.qm .qart{min-height:0;aspect-ratio:16/9}.menu ol{grid-template-columns:repeat(2,minmax(0,1fr))}.coop{grid-template-columns:1fr}}
+@media (max-width:900px){.swrap{grid-template-columns:1fr;padding:30px 18px 40px;gap:24px}.scard{order:-1;padding-top:84px}.gemslot{width:90px;height:90px;margin-left:-45px}.ring{top:84px;width:290px;height:290px;margin-left:-145px}.port{width:220px;height:244px}.sstats{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%}.ch .btn{flex:1 1 100%}.snm{font-size:56px}}
+@media (max-width:820px){.min{padding:18px 16px 22px}.menu ol{grid-template-columns:1fr}.menu small{display:none}.stop{padding:48px 0}.buoy{position:static;margin:0 0 12px}.stop-head{gap:6px 14px}.qstats{grid-template-columns:repeat(2,minmax(0,1fr))}.qbody{padding:20px}.qside{grid-template-columns:1fr 1fr;gap:10px}.qs strong{font-size:15px}}
 </style>
 </head>
 <body>
@@ -357,47 +391,48 @@ footer{background:#0b0918}
 <header class="top">
   <a class="btn line back" href="https://hamnajalil.com/" aria-label="Back to the studio">←<span>&nbsp;The studio</span></a>
   <nav aria-label="Sections of this page"><ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#experience">Career</a></li>
-    <li><a href="#quests">Projects</a></li>
+    <li><a href="#about">Character</a></li>
+    <li><a href="#experience">Campaign</a></li>
+    <li><a href="#quests">Quests</a></li>
     <li><a href="#skills">Skills</a></li>
-    <li><a href="#methodology">How I work</a></li>
-    <li><a href="#achievements">Results</a></li>
-    <li><a href="#recommendations">Praise</a></li>
-    <li><a href="#studio">Your studio</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#methodology">Playstyle</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#recommendations">Allies</a></li>
+    <li><a href="#studio">Side quest</a></li>
+    <li><a href="#contact">Press start</a></li>
   </ul></nav>
   <a class="btn gold" href="../HAMNA_JALIL.pdf" target="_blank" rel="noopener">Résumé</a>
 </header>
 <main id="main">
 <section class="sel" id="map" aria-label="Introduction">
-  <div class="aur" aria-hidden="true"></div><canvas id="fx" aria-hidden="true"></canvas>
+  <div class="aur" aria-hidden="true"></div>
   <div class="swrap">
-    <p class="stitle rise" style="animation-delay:.1s">Select your producer <b>▸</b></p>
-    <section class="spanel stats rise" style="animation-delay:.5s" aria-label="Stats"><p class="sph">Stats · earned, not assigned</p><ul class="sstats"><li><b data-to="700" data-pre="" data-suf="K+">700K+</b><span>installs</span></li><li><b data-to="40" data-pre="$" data-suf="M+">$40M+</b><span>ecosystem</span></li><li><b data-to="50" data-pre="" data-suf="+">50+</b><span>people led</span></li><li><b data-to="4" data-pre="" data-suf="">4</b><span>continents</span></li></ul>
-      <p class="sph" style="margin-top:16px">Class traits</p><ul class="traits"><li>Live ops</li><li>Multi-timezone</li><li>Roadmaps</li><li>Risk registers</li><li>Web3</li><li>AAA</li></ul></section>
-    <section class="scard rise" style="animation-delay:.2s"><div class="ring" aria-hidden="true"><i></i></div><div class="port"><img src="../studio/img/portrait.jpg" alt="Portrait of Hamna Jalil" width="480" height="480"></div>
-      <h1 class="snm">Hamna <span>Jalil</span></h1><p class="scls">Class: Game Producer · PM</p><p class="slv">LVL 4+ · AAA · WEB3 · LIVE SERVICE</p></section>
-    <section class="spanel" aria-label="Quest log"><p class="sph">Quest log · 5 completed</p><ol class="ql"><li style="animation-delay:1.00s"><button type="button" data-book="skyborne" aria-label="Open the logbook for Skyborne Phoenix Flight"><img src="assets/quests/skyborne-phoenix-flight-still.webp" alt=""><span><b>Skyborne Phoenix Flight</b><small>Zero missed seasonal launches</small></span><i aria-hidden="true">▸</i></button></li><li style="animation-delay:1.18s"><button type="button" data-book="rcade" aria-label="Open the logbook for RCADE Network"><img src="assets/quests/rcade-network-icon.webp" alt="" style="object-fit:contain;padding:4px"><span><b>RCADE Network</b><small>700K+ installs</small></span><i aria-hidden="true">▸</i></button></li><li style="animation-delay:1.36s"><button type="button" data-book="genesis" aria-label="Open the logbook for Skyborne Genesis"><img src="assets/quests/skyborne-genesis-art.webp" alt=""><span><b>Skyborne Genesis</b><small>On-time launch</small></span><i aria-hidden="true">▸</i></button></li><li style="animation-delay:1.54s"><button type="button" data-book="dastaan" aria-label="Open the logbook for Dastaan"><img src="../studio/img/dastaan.jpg" alt=""><span><b>Dastaan</b><small>30+ team shipped</small></span><i aria-hidden="true">▸</i></button></li><li style="animation-delay:1.72s"><button type="button" data-book="festival" aria-label="Open the logbook for Music Festival Tycoon"><img src="../studio/img/music-festival-tycoon.webp" alt=""><span><b>Music Festival Tycoon</b><small>15% under budget</small></span><i aria-hidden="true">▸</i></button></li></ol></section>
-    <section class="dlg rise" style="animation-delay:1.2s"><p class="dlgwho">Hamna</p><p id="say" data-text="Game Producer &amp; Product Manager with 4+ years shipping AAA, Web3 and live-service games across 4 continents. Co-owned the roadmap for a $40M+ Web3 gaming ecosystem with 700K+ installs, leading 50+ people.">Game Producer &amp; Product Manager with 4+ years shipping AAA, Web3 and live-service games across 4 continents. Co-owned the roadmap for a $40M+ Web3 gaming ecosystem with 700K+ installs, leading 50+ people.</p><p class="snow">● Associate Product Manager at Revolving Games · Open to senior producer and product roles</p>
-      <div class="ch"><a class="btn gold" href="#about">▶ Start the game</a><a class="btn line" href="#quests">Open the quest log</a><a class="btn line" href="../HAMNA_JALIL.pdf" target="_blank" rel="noopener">Résumé (PDF)</a></div></section>
+    <div class="stx">
+      <p class="p1 rise" style="animation-delay:.05s"><span class="blip" aria-hidden="true"></span>Player 1 · select your producer</p>
+      <h1 class="snm rise" style="animation-delay:.15s">Hamna <span>Jalil</span></h1>
+      <p class="scls rise" style="animation-delay:.3s">Class: Game Producer · Product Manager</p>
+      <p class="spitch rise" style="animation-delay:.45s">I turn vision into structure, and creative ambition into shipped games, across AAA, Web3 and live service.</p>
+      <p class="snow rise" style="animation-delay:.55s">Associate Product Manager at Revolving Games · open to senior producer and product roles</p>
+      <div class="ch rise" style="animation-delay:.65s"><a class="btn gold" href="#quests">▶ Start: see the quests</a><a class="btn line" href="../HAMNA_JALIL.pdf" target="_blank" rel="noopener">Résumé (PDF)</a></div>
+      <ul class="sstats rise" style="animation-delay:.8s" aria-label="Stats"><li><b data-to="700" data-pre="" data-suf="K+">700K+</b><span>installs</span></li><li><b data-to="40" data-pre="$" data-suf="M+">$40M+</b><span>ecosystem</span></li><li><b data-to="50" data-pre="" data-suf="+">50+</b><span>people led</span></li><li><b data-to="4" data-pre="" data-suf="">4</b><span>continents</span></li></ul>
+    </div>
+    <div class="scard rise" style="animation-delay:.1s">
+      <div class="ring" aria-hidden="true"><i></i></div>
+      <div class="gemslot" id="gemslot" aria-hidden="true"><span class="gemfb"></span></div>
+      <div class="port"><img src="../studio/img/portrait.jpg" alt="Portrait of Hamna Jalil" width="480" height="480"></div>
+      <p class="ready">Ready</p>
+    </div>
   </div>
 </section>
-<nav class="menu" aria-label="Game menu: every section on this page">
-  <div class="min"><p class="sph">Main menu · everything is on this page, just keep scrolling</p>
-  <ol><li><a href="#about"><span class="mn">01</span><span>Character bio</span><i aria-hidden="true">▸</i></a></li><li><a href="#experience"><span class="mn">02</span><span>Campaign history</span><i aria-hidden="true">▸</i></a></li><li><a href="#quests"><span class="mn">03</span><span>Quest log</span><i aria-hidden="true">▸</i></a></li><li><a href="#skills"><span class="mn">04</span><span>Skill tree & loadout</span><i aria-hidden="true">▸</i></a></li><li><a href="#methodology"><span class="mn">05</span><span>Playstyle</span><i aria-hidden="true">▸</i></a></li><li><a href="#achievements"><span class="mn">06</span><span>Achievements</span><i aria-hidden="true">▸</i></a></li><li><a href="#recommendations"><span class="mn">07</span><span>Party & allies</span><i aria-hidden="true">▸</i></a></li><li><a href="#studio"><span class="mn">08</span><span>Side quest</span><i aria-hidden="true">▸</i></a></li><li><a href="#contact"><span class="mn">09</span><span>Join the party</span><i aria-hidden="true">▸</i></a></li></ol></div>
+<nav class="menu" aria-label="Main menu: every section on this page">
+  <div class="min"><p class="sph">Main menu <span>· press 1 to 9 to jump</span></p>
+  <ol><li><a href="#about"><kbd>1</kbd><span>Character</span><small>About me</small></a></li><li><a href="#experience"><kbd>2</kbd><span>Campaign</span><small>Where I have worked</small></a></li><li><a href="#quests"><kbd>3</kbd><span>Quests</span><small>Five shipped games. Open any one for the full story</small></a></li><li><a href="#skills"><kbd>4</kbd><span>Skills</span><small>What I bring to a team</small></a></li><li><a href="#methodology"><kbd>5</kbd><span>Playstyle</span><small>How I run production</small></a></li><li><a href="#achievements"><kbd>6</kbd><span>Achievements</span><small>Results</small></a></li><li><a href="#recommendations"><kbd>7</kbd><span>Allies</span><small>Seven people I have worked with</small></a></li><li><a href="#studio"><kbd>8</kbd><span>Side quest</span><small>Pick your studio size and get a production diagnosis</small></a></li><li><a href="#contact"><kbd>9</kbd><span>Press start</span><small>Hiring a producer</small></a></li></ol></div>
 </nav>
 
 <section id="about" class="stop" aria-labelledby="h-about">
   <div class="wrap">
     <div class="buoy" aria-hidden="true">1</div>
-    <header class="stop-head">
-      <div>
-        <p class="eyebrow"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-6h4v6"/></svg><span>Menu 01 · Character bio</span></p>
-        <h2 id="h-about">About me</h2>
-      </div>
-      <p class="stop-sub">The person behind the producer. Levelled up through code, collaboration, and creative chaos.</p>
-    </header>
+    <header class="stop-head"><h2 id="h-about">Character</h2><p class="stop-sub">About me: the person behind the producer.</p></header>
     <div class="two about">
       <div class="prose">
         <p>I grew up fascinated by the invisible systems that made games feel alive: the pacing, the feedback loops, the way a team's work became someone else's joy. A CS degree gave me the language to understand those systems; production gave me the tools to build them at scale. Within four years I went from coordinating ERP rollouts to co-owning the roadmap for a $40M+ Web3 gaming ecosystem, leading 50+ people across four continents.</p>
@@ -424,13 +459,7 @@ footer{background:#0b0918}
 <section id="experience" class="stop" aria-labelledby="h-experience">
   <div class="wrap">
     <div class="buoy" aria-hidden="true">2</div>
-    <header class="stop-head">
-      <div>
-        <p class="eyebrow"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><path d="M2 9c3-3 5 3 8 0s5 3 8 0 3-1 4-1"/><path d="M2 16c3-3 5 3 8 0s5 3 8 0 3-1 4-1"/></svg><span>Menu 02 · Campaign history</span></p>
-        <h2 id="h-experience">Career</h2>
-      </div>
-      <p class="stop-sub">Each chapter, a different world. Same relentless commitment to shipping great experiences.</p>
-    </header>
+    <header class="stop-head"><h2 id="h-experience">Campaign</h2><p class="stop-sub">Where I have worked, 2022 to today.</p></header>
     <ol class="current">
       <li class="card role">
         <div class="role-top"><img src="assets/logos/revolving-games.jpg" alt="" width="44" height="44" loading="lazy"><p class="when">2023 to present <span class="active">Active</span></p></div>
@@ -460,49 +489,21 @@ footer{background:#0b0918}
 <section id="quests" class="stop" aria-labelledby="h-quests">
   <div class="wrap">
     <div class="buoy" aria-hidden="true">3</div>
-    <header class="stop-head">
-      <div>
-        <p class="eyebrow"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><path d="M3 18c2-6 5-9 9-9s7 3 9 9z"/><path d="M12 9V3l5 3-5 2"/></svg><span>Menu 03 · Quest log</span></p>
-        <h2 id="h-quests">Projects</h2>
-      </div>
-      <p class="stop-sub">Five missions. Each one a different challenge, a different world, a different team to lead to victory.</p>
-    </header>
-    <ul class="isles">
-      <li class="isle" id="quest-phoenix">
-        <button type="button" class="arch" data-book="skyborne" aria-label="Open the logbook for Skyborne Phoenix Flight"><img src="assets/quests/skyborne-phoenix-flight-still.webp" alt="" loading="lazy"></button>
-        <p class="eyebrow center"><span>Island 01 · AAA live service</span></p>
-        <h3>Skyborne Phoenix Flight</h3>
-        <p class="chip-one">Zero missed seasonal launches</p>
-        <button type="button" class="btn line" data-book="skyborne">Open the logbook</button>
-      </li>
-      <li class="isle" id="quest-rcade">
-        <button type="button" class="arch logo" data-book="rcade" aria-label="Open the logbook for RCADE Network"><img src="assets/quests/rcade-network-icon.webp" alt="" loading="lazy"></button>
-        <p class="eyebrow center"><span>Island 02 · Web3 gaming</span></p>
-        <h3>RCADE Network</h3>
-        <p class="chip-one">700K+ installs</p>
-        <button type="button" class="btn line" data-book="rcade">Open the logbook</button>
-      </li>
-      <li class="isle" id="quest-genesis">
-        <button type="button" class="arch" data-book="genesis" aria-label="Open the logbook for Skyborne Genesis"><img src="assets/quests/skyborne-genesis-art.webp" alt="" loading="lazy"></button>
-        <p class="eyebrow center"><span>Island 03 · Web3 browser game</span></p>
-        <h3>Skyborne Genesis</h3>
-        <p class="chip-one">On-time launch</p>
-        <button type="button" class="btn line" data-book="genesis">Open the logbook</button>
-      </li>
-      <li class="isle" id="quest-dastaan">
-        <button type="button" class="arch" data-book="dastaan" aria-label="Open the logbook for Dastaan"><img src="../studio/img/dastaan.jpg" alt="" loading="lazy"></button>
-        <p class="eyebrow center"><span>Island 04 · Tactical RPG</span></p>
-        <h3>Dastaan</h3>
-        <p class="chip-one">30+ team shipped</p>
-        <button type="button" class="btn line" data-book="dastaan">Open the logbook</button>
-      </li>
-      <li class="isle" id="quest-festival">
-        <button type="button" class="arch" data-book="festival" aria-label="Open the logbook for Music Festival Tycoon"><img src="../studio/img/music-festival-tycoon.webp" alt="" loading="lazy"></button>
-        <p class="eyebrow center"><span>Island 05 · Simulation</span></p>
-        <h3>Music Festival Tycoon</h3>
-        <p class="chip-one">15% under budget</p>
-        <button type="button" class="btn line" data-book="festival">Open the logbook</button>
-      </li>
+    <header class="stop-head"><h2 id="h-quests">Quests</h2><p class="stop-sub">Five shipped games. Open any one for the full story.</p></header>
+    <div class="qmain" id="quest-phoenix">
+      <button type="button" class="qm" data-book="skyborne" aria-label="Open the quest details for Skyborne Phoenix Flight">
+        <span class="qart"><img src="assets/quests/skyborne-phoenix-flight-still.webp" data-anim="assets/quests/skyborne-phoenix-flight.webp" alt="" width="720" height="404"></span>
+        <span class="qbody"><span class="qtag">Main quest · AAA live service · running now</span><strong>Skyborne Phoenix Flight</strong>
+          <span class="qline">Coordinating seasonal feature delivery across a 50+ person cross-continental team spanning 4 time zones, all without disrupting live services or missing a single player-facing seasonal launch.</span>
+          <span class="qstats"><span><b>50+</b><i>team size</i></span><span><b>+40%</b><i>pipeline efficiency</i></span><span><b>4</b><i>time zones</i></span><span><b>0</b><i>missed launches</i></span></span>
+          <span class="qgo">View quest details ▸</span></span>
+      </button>
+    </div>
+    <ul class="qside">
+      <li id="quest-rcade"><button type="button" class="qs" data-book="rcade" aria-label="Open the quest details for RCADE Network"><span class="qart logo"><img src="assets/quests/rcade-network-icon.webp" alt="" loading="lazy"></span><span class="qtag">Side quest 01 · Web3 gaming</span><strong>RCADE Network</strong><span class="qwin">700K+ installs</span><span class="qgo">View ▸</span></button></li>
+      <li id="quest-genesis"><button type="button" class="qs" data-book="genesis" aria-label="Open the quest details for Skyborne Genesis"><span class="qart"><img src="assets/quests/skyborne-genesis-art.webp" alt="" loading="lazy"></span><span class="qtag">Side quest 02 · Web3 browser game</span><strong>Skyborne Genesis</strong><span class="qwin">On-time launch</span><span class="qgo">View ▸</span></button></li>
+      <li id="quest-dastaan"><button type="button" class="qs" data-book="dastaan" aria-label="Open the quest details for Dastaan"><span class="qart"><img src="../studio/img/dastaan.jpg" alt="" loading="lazy"></span><span class="qtag">Side quest 03 · Tactical RPG</span><strong>Dastaan</strong><span class="qwin">30+ team shipped</span><span class="qgo">View ▸</span></button></li>
+      <li id="quest-festival"><button type="button" class="qs" data-book="festival" aria-label="Open the quest details for Music Festival Tycoon"><span class="qart"><img src="../studio/img/music-festival-tycoon.webp" alt="" loading="lazy"></span><span class="qtag">Side quest 04 · Simulation</span><strong>Music Festival Tycoon</strong><span class="qwin">15% under budget</span><span class="qgo">View ▸</span></button></li>
     </ul>
   </div>
 </section>
@@ -510,13 +511,7 @@ footer{background:#0b0918}
 <section id="skills" class="stop" aria-labelledby="h-skills">
   <div class="wrap">
     <div class="buoy" aria-hidden="true">4</div>
-    <header class="stop-head">
-      <div>
-        <p class="eyebrow"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg><span>Menu 04 · Skill tree & loadout</span></p>
-        <h2 id="h-skills">Skills and tools</h2>
-      </div>
-      <p class="stop-sub">Four-plus years of forging skills under real pressure. Each bar earned, not assigned.</p>
-    </header>
+    <header class="stop-head"><h2 id="h-skills">Skills</h2><p class="stop-sub">What I bring to a team, and the tools I use.</p></header>
     <div class="two">
       <div class="pearls">
         <h3 class="group">Core production</h3>
@@ -541,13 +536,7 @@ footer{background:#0b0918}
 <section id="methodology" class="stop" aria-labelledby="h-methodology">
   <div class="wrap">
     <div class="buoy" aria-hidden="true">5</div>
-    <header class="stop-head">
-      <div>
-        <p class="eyebrow"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 10h16M10 4v16"/></svg><span>Menu 05 · Playstyle</span></p>
-        <h2 id="h-methodology">How I work</h2>
-      </div>
-      <p class="stop-sub">Systems, not heroics. Every process I build is designed to make great work repeatable.</p>
-    </header>
+    <header class="stop-head"><h2 id="h-methodology">Playstyle</h2><p class="stop-sub">How I run production: systems, not heroics.</p></header>
     <ol class="four">
       <li class="card"><p class="roman" aria-hidden="true">I</p><h3>Sprint architecture</h3><p>I run 2-week sprints with structured ceremonies (standups, refinement, retros) and build custom Jira/ClickUp dashboards to track velocity, blockers, and cross-team dependencies in real time.</p></li>
       <li class="card"><p class="roman" aria-hidden="true">II</p><h3>Risk escalation</h3><p>I maintain a living risk register with RICE-scored items. When a P0 surfaces, I run a rapid triage: scope impact, assign owners, communicate up and across within 30 minutes. No surprises at milestone reviews.</p></li>
@@ -560,22 +549,16 @@ footer{background:#0b0918}
 <section id="achievements" class="stop" aria-labelledby="h-achievements">
   <div class="wrap">
     <div class="buoy" aria-hidden="true">6</div>
-    <header class="stop-head">
-      <div>
-        <p class="eyebrow"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11V8a4 4 0 014-4h8a4 4 0 014 4v3z"/><rect x="4" y="11" width="16" height="9"/><path d="M12 13v3"/></svg><span>Menu 06 · Achievements</span></p>
-        <h2 id="h-achievements">Results and certificates</h2>
-      </div>
-      <p class="stop-sub">Every badge has a story. Every number has a team behind it.</p>
-    </header>
+    <header class="stop-head"><h2 id="h-achievements">Achievements</h2><p class="stop-sub">Results, with a team behind every number.</p></header>
     <ul class="badges">
-      <li class="card badge t-legendary"><span class="tier">Legendary</span><h3>ECosystem Architect</h3><p>Co-owned the production roadmap that drove a $40M+ venture-backed Web3 gaming ecosystem with $50M+ in in-game economic activity.</p><p class="stat">$40M+ RCADE Network</p></li>
-      <li class="card badge t-legendary"><span class="tier">Legendary</span><h3>COntinental Commander</h3><p>Led 50+ person cross-functional teams simultaneously across North America, South America, Europe, and Asia.</p><p class="stat">4 continents coordinated</p></li>
-      <li class="card badge t-epic"><span class="tier">Epic</span><h3>SHipmaster</h3><p>Shipped production milestones across 5 titles totalling 700,000+ installs, spanning AAA, Web3, indie, and simulation genres.</p><p class="stat">700K+ installs</p></li>
-      <li class="card badge t-epic"><span class="tier">Epic</span><h3>CLockwork Producer</h3><p>Maintained 95% on-time milestone delivery rate across all productions, the result of proactive risk management, not luck.</p><p class="stat">95% on-time rate</p></li>
-      <li class="card badge t-epic"><span class="tier">Epic</span><h3>VElocity Catalyst</h3><p>Redesigned sprint workflows and built custom Jira dashboards that increased sprint velocity by 30% and improved pipeline efficiency by 40%.</p><p class="stat">+30% velocity</p></li>
-      <li class="card badge t-rare"><span class="tier">Rare</span><h3>WOmen In Games</h3><p>Selected as an International Women in Games Ambassador, advocating for equity, inclusion, and opportunity in the global gaming industry.</p><p class="stat">Ambassador, 2024 to present</p></li>
+      <li class="card badge t-legendary"><span class="tier">Legendary · unlocked</span><p class="bignum"><b>$40M+</b><span>ecosystem</span></p><h3>ECosystem Architect</h3><p>Co-owned the production roadmap that drove a $40M+ venture-backed Web3 gaming ecosystem with $50M+ in in-game economic activity.</p></li>
+      <li class="card badge t-legendary"><span class="tier">Legendary · unlocked</span><p class="bignum"><b>4</b><span>continents</span></p><h3>COntinental Commander</h3><p>Led 50+ person cross-functional teams simultaneously across North America, South America, Europe, and Asia.</p></li>
+      <li class="card badge t-epic"><span class="tier">Epic · unlocked</span><p class="bignum"><b>700K+</b><span>installs</span></p><h3>SHipmaster</h3><p>Shipped production milestones across 5 titles totalling 700,000+ installs, spanning AAA, Web3, indie, and simulation genres.</p></li>
+      <li class="card badge t-epic"><span class="tier">Epic · unlocked</span><p class="bignum"><b>95%</b><span>on time</span></p><h3>CLockwork Producer</h3><p>Maintained 95% on-time milestone delivery rate across all productions, the result of proactive risk management, not luck.</p></li>
+      <li class="card badge t-epic"><span class="tier">Epic · unlocked</span><p class="bignum"><b>+30%</b><span>velocity</span></p><h3>VElocity Catalyst</h3><p>Redesigned sprint workflows and built custom Jira dashboards that increased sprint velocity by 30% and improved pipeline efficiency by 40%.</p></li>
+      <li class="card badge t-rare"><span class="tier">Rare · unlocked</span><p class="bignum"><b>2024</b><span>ambassador since</span></p><h3>WOmen In Games</h3><p>Selected as an International Women in Games Ambassador, advocating for equity, inclusion, and opportunity in the global gaming industry.</p></li>
     </ul>
-    <h3 class="rule"><span>Certification scrolls</span></h3>
+    <h3 class="rule"><span>Certificates · each one links to its proof</span></h3>
     <ul class="scrolls">
       <li><a class="scroll" href="https://www.credly.com/badges/1a78d4b0-f0cd-4538-864f-be274ae61724/linked_in_profile" target="_blank" rel="noopener"><img src="assets/logos/google.jpg" alt="" width="40" height="40" loading="lazy"><span class="by">Google · Coursera</span><span class="ct">Project Management</span><span class="when">Issued Aug 2023 · Verify ↗</span></a></li>
       <li><a class="scroll" href="https://www.linkedin.com/learning/certificates/6f8ced8a673141353d01eff0322be1b7549353dc9d73a9c2ad9e97528069b004" target="_blank" rel="noopener"><img src="assets/logos/atlassian.jpg" alt="" width="40" height="40" loading="lazy"><span class="by">Atlassian</span><span class="ct">Agile with Atlassian Jira</span><span class="when">Issued Aug 2025 · Verify ↗</span></a></li>
@@ -583,20 +566,13 @@ footer{background:#0b0918}
       <li><a class="scroll" href="https://www.coursera.org/account/accomplishments/specialization/certificate/VBL6DYKGF7MV" target="_blank" rel="noopener"><img src="assets/logos/uc-boulder.jpg" alt="" width="40" height="40" loading="lazy"><span class="by">Coursera · UC Boulder</span><span class="ct">Project Management Specialization</span><span class="when">Issued Aug 2023 · Verify ↗</span></a></li>
       <li><a class="scroll" href="https://coursera.org/verify/specialization/HV562VPJZLQB" target="_blank" rel="noopener"><img src="assets/logos/stanford.jpg" alt="" width="40" height="40" loading="lazy"><span class="by">Stanford · Coursera</span><span class="ct">Machine Learning Specialization</span><span class="when">Issued Oct 2024 · Verify ↗</span></a></li>
     </ul>
-    <div class="card wig"><h3>Women in Games Ambassador</h3><p class="dim small">International Women in Games · April 2024 to present</p><p>Building a fair, equal, and safe environment that empowers girls and women across the global gaming industry. Advocating for systemic change, mentoring emerging talent, and representing the future of inclusive game development.</p></div>
   </div>
 </section>
 
 <section id="recommendations" class="stop" aria-labelledby="h-recommendations">
   <div class="wrap">
     <div class="buoy" aria-hidden="true">7</div>
-    <header class="stop-head">
-      <div>
-        <p class="eyebrow"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><path d="M10 2h4v5l3 4v10H7V11l3-4z"/><path d="M9 14h6"/></svg><span>Menu 07 · Party & allies</span></p>
-        <h2 id="h-recommendations">Recommendations</h2>
-      </div>
-      <p class="stop-sub">Seven message bottles from people I have worked with.</p>
-    </header>
+    <header class="stop-head"><h2 id="h-recommendations">Allies</h2><p class="stop-sub">Seven people I have worked with, in their own words.</p></header>
     <ul class="bottles">
       <li class="note n0"><p class="q">“<strong>A powerhouse producer, incredibly hardworking, razor-sharp, and always on top of every detail.</strong> Her ability to juggle complex priorities and anticipate challenges before they become issues is unmatched. Hamna has been my hero at work, someone I could always count on. Any team would be incredibly lucky to have her.”</p><div class="who"><img src="assets/people/vikki.jpg" alt="" width="48" height="48" loading="lazy"><div><p class="name">Vikki Ruttle</p><p class="nrole">Design Director · Revolving Games</p><p class="rel">Same Team · Sep 2025</p></div></div></li>
       <li class="note n1"><p class="q">“She is smart but always willing to learn and <strong>produced and managed pipelines across engineering, QA, art, and design</strong>, keeping everyone aligned towards project goals across all levels of the team. Any team should consider themselves lucky to have someone like Hamna as part of their production team.”</p><div class="who"><img src="assets/people/christopher.jpg" alt="" width="48" height="48" loading="lazy"><div><p class="name">Christopher Arrington</p><p class="nrole">Director of Product · Revolving Games</p><p class="rel">Direct Manager · Oct 2025</p></div></div></li>
@@ -612,13 +588,7 @@ footer{background:#0b0918}
 <section id="studio" class="stop" aria-labelledby="h-studio">
   <div class="wrap">
     <div class="buoy" aria-hidden="true">8</div>
-    <header class="stop-head">
-      <div>
-        <p class="eyebrow"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v14M5 13c0 5 3 8 7 8s7-3 7-8M8 11h8"/></svg><span>Menu 08 · Side quest</span></p>
-        <h2 id="h-studio">How I'd improve your game studio</h2>
-      </div>
-      <p class="stop-sub">Thinking producer, not just executor. A diagnosis made for your studio size.</p>
-    </header>
+    <header class="stop-head"><h2 id="h-studio">Side quest</h2><p class="stop-sub">Pick your studio size and get a production diagnosis.</p></header>
     <div class="sound">
       <p class="try"><strong>Try it: pick your studio size.</strong> <span>The diagnosis below changes with your choice.</span></p>
       <div class="sizes" role="group" aria-label="Studio size">
@@ -655,27 +625,23 @@ footer{background:#0b0918}
 <section id="contact" class="stop" aria-labelledby="h-contact">
   <div class="wrap">
     <div class="buoy" aria-hidden="true">9</div>
-    <header class="stop-head">
-      <div>
-        <p class="eyebrow"><svg class="ico " aria-hidden="true" viewBox="0 0 24 24"><path d="M10 21l1-12h2l1 12zM8 21h8M9 9h6l-1-4h-4z"/><path d="M3 5l4 1M21 5l-4 1M2 9h4M22 9h-4"/></svg><span>Menu 09 · Join the party</span></p>
-        <h2 id="h-contact">Say hello</h2>
-      </div>
-      <p class="stop-sub">The Deep Beacon. Send a signal.</p>
-    </header>
-    <div class="two beacon">
-      <div>
-        <p class="big">Let's make something.</p>
+    <header class="stop-head"><h2 id="h-contact">Press start</h2><p class="stop-sub">Hiring a producer, or building something ambitious?</p></header>
+    <div class="coop">
+      <div class="p1c">
+        <p class="big2">Let's make something.</p>
         <p class="lead">Have a game that needs a great producer? Building something ambitious? I'd love to hear from you. Every great title started with one conversation.</p>
         <ul class="links">
           <li><a class="btn gold" href="../HAMNA_JALIL.pdf" target="_blank" rel="noopener">Download résumé (PDF)</a></li>
-          <li><a class="btn line" href="mailto:hamnajalil@gmail.com?subject=Hello%20from%20your%20portfolio">Email: hamnajalil@gmail.com</a></li>
           <li><a class="btn line" href="https://linkedin.com/in/hamnabukhari" target="_blank" rel="noopener">LinkedIn</a></li>
           <li><a class="btn line" href="https://github.com/hamnajalil" target="_blank" rel="noopener">GitHub</a></li>
         </ul>
+        <a class="tostudio" href="https://hamnajalil.com/">← Back to the studio</a>
       </div>
-      <div class="light">
-        <svg aria-hidden="true" viewBox="0 0 520 300" preserveAspectRatio="xMidYMid slice"><path d="M300 96L40 30L40 86Z" fill="#ffe6b8" fill-opacity="0.2"/><path d="M300 96L500 60L500 100Z" fill="#ffe6b8" fill-opacity="0.12"/><ellipse cx="300" cy="238" rx="120" ry="16" fill="#1b1030"/><path d="M284 236l6-128h20l6 128z" fill="#2a1a3e" stroke="#dea85c"/><rect x="287" y="84" width="26" height="24" fill="#ffd27a"/><path d="M282 84h36l-18-20z" fill="#dea85c"/><circle cx="300" cy="96" r="44" fill="#ffd682" fill-opacity="0.3"/></svg>
-        <a class="btn plate" href="https://hamnajalil.com/">Back up to the studio ↑</a>
+      <div class="p2">
+        <p class="p2h"><span class="blip" aria-hidden="true"></span>Player 2 · slot open</p>
+        <p class="p2plus" aria-hidden="true">+</p>
+        <a class="btn gold start" href="mailto:hamnajalil@gmail.com?subject=Hello%20from%20your%20portfolio">Press start: send an email</a>
+        <p class="p2mail"><span>hamnajalil@gmail.com</span><button type="button" class="copy" data-copy="hamnajalil@gmail.com">Copy</button></p>
       </div>
     </div>
   </div>
@@ -683,7 +649,7 @@ footer{background:#0b0918}
 </main>
 <footer>Hamna Jalil · Game Producer &amp; Product Manager · <a href="https://hamnajalil.com/">hamnajalil.com</a></footer>
 <dialog id="logbook" aria-labelledby="bkTitle">
-  <button type="button" class="x" id="bkClose" aria-label="Close the logbook">×</button>
+  <button type="button" class="x" id="bkClose" aria-label="Close the quest details">×</button>
   <div class="book">
     <div class="pg l">
       <p class="eyebrow"><span id="bkKind"></span></p>
@@ -710,7 +676,7 @@ footer{background:#0b0918}
   function openBook(key,from){
     var d=BOOK[key]; if(!d||!dlg.showModal) return; cur=key; if(from) opener=from;
     var i=ORDER.indexOf(key);
-    document.getElementById('bkKind').textContent='Logbook '+(i+1)+' of 5 · '+d.kind;
+    document.getElementById('bkKind').textContent='Quest '+(i+1)+' of 5 · '+d.kind;
     document.getElementById('bkTitle').textContent=d.title;
     document.getElementById('bkSub').textContent=d.sub;
     var im=document.getElementById('bkImg'); im.src=d.img; im.alt=d.alt; im.parentNode.className='photo'+(d.logo?' logo':'');
@@ -773,19 +739,71 @@ footer{background:#0b0918}
   document.getElementById('gameNew').addEventListener('click',deal); deal(); }
 })();
 
-(function(){if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;document.documentElement.classList.add('anim');
-var sel='.stop .buoy,.stop .stop-head,.stop .prose>*,.stop .card,.stop .current>li,.stop .isle,.stop .pearls ul>li,.stop .load>li,.stop .four>li,.stop .badges>li,.stop .scrolls>li,.stop .note,.stop .sound,.stop .size,.stop .diag>div,.stop .links>li,.stop .big,.stop .beacon .lead,.stop .light,.stop .rule,.menu li';
-var els=[].slice.call(document.querySelectorAll(sel));els.forEach(function(el){var sib=[].slice.call(el.parentNode.children).filter(function(c){return els.indexOf(c)>=0;});el.style.setProperty('--d',Math.min(sib.indexOf(el),8)*90+'ms');el.classList.add('rv');});
+(function(){
+var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* stats count up */
+document.querySelectorAll('[data-to]').forEach(function(b,i){if(rm)return;var to=+b.dataset.to,pre=b.dataset.pre,suf=b.dataset.suf,t0=null;b.textContent=pre+'0'+suf;setTimeout(function(){function s(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1500),e=1-Math.pow(1-p,3);b.textContent=pre+Math.round(to*e)+suf;if(p<1)requestAnimationFrame(s);}requestAnimationFrame(s);},900+i*120);});
+/* number keys 1-9 jump to a section */
+var ids=[].map.call(document.querySelectorAll('.menu a'),function(a){return a.getAttribute('href');});
+addEventListener('keydown',function(e){if(e.altKey||e.ctrlKey||e.metaKey)return;var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;if(document.querySelector('dialog[open]'))return;var n=+e.key;if(n>=1&&n<=ids.length){var el=document.querySelector(ids[n-1]);if(el){el.scrollIntoView({behavior:rm?'auto':'smooth'});history.replaceState(null,'',ids[n-1]);}}});
+/* copy email */
+document.addEventListener('click',function(e){var b=e.target.closest('[data-copy]');if(!b)return;var v=b.dataset.copy;(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1600);},function(){b.textContent='Select and copy';});});
+/* main quest art turns into the animation once it is near the screen */
+var art=document.querySelector('[data-anim]');if(art&&!rm&&'IntersectionObserver' in window){new IntersectionObserver(function(es,o){if(es[0].isIntersecting){var im=new Image();im.onload=function(){art.src=im.src;};im.src=art.dataset.anim;o.disconnect();}},{rootMargin:'300px'}).observe(art);}
+/* scroll reveals */
+if(!rm){document.documentElement.classList.add('anim');
+var sel='.stop .buoy,.stop .stop-head,.stop .prose>*,.stop .card,.stop .current>li,.stop .qmain,.stop .qside>li,.stop .pearls ul>li,.stop .load>li,.stop .four>li,.stop .badges>li,.stop .scrolls>li,.stop .note,.stop .sound,.stop .size,.stop .diag>div,.stop .p1c,.stop .p2,.stop .rule,.menu li';
+var els=[].slice.call(document.querySelectorAll(sel));els.forEach(function(el){var sib=[].slice.call(el.parentNode.children).filter(function(c){return els.indexOf(c)>=0;});el.style.setProperty('--d',Math.min(sib.indexOf(el),8)*80+'ms');el.classList.add('rv');});
 document.querySelectorAll('.stop .row').forEach(function(r){r.classList.add('rv');els.push(r);});
-var left=els.slice(),busy=false;function check(){busy=false;var lim=innerHeight*.92;left=left.filter(function(el){if(el.getBoundingClientRect().top<lim){el.classList.add('in');return false;}return true;});if(!left.length){removeEventListener('scroll',on);removeEventListener('resize',on);}}function on(){if(!busy){busy=true;requestAnimationFrame(check);}}addEventListener('scroll',on,{passive:true});addEventListener('resize',on);addEventListener('hashchange',on);check();})();
-(function(){var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-document.querySelectorAll('[data-to]').forEach(function(b,i){if(rm)return;var to=+b.dataset.to,pre=b.dataset.pre,suf=b.dataset.suf,t0=null;b.textContent=pre+'0'+suf;setTimeout(function(){function s(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1600),e=1-Math.pow(1-p,3);b.textContent=pre+Math.round(to*e)+suf;if(p<1)requestAnimationFrame(s);}requestAnimationFrame(s);},900+i*120);});
-var s=document.getElementById('say');if(s&&!rm){var t=s.dataset.text;s.textContent='';var i=0;setTimeout(function k(){s.textContent=t.slice(0,++i);if(i<t.length)setTimeout(k,20);},1500);}
-var c=document.getElementById('fx');if(!c)return;var x=c.getContext('2d'),P=[],box=c.parentElement,vis=true;
-function rs(){c.width=box.offsetWidth;c.height=box.offsetHeight;}rs();addEventListener('resize',rs);
-for(var n=0;n<80;n++)P.push({x:Math.random(),y:Math.random(),r:Math.random()*1.8+.4,v:Math.random()*.0003+.0001,a:Math.random()*6.28});
-if('IntersectionObserver' in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis&&!rm)requestAnimationFrame(fr);}).observe(box);
-function fr(){x.clearRect(0,0,c.width,c.height);P.forEach(function(p){p.y-=p.v;p.a+=.01;if(p.y<-.02)p.y=1.02;x.fillStyle='rgba(220,205,255,'+(.3+.35*Math.sin(p.a))+')';x.beginPath();x.arc(p.x*c.width,p.y*c.height,p.r,0,7);x.fill();});if(vis&&!rm)requestAnimationFrame(fr);}fr();})();
+var left=els.slice(),busy=false;function check(){busy=false;var lim=(scrollY+innerHeight>=document.documentElement.scrollHeight-8)?1e9:innerHeight*.92;left=left.filter(function(el){if(el.getBoundingClientRect().top<lim){el.classList.add('in');return false;}return true;});if(!left.length){removeEventListener('scroll',on);}}function on(){if(!busy){busy=true;requestAnimationFrame(check);}}addEventListener('scroll',on,{passive:true});addEventListener('resize',on);addEventListener('hashchange',on);check();}
+})();
+/* ---------------------------------------------------------------- the crystal */
+(function(){
+var cv=document.createElement('canvas');cv.id='gem';cv.setAttribute('aria-hidden','true');
+var gl=cv.getContext('webgl2',{alpha:true,premultipliedAlpha:true,antialias:false});if(!gl)return;
+document.body.appendChild(cv);document.documentElement.classList.add('gl');
+var Q=new URLSearchParams(location.search),FREEZE=Q.has('t')?+Q.get('t'):null,rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o;}
+var P=gl.createProgram();try{gl.attachShader(P,sh(gl.VERTEX_SHADER,'#version 300 es\nvoid main(){vec2 p=vec2(float((gl_VertexID<<1)&2),float(gl_VertexID&2));gl_Position=vec4(p*2.-1.,0.,1.);}'));gl.attachShader(P,sh(gl.FRAGMENT_SHADER,"#version 300 es\nprecision highp float;\nuniform vec2 uRes; uniform float uPx,uT,uScroll; uniform vec4 uPose; uniform vec3 uRot; uniform sampler2D uInk; uniform vec4 uInkR;\nout vec4 o;\nconst vec3 BG=vec3(.055,.043,.125);\nvec3 ry(vec3 v,float a){float c=cos(a),s=sin(a);return vec3(c*v.x+s*v.z,v.y,-s*v.x+c*v.z);}\nvec3 rx(vec3 v,float a){float c=cos(a),s=sin(a);return vec3(v.x,c*v.y-s*v.z,s*v.y+c*v.z);}\nvec3 rz(vec3 v,float a){float c=cos(a),s=sin(a);return vec3(c*v.x-s*v.y,s*v.x+c*v.y,v.z);}\nvec3 toO(vec3 v){return ry(rx(rz(v,-uRot.z),-uRot.y),-uRot.x);}\nvec3 toW(vec3 v){return rz(rx(ry(v,uRot.x),uRot.y),uRot.z);}\n/* hexagonal bipyramid with a short girdle: a classic RPG selection gem */\nfloat hexd(vec2 p){p=abs(p);return max(p.x*.8660254+p.y*.5,p.y);}\nfloat gem(vec3 p){\n  p.y+=.19;\n  float h=hexd(p.xz);\n  float d=p.y>0.?(h/.42+p.y/.62-1.):(h/.42-p.y/1.0-1.);\n  return d*.33;\n}\nvec3 nrm(vec3 p){vec2 e=vec2(.0015,-.0015);return normalize(e.xyy*gem(p+e.xyy)+e.yyx*gem(p+e.yyx)+e.yxy*gem(p+e.yxy)+e.xxx*gem(p+e.xxx));}\nvec3 env(vec3 d){\n  vec3 c=mix(vec3(.05,.035,.12),vec3(.20,.14,.38),smoothstep(-.5,.8,d.y));\n  float az=atan(d.x,d.z);\n  c+=vec3(1.6,1.3,2.4)*smoothstep(.22,.12,abs(az+.9))*smoothstep(-.2,.1,d.y)*smoothstep(.9,.6,d.y);   /* lilac softbox */\n  c+=vec3(.6,1.8,2.0)*smoothstep(.12,.06,abs(az-1.3))*smoothstep(-.4,-.1,d.y)*smoothstep(.7,.4,d.y);  /* cyan strip */\n  c+=vec3(2.4,1.9,1.2)*smoothstep(.86,.96,d.y);                                                     /* warm top light */\n  return c;\n}\nvec3 page(vec2 q){\n  vec2 uv=vec2(q.x/uInkR.x,(q.y+uScroll-uInkR.y)/uInkR.z);\n  vec4 k=(uv.x<0.||uv.x>1.||uv.y<0.||uv.y>1.)?vec4(0.):texture(uInk,uv);\n  return BG*(1.-k.a)+k.rgb;\n}\nvoid main(){\n  vec2 p=vec2(gl_FragCoord.x,uRes.y-gl_FragCoord.y)/uPx;\n  vec2 s=(p-uPose.xy)/uPose.z; s.y=-s.y;\n  float r=length(s);\n  /* soft halo around the gem */\n  float halo=exp(-r*r*1.1)*.30+exp(-r*r*.25)*.08;\n  vec4 col=vec4(vec3(.62,.48,.95)*halo,halo*.85);\n  if(r<1.6){\n    vec3 ro=toO(vec3(s,3.)), rd=toO(vec3(0.,0.,-1.));\n    float t=1.2,md=1e9; bool hit=false; float pxo=1./(uPose.z*uPx);\n    for(int i=0;i<64;i++){ float d=gem(ro+rd*t); md=min(md,d); if(d<.0006){hit=true;break;} t+=d; if(t>4.8)break; }\n    if(!hit){ float cov=1.-smoothstep(0.,pxo*1.4,md); col=mix(col,vec4(vec3(.85,.78,1.)*.9,1.),cov*.9); }\n    if(hit){\n      vec3 P=ro+rd*t, n=nrm(P), nw=toW(n);\n      float ci=max(dot(-rd,n),0.);\n      float F=.06+.94*pow(1.-ci,5.);\n      vec3 refl=env(toW(reflect(rd,n)));\n      /* through the gem: march to the back face, then refract out and read the page behind */\n      vec3 d1=refract(rd,n,1./1.75); vec3 q=P-n*.004; float th=0.;\n      for(int i=0;i<24;i++){ float d=-gem(q+d1*th); if(d<.001)break; th+=max(d,.004); }\n      vec3 Q=q+d1*th, nb=nrm(Q), d2=refract(d1,-nb,1.75);\n      float tir=0.; if(dot(d2,d2)<.01){d2=reflect(d1,-nb);tir=1.;}\n      vec3 w=toW(d2);\n      vec2 off=w.xy*uPose.z*.55;\n      vec3 bg; float disp=uPose.z*.035;\n      bg.r=page(p+vec2(off.x,-off.y)+vec2(disp,0.)).r;\n      bg.g=page(p+vec2(off.x,-off.y)).g;\n      bg.b=page(p+vec2(off.x,-off.y)-vec2(disp,0.)).b;\n      bg=mix(bg,env(w),.55+.35*tir);\n      vec3 absorb=vec3(.30,.85,.18);                      /* amethyst: lets violet through */\n      vec3 T=exp(-th*absorb*1.15);\n      vec3 c=bg*T*(1.-F)+refl*F;\n      c+=vec3(.55,.38,1.)*(.32+.45*pow(1.-ci,2.));\n      c+=vec3(.9,.8,1.2)*F*1.4;           /* inner violet glow */\n      /* facet edges catch light */\n      vec3 fw=fwidth(n); float edge=clamp((fw.x+fw.y+fw.z)*2.2,0.,1.);\n      c+=vec3(1.,.92,1.15)*edge*.22;\n      /* sparkles that travel across facets as it turns */\n      vec3 L1=normalize(vec3(-.5,.7,.6)),L2=normalize(vec3(.7,.2,.7));\n      vec3 rw=toW(reflect(rd,n));\n      c+=vec3(1.,.95,1.2)*pow(max(dot(rw,L1),0.),90.)*2.6+vec3(.6,1.,1.1)*pow(max(dot(rw,L2),0.),70.)*1.6;\n      c=c/(1.+c*.28);\n      col=vec4(c,1.);\n    }\n  }\n  /* a four-point twinkle at the gem's tip */\n  vec3 tip=toW(vec3(0.,.43,0.)); vec2 tp=vec2(tip.x,-tip.y)*uPose.z+uPose.xy; vec2 dq=(p-tp)/uPose.z;\n  float tw=.55+.45*sin(uT*2.2), fl=(exp(-abs(dq.x)*28.)*exp(-dq.y*dq.y*3.)+exp(-abs(dq.y)*28.)*exp(-dq.x*dq.x*3.))*tw+exp(-dot(dq,dq)*90.)*tw;\n  col.rgb+=vec3(1.,.95,1.)*fl*.9; col.a=max(col.a,clamp(fl,0.,1.));\n  o=vec4(col.rgb*uPose.w,col.a*uPose.w);\n}"));}catch(e){cv.remove();document.documentElement.classList.remove('gl');return;}
+gl.linkProgram(P);gl.useProgram(P);gl.bindVertexArray(gl.createVertexArray());gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+var U={};['uRes','uPx','uT','uScroll','uPose','uRot','uInk','uInkR'].forEach(function(n){U[n]=gl.getUniformLocation(P,n);});
+var tex=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);gl.uniform1i(U.uInk,0);
+var vw=0,vh=0,dpr=1,qs=1,mobile=false;
+/* the page's own type, redrawn into a texture so the gem can bend it */
+var ink=document.createElement('canvas'),ic=ink.getContext('2d'),items=[],iy0=0,ih=1,icen=-1e9,dirty=true;
+function collect(){items=[];var main=document.getElementById('main'),w=document.createTreeWalker(main,NodeFilter.SHOW_TEXT),rg=document.createRange(),n,sy=scrollY;
+while((n=w.nextNode())){var el=n.parentElement;if(!el||!n.nodeValue.trim())continue;var cs=getComputedStyle(el);if(cs.visibility==='hidden'||cs.display==='none')continue;var font=cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily,re=/\S+/g,m;
+while((m=re.exec(n.nodeValue))){rg.setStart(n,m.index);rg.setEnd(n,m.index+m[0].length);var r=rg.getClientRects()[0];if(!r||!r.width)continue;items.push({s:m[0],x:r.left,y:r.top+sy,h:r.height,font:font,ls:cs.letterSpacing==='normal'?'0px':cs.letterSpacing,c:cs.color});}}dirty=true;}
+function drawInk(sy){var m=Math.round(vh*.3);iy0=Math.round(sy-m);ih=vh+2*m;icen=sy;var W=Math.round(vw),H=Math.round(ih);if(ink.width!==W||ink.height!==H){ink.width=W;ink.height=H;}
+ic.setTransform(1,0,0,1,0,-iy0);ic.clearRect(0,iy0,W,H);ic.textBaseline='top';var lf='';items.forEach(function(it){if(it.y+it.h<iy0||it.y>iy0+ih)return;if(it.font!==lf){ic.font=it.font;lf=it.font;}ic.letterSpacing=it.ls;ic.fillStyle=it.c;ic.fillText(it.s,it.x,it.y+it.h*.12);});
+gl.activeTexture(gl.TEXTURE0);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,ink);dirty=false;}
+/* where the gem sits: above the portrait in the opening; beside each section title on wide screens */
+var slot=document.getElementById('gemslot'),heads=[].slice.call(document.querySelectorAll('.stop-head'));
+function layout(){vw=document.documentElement.clientWidth;vh=innerHeight;mobile=vw<820;dpr=Math.min(devicePixelRatio||1,2);var px=vw*vh*dpr*dpr;if(px*qs*qs>3.2e6)qs=Math.sqrt(3.2e6/px);size();collect();}
+function size(){var w=Math.max(2,Math.round(vw*dpr*qs)),h=Math.max(2,Math.round(vh*dpr*qs));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;gl.viewport(0,0,w,h);}}
+var rz=0;addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(layout,80);});
+function target(){var r=slot.getBoundingClientRect(),hero={x:r.left+r.width/2,y:r.top+r.height/2,s:r.height*.66,a:1};
+if(r.bottom>-40||mobile){if(mobile)hero.a=Math.max(0,Math.min(1,(r.bottom+60)/160));return hero;}
+var best=null,bd=1e9;heads.forEach(function(h){var b=h.getBoundingClientRect(),d=Math.abs(b.top+b.height/2-vh*.32);if(b.bottom>-80&&b.top<vh*.9&&d<bd){bd=d;best={h2:h.querySelector('h2')};}});
+if(!best)return{x:vw-70,y:110,s:26,a:0};var h2=best.h2.getBoundingClientRect();return{x:Math.min(vw-60,h2.right+52),y:h2.top+h2.height*.5,s:38,a:1};}
+var mx=.5,my=.5,tmx=.5,tmy=.5;addEventListener('pointermove',function(e){tmx=e.clientX/vw;tmy=e.clientY/vh;},{passive:true});
+var pose=null,t0=performance.now(),last=t0,slow=0,fast=0,yaw=0;window.__gem={fps:0,q:1};var fa=0,fn=0;
+function frame(now){requestAnimationFrame(frame);var dr=(now-last)/1000,dt=Math.min(.05,dr);last=now;var T=FREEZE!==null?FREEZE:(now-t0)/1000,sy=scrollY;
+var tg=target();if(!pose||rm){pose={x:tg.x,y:tg.y,s:tg.s,a:tg.a};}else{var k=1-Math.exp(-dt*6.5);pose.x+=(tg.x-pose.x)*k;pose.y+=(tg.y-pose.y)*k;pose.s+=(tg.s-pose.s)*k;pose.a+=(tg.a-pose.a)*Math.min(1,dt*4);}
+if(pose.a<.01){gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);return;}
+if(dirty||Math.abs(sy-icen)>vh*.2)drawInk(sy);
+mx+=(tmx-mx)*(1-Math.exp(-dt*3));my+=(tmy-my)*(1-Math.exp(-dt*3));
+yaw=(rm||FREEZE!==null)?.55:yaw+dt*.38;
+if(dr>.0192){slow++;fast=0;}else if(dr<.0172){fast++;slow=Math.max(0,slow-1);}
+if(slow>24&&qs>.5){qs=Math.max(.5,qs*.86);slow=0;size();}if(fast>110&&qs<1){qs=Math.min(1,qs*1.07);fast=0;size();}
+var px=cv.width/vw;gl.uniform2f(U.uRes,cv.width,cv.height);gl.uniform1f(U.uPx,px);gl.uniform1f(U.uT,T);gl.uniform1f(U.uScroll,sy);
+var bob=rm?0:Math.sin(T*1.1)*pose.s*.05;gl.uniform4f(U.uPose,pose.x,pose.y+bob,pose.s,pose.a);
+gl.uniform3f(U.uRot,yaw+(mx-.5)*.9,.32+(my-.5)*.5,Math.sin(T*.5)*.05);gl.uniform4f(U.uInkR,vw,iy0,ih,0);
+gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,0,3);
+fa+=dr;fn++;if(fa>.5){window.__gem.fps=fn/fa;window.__gem.q=qs;fa=0;fn=0;}}
+layout();requestAnimationFrame(frame);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);addEventListener('load',function(){setTimeout(layout,60);});
+})();
 </script>
 </body>
 </html>
