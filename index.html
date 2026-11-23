@@ -18,11 +18,19 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314132c'/%3E%3Ccircle cx='32' cy='32' r='21' fill='none' stroke='%23dea85c' stroke-width='2.5'/%3E%3Ccircle cx='32' cy='32' r='12' fill='none' stroke='%23dea85c' stroke-opacity='.55' stroke-width='2'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23ffd9a0'/%3E%3Ccircle cx='50' cy='21' r='4.5' fill='%23ff8a5c'/%3E%3C/svg%3E">
 <script>/* links to the old one-page site's sections (hamnajalil.com/#contact and the like) go on to the same section of the portfolio, which moved to /portfolio/ */
 if (/^#(about|experience|quests|skills|methodology|achievements|recommendations|contact|studio|map)$/.test(location.hash)) location.replace('portfolio/' + location.hash);</script>
+<script type="importmap">{ "imports": { "three": "./studio/three/three.module.js", "three/addons/": "./studio/three/addons/" } }</script>
+<script>/* Start the room's downloads at once. Without this the browser finds them one file after another and the big ones start seconds late (measured 2026-11-24). Keep this list in step with what studio/main.js loads first. */
+if (!/[?&]plain(&|=|$)/.test(location.search)) {
+  var add = function (rel, href, as) { var l = document.createElement('link'); l.rel = rel; l.href = 'studio/' + href; if (as) { l.as = as; l.crossOrigin = 'anonymous'; } document.head.appendChild(l); };
+  ['content.js', 'main.js', 'os.js', 'sound.js', 'three/three.module.js', 'three/three.core.js', 'three/addons/loaders/GLTFLoader.js', 'three/addons/utils/BufferGeometryUtils.js', 'three/addons/utils/SkeletonUtils.js', 'three/addons/libs/meshopt_decoder.module.js'].forEach(function (f) { add('modulepreload', f); });
+  add('preload', 'room.glb', 'fetch');
+  ['bake_shell_A.webp', 'bake_furn_A.webp', 'bake_props_A.webp', 'pano.webp', 'bake_shell_B.webp', 'bake_furn_B.webp', 'bake_props_B.webp'].forEach(function (f) { add('preload', f, 'image'); });
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="studio/os.css">
-<script type="importmap">{ "imports": { "three": "./studio/three/three.module.js", "three/addons/": "./studio/three/addons/" } }</script>
 </head>
 <body>
 <div id="veil"><div class="in"><div class="who"></div><div class="role"></div><div class="bar"><i></i></div><div class="pct"></div></div></div>
