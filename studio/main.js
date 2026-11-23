@@ -2,6 +2,7 @@
 // This is the Orrery copy of the studio. The original room lives untouched in ../studio-portfolio.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js'; // room.glb is packed with meshopt (tools: see TECHNICAL.md)
 import { WORKS, PROFILE, INTRO, HELLO, QUOTES, LINKS, SKILLS, TOUR } from './content.js';
 import { OS, paintWallpaper, wallpaperTint, cardArt, quoteCard, crewHead } from './os.js';
 import { sfx } from './sound.js';
@@ -52,7 +53,7 @@ const U = {
 };
 // the baked light of each group (layer A): a = what is shown, b = what it is fading to. Shared by every material of the group.
 const LA = { shell: { a: { value: null }, b: { value: null } }, furn: { a: { value: null }, b: { value: null } }, props: { a: { value: null }, b: { value: null } } };
-// the dusk scenery is one 360 picture rendered in Blender from the middle of the room (studio/pano.jpg)
+// the dusk scenery is one 360 picture rendered in Blender from the middle of the room (studio/pano.webp, made from Blender's pano.jpg by tools/reimg.mjs)
 const PANO_GLSL = /* glsl */`
 uniform sampler2D tPano, tPano2; uniform float uMix;
 vec3 pano(vec3 d){
@@ -670,7 +671,7 @@ function wakeStep(t) {
 
 // ---------------------------------------------------------------- times of day (Ham, 2026-11-17: "Both moods")
 // Dusk is what everyone lands on. Night and morning each have their own baked light (studio/bake_<group>_A_<mood>.webp) and
-// their own 360 picture (studio/pano-<mood>.jpg), fetched only when someone asks for them. Switching fades one into the
+// their own 360 picture (studio/pano-<mood>.webp), fetched only when someone asks for them. Switching fades one into the
 // other; the camera never moves. Only two sets are ever held at once: the one leaving is dropped when the fade ends.
 const MOODS = {
   dusk: { glow: 1, star: 1, lines: 0.55, exp: 0.82, zenA: [0.03, 0.035, 0.11], zenB: [0.008, 0.012, 0.045], zstar: 1, glint: [1.0, 0.78, 0.6], mist: 0, fly: 0, birds: 0 },
@@ -703,7 +704,7 @@ function moodLoad(m) {
     else { t.flipY = false; t.anisotropy = 8; t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; }
     renderer.initTexture(t); res(t); // sent to the graphics card now, so the fade itself does not stutter
   }, undefined, rej));
-  return Promise.all([...['shell', 'furn', 'props'].map((n) => one(`studio/bake_${n}_A${tail}.webp`)), one(m === 'dusk' ? 'studio/pano.jpg' : `studio/pano-${m}.jpg`, true)])
+  return Promise.all([...['shell', 'furn', 'props'].map((n) => one(`studio/bake_${n}_A${tail}.webp`)), one(m === 'dusk' ? 'studio/pano.webp' : `studio/pano-${m}.webp`, true)])
     .then(([shell, furn, props, pano]) => (moodTex[m] = { shell, furn, props, pano }));
 }
 function setMood(m, instant) {
@@ -734,7 +735,7 @@ function moodStep(dt) {
 const works = []; // { id, meshes, center, box, proxy, mat }
 const liveOf = {}; // the live screen that belongs to a piece, if it has one
 let screenMesh = null, sideMesh = null, glass = null, dust = null, flies = null, birds = null, domeStars = null, conLines = null, conDots = null;
-const loader = new GLTFLoader();
+const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 const tl = new THREE.TextureLoader();
 function tex(name) {
   return new Promise((res) => tl.load(`studio/${name}.webp`, (t) => { tick();
@@ -752,7 +753,7 @@ async function load() {
   const [gltf, ...texs] = await Promise.all([
     new Promise((res, rej) => loader.load('studio/room.glb', (g) => { glbK = 0; tick(); res(g); }, (ev) => { if (ev.total) { glbK = Math.min(0.99, ev.loaded / ev.total); report(); } }, rej)),
     ...names.flatMap((n) => [tex(`bake_${n}_A`), tex(`bake_${n}_B`)]),
-    new Promise((res) => tl.load(Q.get('pano') && /^[a-z]+$/.test(Q.get('pano')) ? `studio/pano-${Q.get('pano')}.jpg` : 'studio/pano.jpg', (t) => { t.colorSpace = THREE.NoColorSpace; t.generateMipmaps = false; t.minFilter = THREE.LinearFilter; t.wrapS = THREE.RepeatWrapping; U.tPano.value = t; tick(); res(t); })),
+    new Promise((res) => tl.load(Q.get('pano') && /^[a-z]+$/.test(Q.get('pano')) ? `studio/pano-${Q.get('pano')}.webp` : 'studio/pano.webp', (t) => { t.colorSpace = THREE.NoColorSpace; t.generateMipmaps = false; t.minFilter = THREE.LinearFilter; t.wrapS = THREE.RepeatWrapping; U.tPano.value = t; tick(); res(t); })),
   ]);
   texs.pop();
   const mats = {};
