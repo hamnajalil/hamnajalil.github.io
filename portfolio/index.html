@@ -23,7 +23,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Hamna Jalil","jobTitle":"Game Producer & Product Manager","url":"https://hamnajalil.com/","sameAs":["https://linkedin.com/in/hamnabukhari","https://github.com/hamnajalil"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&amp;family=Cinzel:wght@500;600;700&amp;family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&amp;family=Cinzel:wght@500;600;700;900&amp;family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0b1d;--panel:linear-gradient(170deg,rgba(44,30,22,.92),rgba(18,12,22,.92));--brass:#dea85c;--cream:#f4dfb6;--hi:#ffe6b8;--ink:#2a1806;--mute:#cbb89c;--line:rgba(222,168,92,.38);--plum:#4a2a6a;--paper:#efe1c2;--pink:#2a1e14;
 --cz:'Cinzel',Georgia,serif;--czd:'Cinzel Decorative','Cinzel',Georgia,serif;--sg:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace;--lora:'Lora',Georgia,serif}
@@ -295,31 +295,11 @@ blockquote{font-family:var(--sg);font-style:italic;font-weight:600;color:#e3d6ff
 .classes [aria-checked="true"] small{color:#e9e2ff}
 .traits{display:flex;flex-wrap:wrap;gap:6px}.traits li{font-size:13px;font-weight:700;padding:4px 11px;border-radius:999px;border:1px solid rgba(196,172,240,.4);background:rgba(40,32,80,.55)}
 .swap{animation:swap .45s ease}@keyframes swap{from{opacity:.2;translate:0 6px}to{opacity:1;translate:0 0}}
-.qside li.fit .qs,.qmain.fit .qm{border-color:#e3d6ff;box-shadow:0 0 0 1px rgba(227,214,255,.6),0 14px 40px rgba(120,90,220,.28)}
-.qside li.fit .qtag::after,.qmain.fit .qtag::after{content:" · class pick";color:var(--gold)}
 /* skills: where each was earned */
 .earned{display:flex;flex-direction:column;gap:10px}.earned ul{display:flex;flex-direction:column;gap:10px}
 .earned li{display:grid;grid-template-columns:minmax(0,190px) auto minmax(0,1fr);gap:12px;align-items:center;padding-bottom:10px;border-bottom:1px solid rgba(196,172,240,.12)}
 .einl{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
 .eins{display:flex;flex-wrap:wrap;gap:6px}.ein{display:inline-flex;align-items:center;min-height:32px;padding:0 11px;border-radius:999px;border:1px solid rgba(196,172,240,.45);background:rgba(40,32,80,.6);color:#f4efff;font:700 12.5px var(--sg);text-decoration:none;cursor:pointer}.ein:hover{border-color:#fff;background:rgba(80,64,150,.7)}
-/* quests: one main quest, four side quests, whole card is the button */
-.qmain{margin-bottom:22px;scroll-margin-top:100px}
-.qm{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);width:100%;padding:0;border:1px solid rgba(196,172,240,.45);border-radius:16px;overflow:hidden;background:var(--panel);color:inherit;text-align:left;font:inherit;cursor:pointer;transition:border-color .3s,box-shadow .3s,transform .3s}
-.qm:hover{border-color:#e3d6ff;box-shadow:0 20px 60px rgba(110,80,200,.35);transform:translateY(-3px)}
-.qart{display:block;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 40%,#4a3d86,#1b1636)}
-.qm .qart{min-height:340px}.qart img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
-.qm:hover .qart img,.qs:hover .qart img{transform:scale(1.05)}
-.qbody{display:flex;flex-direction:column;gap:14px;padding:30px 32px}
-.qtag{font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
-.qm strong{font:600 clamp(26px,2.6vw,36px)/1.1 var(--cz);color:#fff}
-.qline{font-size:16px;line-height:1.6;color:var(--cream)}
-.qstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.qstats span{display:flex;flex-direction:column;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(10,8,24,.45)}.qstats b{font:700 22px var(--cz);color:#fff}.qstats i{font:600 12px var(--sg);font-style:normal;color:var(--mute)}
-.qgo{margin-top:auto;font:700 12px var(--cz);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
-.qside{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.qside li{scroll-margin-top:100px}
-.qs{display:flex;flex-direction:column;gap:8px;width:100%;height:100%;padding:0 0 16px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);color:inherit;text-align:left;font:inherit;cursor:pointer;transition:border-color .3s,box-shadow .3s,transform .3s}
-.qs:hover{border-color:#e3d6ff;box-shadow:0 16px 40px rgba(110,80,200,.3);transform:translateY(-3px)}
-.qs .qart{aspect-ratio:16/10;margin-bottom:6px}.qs .qart.logo{background:radial-gradient(circle at 50% 45%,#7a6ac8,#2a2358)}.qs .qart.logo img{object-fit:contain;padding:8%;filter:brightness(1.9) contrast(1.1) saturate(1.25)}
-.qs .qtag,.qs strong,.qs .qwin,.qs .qgo{margin:0 16px}.qs strong{font:600 18px/1.25 var(--cz);color:#fff}.qs .qwin{font-weight:700;font-size:14px;color:var(--gold)}
 /* achievements: number first */
 .badge{gap:8px}.tier{border-radius:999px}.bignum{display:flex;align-items:baseline;gap:10px;margin:6px 0 2px}.bignum b{font:700 clamp(34px,3vw,46px)/1 var(--cz);color:#fff;font-variant-numeric:tabular-nums}.bignum span{font:600 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--cyan)}
 .badge h3{font-size:16px}
@@ -398,9 +378,66 @@ dialog::backdrop{background:rgba(6,4,16,.8);backdrop-filter:blur(3px)}
 .menu a:hover{background:rgba(70,56,130,.6);border-color:#e3d6ff;transform:translateX(3px)}
 .menu kbd{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;border:1px solid rgba(159,231,255,.5);font:700 12px var(--mono);color:var(--cyan);background:rgba(10,8,24,.6)}
 .menu span{font:600 14px var(--cz);letter-spacing:.05em}.menu small{font:600 12.5px var(--sg);color:var(--mute);text-align:right}
-@media (max-width:1100px){.buoy{left:36px}.qside{grid-template-columns:repeat(2,minmax(0,1fr))}.qm{grid-template-columns:1fr}.qm .qart{min-height:0;aspect-ratio:16/9}.menu ol{grid-template-columns:repeat(2,minmax(0,1fr))}.coop{grid-template-columns:1fr}}
+@media (max-width:1100px){.buoy{left:36px}.menu ol{grid-template-columns:repeat(2,minmax(0,1fr))}.coop{grid-template-columns:1fr}}
 @media (max-width:900px){.swrap{grid-template-columns:1fr;padding:30px 18px 40px;gap:24px}.scard{order:-1;padding-top:84px}.gemslot{width:90px;height:90px;margin-left:-45px}.ring{top:84px;width:290px;height:290px;margin-left:-145px}.port{width:220px;height:244px}.sstats{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%}.ch .btn{flex:1 1 100%}.snm{font-size:56px}}
-@media (max-width:820px){.earned li{grid-template-columns:1fr;gap:6px}.einl{display:none}.min{padding:18px 16px 22px}.menu ol{grid-template-columns:1fr}.menu small{display:none}.stop{padding:48px 0}.buoy{position:static;margin:0 0 12px}.stop-head{gap:6px 14px}.qstats{grid-template-columns:repeat(2,minmax(0,1fr))}.qbody{padding:20px}.qside{grid-template-columns:1fr 1fr;gap:10px}.qs strong{font-size:15px}}
+@media (max-width:820px){.earned li{grid-template-columns:1fr;gap:6px}.einl{display:none}.min{padding:18px 16px 22px}.menu ol{grid-template-columns:1fr}.menu small{display:none}.stop{padding:48px 0}.buoy{position:static;margin:0 0 12px}.stop-head{gap:6px 14px}.qbody{padding:20px}}
+
+/* quests: one game at a time, the section takes each game's colour */
+#quests{overflow-x:clip;--qc:#3f6ea8}
+#quests::before{display:block;content:"";position:absolute;inset:0;background-color:var(--qc);transition:background-color .9s ease;-webkit-mask-image:linear-gradient(transparent,#000 120px,#000 calc(100% - 120px),transparent);mask-image:linear-gradient(transparent,#000 120px,#000 calc(100% - 120px),transparent);pointer-events:none}
+#quests .wrap{position:relative;z-index:1}
+#quests .stop-head{border-bottom-color:rgba(255,255,255,.25)}#quests .stop-sub{color:rgba(255,255,255,.82)}
+.qsl{position:relative;color:#fff;text-align:center;--h:clamp(190px,min(29vw,calc(100vh - 380px)),540px)}
+@supports (height:100svh){.qsl{--h:clamp(190px,min(29vw,calc(100svh - 380px)),540px)}}
+.qanchors span{position:absolute;top:0;left:0;scroll-margin-top:200px}
+.qtop{display:flex;justify-content:center;align-items:center;gap:16px;margin:0 0 20px;transition:opacity .4s}
+.qbars{display:flex;gap:4px}
+.qbar{position:relative;width:46px;height:28px;padding:0;border:0;background:none;cursor:pointer}
+.qbar::before{content:"";position:absolute;left:8px;right:8px;top:50%;height:3px;margin-top:-1.5px;border-radius:2px;background:#fff;opacity:.35;transition:opacity .4s,left .4s,right .4s}
+.qbar:hover::before{opacity:.7}.qbar.on::before{opacity:1;left:0;right:0}
+.qcount{font:600 12px var(--mono);letter-spacing:.2em;opacity:.8;min-width:4.5em;text-align:left}
+.qview{position:relative;height:var(--h);width:100vw;margin-left:calc(50% - 50vw);overflow:clip;touch-action:pan-y;transition:height .7s cubic-bezier(.22,.8,.2,1)}
+.qtrack{position:absolute;left:0;top:0;height:100%;display:flex;gap:clamp(14px,2.6vw,40px);transition:transform .85s cubic-bezier(.22,.8,.2,1)}
+.qslide{position:relative;flex:0 0 auto;height:100%;aspect-ratio:16/9;padding:0;border:0;border-radius:4px;overflow:hidden;cursor:pointer;background:rgba(0,0,0,.25);box-shadow:0 30px 70px rgba(0,0,0,.4);opacity:.45;transition:opacity .6s,transform .85s cubic-bezier(.22,.8,.2,1)}
+.qslide:hover{opacity:.7}.qslide.on{opacity:1}
+.qslide img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.22,.8,.2,1)}
+.qslide.on:hover img{transform:scale(1.04)}
+.qslide.icon::before{content:"";position:absolute;inset:-20%;background:var(--img) center/cover;filter:blur(40px) brightness(.9)}
+.qslide.icon img{position:relative;object-fit:contain;padding:9% 0;filter:brightness(1.9) contrast(1.1) saturate(1.25)}
+.qslide:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.qcaps{display:grid;margin-top:clamp(18px,4vh,38px)}
+.qcap{grid-area:1/1;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility 0s .3s}
+.qcap.on{opacity:1;visibility:visible;transition:opacity .45s ease .12s}
+.qname{margin:0;font:900 clamp(40px,min(9vw,16vh),150px)/1 var(--cz);letter-spacing:-.01em;color:rgba(255,255,255,.95);white-space:nowrap;transition:font-size .7s cubic-bezier(.22,.8,.2,1)}
+.qcap.long .qname{font-size:clamp(36px,min(6.6vw,12.5vh),112px)}
+.qkind{margin:14px 0 0;font:600 12px var(--cz);letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.qsl.isfit .qcap.on .qkind::after{content:" · class pick";color:var(--gold)}
+.qdet{display:none}
+.qline{max-width:660px;margin:18px auto 24px;font-size:17px;line-height:1.55;color:rgba(255,255,255,.94)}
+.qnums{display:flex;justify-content:center;flex-wrap:wrap;gap:18px clamp(26px,5vw,64px)}
+.qnums b{display:block;font:900 clamp(28px,min(4vw,7.4vh),58px)/1 var(--cz);color:#fff}
+.qnums span{display:block;margin-top:8px;font:700 11px var(--sg);letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.qmedia{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;max-width:900px;margin:26px auto 0}.qmedia img{width:100%;height:auto;border-radius:4px}
+.qdoc{display:flex;align-items:center;justify-content:center;padding:14px;border:1px solid rgba(255,255,255,.4);border-radius:4px;color:#fff;font-weight:700}
+.qread{margin-top:28px;color:#fff;border-color:rgba(255,255,255,.6)}
+.qhint{margin:22px 0 0;font:700 12px var(--sg);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.72);transition:opacity .4s}
+.qh-t{display:none}@media (hover:none){.qh-m{display:none}.qh-t{display:inline}}
+.qback{position:absolute;top:-4px;right:0;padding:9px 14px;border:1px solid rgba(255,255,255,.55);border-radius:4px;background:rgba(0,0,0,.18);color:#fff;font:700 12px var(--cz);letter-spacing:.2em;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .4s}
+.qback:hover{background:rgba(0,0,0,.3)}
+.qsl.open{--h:clamp(170px,min(24vw,calc(100vh - 500px)),460px)}
+@supports (height:100svh){.qsl.open{--h:clamp(170px,min(24vw,calc(100svh - 500px)),460px)}}
+.qsl.open .qslide:not(.on){opacity:0;pointer-events:none}
+.qsl.open .qslide.on{transform:scale(1.05)}
+.qsl.open .qname{font-size:clamp(26px,min(4.2vw,7.4vh),62px)}
+.qsl.open .qdet{display:block;animation:qin .6s ease .2s both}
+@keyframes qin{from{opacity:0;transform:translateY(16px)}}
+.qsl.open .qtop,.qsl.open .qhint{opacity:0;pointer-events:none}
+.qsl.open .qback{opacity:1;pointer-events:auto}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:700px){.qsl{--h:min(46vw,calc(100vh - 330px))}.qsl.open{--h:min(42vw,calc(100vh - 420px))}
+ .qname{white-space:normal;text-wrap:balance;font-size:clamp(34px,11vw,64px)}.qsl.open .qname{font-size:28px}
+ .qline{font-size:16px}.qnums{display:grid;grid-template-columns:1fr 1fr;gap:18px 12px;max-width:340px;margin:0 auto}.qnums b{font-size:28px}.qtop{margin-bottom:16px}.qback{top:-8px}}
+@media (prefers-reduced-motion:reduce){.qtrack,.qslide,.qslide img,.qview,.qname,.qcap,#quests::before{transition:none!important}.qsl.open .qdet{animation:none}}
 </style>
 </head>
 <body>
@@ -509,21 +546,67 @@ dialog::backdrop{background:rgba(6,4,16,.8);backdrop-filter:blur(3px)}
   <div class="wrap">
     <div class="buoy" aria-hidden="true">3</div>
     <header class="stop-head"><h2 id="h-quests">Quests</h2><p class="stop-sub">Five shipped games. Open any one for the full story.</p></header>
-    <div class="qmain" id="quest-phoenix" data-q="skyborne">
-      <button type="button" class="qm" data-book="skyborne" aria-label="Open the quest details for Skyborne Phoenix Flight">
-        <span class="qart"><img src="assets/quests/skyborne-phoenix-flight-still.webp" data-anim="assets/quests/skyborne-phoenix-flight.webp" alt="" width="720" height="404"></span>
-        <span class="qbody"><span class="qtag">Main quest · AAA live service · running now</span><strong>Skyborne Phoenix Flight</strong>
-          <span class="qline">Coordinating seasonal feature delivery across a 50+ person cross-continental team spanning 4 time zones, all without disrupting live services or missing a single player-facing seasonal launch.</span>
-          <span class="qstats"><span><b>50+</b><i>team size</i></span><span><b>+40%</b><i>pipeline efficiency</i></span><span><b>4</b><i>time zones</i></span><span><b>0</b><i>missed launches</i></span></span>
-          <span class="qgo">View quest details ▸</span></span>
-      </button>
+    <div class="qsl" id="qsl" role="region" aria-roledescription="carousel" aria-label="Five shipped games, one at a time">
+      <div class="qanchors"><span id="quest-phoenix"></span><span id="quest-rcade"></span><span id="quest-genesis"></span><span id="quest-dastaan"></span><span id="quest-festival"></span></div>
+      <div class="qtop"><div class="qbars"><button type="button" class="qbar on" data-go="0" aria-label="Show Phoenix Flight" aria-current="true"></button><button type="button" class="qbar" data-go="1" aria-label="Show RCADE"></button><button type="button" class="qbar" data-go="2" aria-label="Show Genesis"></button><button type="button" class="qbar" data-go="3" aria-label="Show Dastaan"></button><button type="button" class="qbar" data-go="4" aria-label="Show Festival Tycoon"></button></div><span class="qcount" aria-hidden="true">1 / 5</span></div>
+      <div class="qview"><div class="qtrack">
+        <button type="button" class="qslide on" data-i="0" data-q="skyborne" data-c="#3f6ea8" data-n="Phoenix Flight" aria-label="Step into Phoenix Flight"><img src="assets/quests/skyborne-phoenix-flight-still.webp" data-anim="assets/quests/skyborne-phoenix-flight.webp" alt="" width="720" height="405"></button>
+        <button type="button" class="qslide icon" data-i="1" data-q="rcade" data-c="#1d1b45" data-n="RCADE" style="--img:url(assets/quests/rcade-network-icon.webp)" aria-label="Show RCADE"><img src="assets/quests/rcade-network-icon.webp" alt="" width="720" height="405" loading="lazy"></button>
+        <button type="button" class="qslide" data-i="2" data-q="genesis" data-c="#5b2a78" data-n="Genesis" aria-label="Show Genesis"><img src="assets/quests/skyborne-genesis-art.webp" alt="" width="720" height="405" loading="lazy"></button>
+        <button type="button" class="qslide" data-i="3" data-q="dastaan" data-c="#8c3324" data-n="Dastaan" aria-label="Show Dastaan"><img src="../studio/img/dastaan.jpg" alt="" width="720" height="405" loading="lazy"></button>
+        <button type="button" class="qslide" data-i="4" data-q="festival" data-c="#1f6f73" data-n="Festival Tycoon" aria-label="Show Festival Tycoon"><img src="../studio/img/music-festival-tycoon.webp" alt="" width="720" height="405" loading="lazy"></button>
+      </div></div>
+      <div class="qcaps">
+        <div class="qcap on long" data-i="0">
+          <h3 class="qname">Phoenix Flight</h3>
+          <p class="qkind">AAA live service · running now</p>
+          <div class="qdet">
+            <p class="qline">Co-owned the roadmap with the Game Director. Seasonal features, shipped live, across four time zones.</p>
+            <div class="qnums"><div><b>50+</b><span>team size</span></div><div><b>+40%</b><span>pipeline efficiency</span></div><div><b>4</b><span>time zones</span></div><div><b>0</b><span>missed launches</span></div></div>
+            <button type="button" class="btn line qread" data-book="skyborne">Read the full quest ▸</button>
+          </div>
+        </div>
+        <div class="qcap" data-i="1" aria-hidden="true">
+          <h3 class="qname">RCADE</h3>
+          <p class="qkind">Web3 gaming ecosystem</p>
+          <div class="qdet">
+            <p class="qline">Production strategy across the ecosystem: stakeholder reporting, cross-title dependencies, milestones and the risk registry.</p>
+            <div class="qnums"><div><b>$40M+</b><span>ecosystem</span></div><div><b>700K+</b><span>installs</span></div><div><b>$50M+</b><span>in-game revenue</span></div><div><b>Multi</b><span>titles</span></div></div>
+            <button type="button" class="btn line qread" data-book="rcade">Read the full quest ▸</button>
+          </div>
+        </div>
+        <div class="qcap" data-i="2" aria-hidden="true">
+          <h3 class="qname">Genesis</h3>
+          <p class="qkind">Web3 browser game</p>
+          <div class="qdet">
+            <p class="qline">Co-owned product strategy and delivery, turning blockchain constraints into player-facing feature decisions.</p>
+            <div class="qnums"><div><b>Web3</b><span>platform</span></div><div><b>NFT</b><span>progression</span></div><div><b>✓</b><span>on-time</span></div><div><b>Live</b><span>status</span></div></div>
+            <button type="button" class="btn line qread" data-book="genesis">Read the full quest ▸</button>
+          </div>
+        </div>
+        <div class="qcap" data-i="3" aria-hidden="true">
+          <h3 class="qname">Dastaan</h3>
+          <p class="qkind">Tactical RPG</p>
+          <div class="qdet">
+            <p class="qline">End-to-end producer. Built the production structure from scratch and took the team from day one to ship.</p>
+            <div class="qnums"><div><b>30+</b><span>team shipped</span></div><div><b>0→1</b><span>full lifecycle</span></div><div><b>On scope</b><span>delivery</span></div></div>
+            <button type="button" class="btn line qread" data-book="dastaan">Read the full quest ▸</button>
+          </div>
+        </div>
+        <div class="qcap long" data-i="4" aria-hidden="true">
+          <h3 class="qname">Festival Tycoon</h3>
+          <p class="qkind">Simulation</p>
+          <div class="qdet">
+            <p class="qline">Feature scoping, resource allocation and milestone planning with the design and engineering leads.</p>
+            <div class="qnums"><div><b>15%</b><span>under budget</span></div><div><b>6</b><span>milestone builds on schedule</span></div><div><b>On time</b><span>delivery</span></div></div>
+            <button type="button" class="btn line qread" data-book="festival">Read the full quest ▸</button>
+          </div>
+        </div>
+      </div>
+      <p class="qhint"><span class="qh-m">Click the picture to step in · scroll or ← → to move</span><span class="qh-t">Tap the picture to step in · swipe to move</span></p>
+      <button type="button" class="qback">← Back</button>
+      <p class="sr-only" aria-live="polite" id="qlive"></p>
     </div>
-    <ul class="qside">
-      <li id="quest-rcade" data-q="rcade"><button type="button" class="qs" data-book="rcade" aria-label="Open the quest details for RCADE Network"><span class="qart logo"><img src="assets/quests/rcade-network-icon.webp" alt="" loading="lazy"></span><span class="qtag">Side quest 01 · Web3 gaming</span><strong>RCADE Network</strong><span class="qwin">700K+ installs</span><span class="qgo">View ▸</span></button></li>
-      <li id="quest-genesis" data-q="genesis"><button type="button" class="qs" data-book="genesis" aria-label="Open the quest details for Skyborne Genesis"><span class="qart"><img src="assets/quests/skyborne-genesis-art.webp" alt="" loading="lazy"></span><span class="qtag">Side quest 02 · Web3 browser game</span><strong>Skyborne Genesis</strong><span class="qwin">On-time launch</span><span class="qgo">View ▸</span></button></li>
-      <li id="quest-dastaan" data-q="dastaan"><button type="button" class="qs" data-book="dastaan" aria-label="Open the quest details for Dastaan"><span class="qart"><img src="../studio/img/dastaan.jpg" alt="" loading="lazy"></span><span class="qtag">Side quest 03 · Tactical RPG</span><strong>Dastaan</strong><span class="qwin">30+ team shipped</span><span class="qgo">View ▸</span></button></li>
-      <li id="quest-festival" data-q="festival"><button type="button" class="qs" data-book="festival" aria-label="Open the quest details for Music Festival Tycoon"><span class="qart"><img src="../studio/img/music-festival-tycoon.webp" alt="" loading="lazy"></span><span class="qtag">Side quest 04 · Simulation</span><strong>Music Festival Tycoon</strong><span class="qwin">15% under budget</span><span class="qgo">View ▸</span></button></li>
-    </ul>
   </div>
 </section>
 
@@ -770,7 +853,7 @@ document.querySelectorAll('.classes [data-cls]').forEach(function(b){b.setAttrib
 var p=document.getElementById('clsPitch'),tr=document.getElementById('clsTraits'),st=document.getElementById('clsStats');if(!p)return;
 p.textContent=c.pitch;tr.innerHTML='';c.traits.forEach(function(t){var li=document.createElement('li');li.textContent=t;tr.appendChild(li);});
 st.querySelectorAll('li').forEach(function(li,i){var s=c.stats[i],b=li.querySelector('b');li.querySelector('span').textContent=s[1];if(window.__clsReady)cnt(b,s[2],s[4],s[3],i*90);else{b._tok=(b._tok||0)+1;b.dataset.to=s[2];b.dataset.pre=s[4];b.dataset.suf=s[3];b.textContent=s[0];}});
-document.querySelectorAll('[data-q]').forEach(function(q){q.classList.toggle('fit',c.quests.indexOf(q.dataset.q)>=0);});
+document.querySelectorAll('[data-q]').forEach(function(q){q.classList.toggle('fit',c.quests.indexOf(q.dataset.q)>=0);});document.dispatchEvent(new Event('cls'));
 [p,tr,st].forEach(function(el){el.classList.remove('swap');void el.offsetWidth;el.classList.add('swap');});
 try{sessionStorage.setItem('cls',k);}catch(e){}}
 document.querySelectorAll('.classes [data-cls]').forEach(function(b){b.addEventListener('click',function(){setCls(b.dataset.cls);});b.addEventListener('keydown',function(e){if(['ArrowRight','ArrowLeft','ArrowDown','ArrowUp'].indexOf(e.key)>=0){e.preventDefault();var o=document.querySelector('.classes [data-cls]:not([data-cls="'+b.dataset.cls+'"])');o.focus();setCls(o.dataset.cls);}});});
@@ -780,11 +863,9 @@ var ids=[].map.call(document.querySelectorAll('.menu a'),function(a){return a.ge
 addEventListener('keydown',function(e){if(e.altKey||e.ctrlKey||e.metaKey)return;var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;if(document.querySelector('dialog[open]'))return;var n=+e.key;if(n>=1&&n<=ids.length){var el=document.querySelector(ids[n-1]);if(el){el.scrollIntoView({behavior:rm?'auto':'smooth'});history.replaceState(null,'',ids[n-1]);}}});
 /* copy email */
 document.addEventListener('click',function(e){var b=e.target.closest('[data-copy]');if(!b)return;var v=b.dataset.copy;(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1600);},function(){b.textContent='Select and copy';});});
-/* main quest art turns into the animation once it is near the screen */
-var art=document.querySelector('[data-anim]');if(art&&!rm&&'IntersectionObserver' in window){new IntersectionObserver(function(es,o){if(es[0].isIntersecting){var im=new Image();im.onload=function(){art.src=im.src;};im.src=art.dataset.anim;o.disconnect();}},{rootMargin:'300px'}).observe(art);}
 /* scroll reveals */
 if(!rm){document.documentElement.classList.add('anim');
-var sel='.stop .buoy,.stop .stop-head,.stop .prose>*,.stop .card,.stop .current>li,.stop .qmain,.stop .qside>li,.stop .pearls ul>li,.stop .earned li,.stop .load>li,.stop .four>li,.stop .badges>li,.stop .scrolls>li,.stop .note,.stop .sound,.stop .size,.stop .diag>div,.stop .p1c,.stop .p2,.stop .rule,.menu li';
+var sel='.stop .buoy,.stop .stop-head,.stop .prose>*,.stop .card,.stop .current>li,.stop .qsl,.stop .pearls ul>li,.stop .earned li,.stop .load>li,.stop .four>li,.stop .badges>li,.stop .scrolls>li,.stop .note,.stop .sound,.stop .size,.stop .diag>div,.stop .p1c,.stop .p2,.stop .rule,.menu li';
 var els=[].slice.call(document.querySelectorAll(sel));els.forEach(function(el){var sib=[].slice.call(el.parentNode.children).filter(function(c){return els.indexOf(c)>=0;});el.style.setProperty('--d',Math.min(sib.indexOf(el),8)*80+'ms');el.classList.add('rv');});
 document.querySelectorAll('.stop .row').forEach(function(r){r.classList.add('rv');els.push(r);});
 var left=els.slice(),busy=false;function check(){busy=false;var lim=(scrollY+innerHeight>=document.documentElement.scrollHeight-8)?1e9:innerHeight*.92;left=left.filter(function(el){if(el.getBoundingClientRect().top<lim){el.classList.add('in');return false;}return true;});if(!left.length){removeEventListener('scroll',on);}}function on(){if(!busy){busy=true;requestAnimationFrame(check);}}addEventListener('scroll',on,{passive:true});addEventListener('resize',on);addEventListener('hashchange',on);check();}
@@ -835,6 +916,48 @@ gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,
 fa+=dr;fn++;if(fa>.5){window.__gem.fps=fn/fa;window.__gem.q=qs;fa=0;fn=0;}}
 layout();requestAnimationFrame(frame);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);addEventListener('load',function(){setTimeout(layout,60);});
+})();
+
+/* Quests slider: moves only when the visitor asks (bars, arrows, wheel, swipe, click a neighbour) */
+(function(){
+var S=document.getElementById('qsl');if(!S)return;
+var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var sec=document.getElementById('quests'),view=S.querySelector('.qview'),track=S.querySelector('.qtrack');
+var slides=[].slice.call(S.querySelectorAll('.qslide')),caps=[].slice.call(S.querySelectorAll('.qcap')),bars=[].slice.call(S.querySelectorAll('.qbar'));
+var cnt=S.querySelector('.qcount'),live=document.getElementById('qlive'),back=S.querySelector('.qback'),n=slides.length,cur=0;
+var IDX={};[].slice.call(S.querySelectorAll('.qanchors span')).forEach(function(a,i){IDX[a.id]=i;});
+function place(){var s=slides[cur];track.style.transform='translateX('+(view.clientWidth/2-(s.offsetLeft+s.offsetWidth/2))+'px)';}
+function follow(ms){if(rm){place();return;}var t0=performance.now();track.style.transition='none';(function f(){place();if(performance.now()-t0<ms)requestAnimationFrame(f);else track.style.transition='';})();}
+function still(){slides.forEach(function(s){var im=s.querySelector('img[data-anim]');if(im&&im.dataset.still){im.src=im.dataset.still;}});}
+function fit(){S.classList.toggle('isfit',slides[cur].classList.contains('fit'));}
+function isOpen(){return S.classList.contains('open');}
+function go(i,force){i=(i+n)%n;if(i===cur&&!force)return;cur=i;sec.style.setProperty('--qc',slides[i].dataset.c);
+ slides.forEach(function(s,k){s.classList.toggle('on',k===i);s.tabIndex=k===i?0:-1;s.setAttribute('aria-label',(k===i?'Step into ':'Show ')+s.dataset.n);if(k===i)s.setAttribute('aria-expanded',isOpen()?'true':'false');else s.removeAttribute('aria-expanded');});
+ caps.forEach(function(c,k){c.classList.toggle('on',k===i);if(k===i)c.removeAttribute('aria-hidden');else c.setAttribute('aria-hidden','true');});
+ bars.forEach(function(b,k){b.classList.toggle('on',k===i);if(k===i)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');});
+ cnt.textContent=(i+1)+' / '+n;still();if(isOpen())anim();place();fit();live.textContent=slides[i].dataset.n+', game '+(i+1)+' of '+n;}
+function anim(){var im=slides[cur].querySelector('img[data-anim]');if(!im||rm)return;if(!im.dataset.still)im.dataset.still=im.getAttribute('src');var p=new Image();p.onload=function(){if(isOpen()&&slides[cur].contains(im))im.src=p.src;};p.src=im.dataset.anim;}
+function open(v){if(v===isOpen())return;S.classList.toggle('open',v);slides[cur].setAttribute('aria-expanded',v?'true':'false');if(v)anim();else still();follow(800);}
+slides.forEach(function(s,k){s.tabIndex=k?-1:0;s.addEventListener('click',function(){if(Date.now()-swiped<400)return;if(k!==cur)go(k);else open(!isOpen());});});
+bars.forEach(function(b,k){b.addEventListener('click',function(){open(false);go(k);});});
+back.addEventListener('click',function(){open(false);slides[cur].focus({preventScroll:true});});
+function inView(){var r=S.getBoundingClientRect();return r.top<innerHeight*.6&&r.bottom>innerHeight*.4;}
+addEventListener('keydown',function(e){if(e.altKey||e.ctrlKey||e.metaKey||document.querySelector('dialog[open]'))return;var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable||(t.closest&&t.closest('.classes'))))return;
+ var mine=S.contains(t)||inView();if(!mine)return;
+ if(e.key==='ArrowRight'){e.preventDefault();go(cur+1);}else if(e.key==='ArrowLeft'){e.preventDefault();go(cur-1);}else if(e.key==='Escape'&&isOpen()){open(false);if(S.contains(t))slides[cur].focus({preventScroll:true});}});
+/* the wheel over the pictures moves one game per flick; at the first or last game it lets the page scroll on */
+var wlock=0,wq;view.addEventListener('wheel',function(e){if(e.ctrlKey)return;var d=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;if(!wlock&&Math.abs(d)<4)return;var dir=d>0?1:-1;if(!wlock&&((dir<0&&cur===0)||(dir>0&&cur===slides.length-1)))return;e.preventDefault();clearTimeout(wq);wq=setTimeout(function(){wlock=0;},240);if(wlock)return;wlock=1;go(cur+dir);},{passive:false});
+var sx=null,sy=0,swiped=0;view.addEventListener('pointerdown',function(e){if(e.pointerType==='mouse')return;sx=e.clientX;sy=e.clientY;});
+view.addEventListener('pointerup',function(e){if(sx===null)return;var dx=e.clientX-sx,dy=e.clientY-sy;sx=null;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.2){swiped=Date.now();go(cur+(dx<0?1:-1));}});
+view.addEventListener('pointercancel',function(){sx=null;});
+document.addEventListener('cls',fit);
+if('ResizeObserver' in window)new ResizeObserver(function(){place();}).observe(view);else addEventListener('resize',place);
+addEventListener('load',place);
+/* addresses from the studio room (/portfolio/#quest-dastaan and the like) pick that game and step in; the full story opens on top as before */
+function fromHash(){var i=IDX[location.hash.slice(1)];if(i!=null){go(i,true);open(true);}}
+addEventListener('hashchange',fromHash);
+track.style.transition='none';go(0,true);fromHash();place();requestAnimationFrame(function(){track.style.transition='';});
+window.__qReady=true;
 })();
 </script>
 </body>
